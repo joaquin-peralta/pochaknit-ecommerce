@@ -16,7 +16,7 @@ const Sidemenu = () => (
         </button>
         <ul className="list">
           {SidemenuData.map((item) => (
-            <Link href={item.path}>
+            <Link key={item.title} href={item.path}>
               <a className="list-anchor">
                 <li className="list-item">
                   <span>{item.icon}</span>
@@ -60,8 +60,8 @@ const Sidemenu = () => (
 
       .list {
         list-style: none;
-        padding-left: 24px;
-        padding-right: 24px;
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
       .list-anchor {
@@ -75,6 +75,8 @@ const Sidemenu = () => (
         height: 72px;
         display: flex;
         align-items: center;
+        padding-left: 8px;
+        padding-right: 8px;
       }
 
       .list-item__title {
@@ -92,6 +94,8 @@ const Sidemenu = () => (
         position: fixed;
         bottom: 0;
         width: 304px;
+        padding-top: 16px;
+        padding-bottom: 16px;
       }
 
       .log-in__content {
