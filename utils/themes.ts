@@ -1,6 +1,8 @@
 export const colors = {
   primary: '#A9C4DA',
   background: '#F8F8F8',
+  analogous500: '#9CA1A5',
+  darkgray: '#2A2C2E',
 };
 
 export const typography = {

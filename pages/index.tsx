@@ -23,6 +23,7 @@ export default function Home() {
         body {
           margin: 0;
           padding: 72px 0 0 0;
+          color: ${colors.darkgray};
           background-color: ${colors.background};
         }
       `}</style>
