@@ -1,7 +1,15 @@
 import Head from 'next/head';
+import { useContext } from 'react';
+import SidemenuContext from '@context/SidemenuContext';
 import { colors } from '@utils/themes';
 
 export default function Home() {
+  // eslint-disable-next-line no-unused-vars
+  const [visible, setVisible] = useContext(SidemenuContext);
+  const backgroundColor = visible
+    ? `${colors.darkenBackground}`
+    : `${colors.background}`;
+
   return (
     <div>
       <Head>
@@ -24,7 +32,7 @@ export default function Home() {
           margin: 0;
           padding: 72px 0 0 0;
           color: ${colors.darkgray};
-          background-color: ${colors.background};
+          background-color: ${backgroundColor};
         }
       `}</style>
     </div>
