@@ -8,13 +8,13 @@ import { colors } from '@utils/themes';
 import SidemenuData from './SidemenuData';
 
 const Sidemenu = () => {
-  const [visible, setVisible] = useContext(SidemenuContext);
+  const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
 
   const hideMenu = () => {
-    setVisible(false);
+    setMenuVisibility(false);
   };
 
-  const menuTranslation = visible
+  const menuTranslation = menuVisibility
     ? 'translate3d(0)'
     : 'translate3d(-100%, 0, 0)';
 

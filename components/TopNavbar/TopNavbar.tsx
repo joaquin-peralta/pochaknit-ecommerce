@@ -1,30 +1,35 @@
 import { useContext } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
+import SideshopbagContext from '@context/SideshopbagContext';
 import Image from 'next/image';
 import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineShopping } from 'react-icons/ai';
 import { colors } from '@utils/themes';
 
 const TopNavbar = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [visible, setVisible] = useContext(SidemenuContext);
+  const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
+  const [shopVisibility, setShopVisibility] = useContext(SideshopbagContext);
 
-  const showMenu = () => {
-    setVisible(true);
+  const showSidemenu = () => {
+    setMenuVisibility(true);
   };
 
-  const opacity = visible ? '0.2' : '1';
+  const showSideshopbag = () => {
+    setShopVisibility(true);
+  };
+
+  const opacity = menuVisibility || shopVisibility ? '0.2' : '1';
 
   return (
     <header className="header">
       <IconContext.Provider value={{ color: '#fff', size: '24px' }}>
-        <button type="button" className="header-btn" onClick={showMenu}>
+        <button type="button" className="header-btn" onClick={showSidemenu}>
           <AiOutlineMenu />
         </button>
         <div className="brand">
           <Image src="/square-logo.png" alt="logo" width={64} height={64} />
         </div>
-        <button type="button" className="header-btn">
+        <button type="button" className="header-btn" onClick={showSideshopbag}>
           <AiOutlineShopping />
         </button>
       </IconContext.Provider>
