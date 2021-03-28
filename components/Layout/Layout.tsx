@@ -4,6 +4,7 @@ import Sidemenu from '@components/Sidemenu/Sidemenu';
 import SidemenuContext from '@context/SidemenuContext';
 import Sideshopbag from '@components/Sideshopbag/Sideshopbag';
 import SideshopbagContext from '@context/SideshopbagContext';
+import Footer from '@components/Footer/Footer';
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,7 @@ const Layout = ({ children }: Props) => {
           <Sidemenu />
           <Sideshopbag />
           {children}
+          <Footer />
         </SideshopbagContext.Provider>
       </SidemenuContext.Provider>
     </>
