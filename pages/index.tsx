@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
+import FeaturedPattern from '@components/FeaturedPattern/FeaturedPattern';
 
 export default function Home() {
   return (
@@ -9,7 +10,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Home</h1>
+      <FeaturedPattern />
+      <FeaturedPattern />
 
       <GlobalStyles />
     </>
