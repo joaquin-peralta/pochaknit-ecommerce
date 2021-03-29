@@ -10,8 +10,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <FeaturedPattern />
-      <FeaturedPattern />
+      <FeaturedPattern
+        type="medias"
+        name="lola"
+        img="/medias-lola.jpeg"
+        alt="medias"
+        titleColor="green"
+        indexOfArray={1}
+      />
+      <FeaturedPattern
+        type="chaleco"
+        name="nina"
+        img="/chaleco-nina.jpeg"
+        alt="chaleco de lana"
+        titleColor="red"
+        indexOfArray={2}
+      />
 
       <GlobalStyles />
     </>

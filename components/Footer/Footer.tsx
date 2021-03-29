@@ -8,21 +8,21 @@ import Image from 'next/image';
 import { colors } from '@utils/themes';
 
 const Footer = () => (
-  <footer>
+  <footer className="pb-3">
     <Container>
       <hr />
       <Row className="align-items-end">
-        <Col xs={4}>
+        <Col xs={5} lg={2}>
           <IconContext.Provider
-            value={{ size: '18px', color: `${colors.darkgray}` }}
+            value={{ size: '24px', color: `${colors.darkgray}` }}
           >
-            <div className="d-block">
+            <div className="mb-2">
               <FaInstagram />
               <Link href="/">
                 <a className="social-media">@pochaknit</a>
               </Link>
             </div>
-            <div className="d-inline-block">
+            <div>
               <FaPinterest />
               <Link href="/">
                 <a className="social-media">@pochaknit</a>
@@ -30,19 +30,20 @@ const Footer = () => (
             </div>
           </IconContext.Provider>
         </Col>
-        <Col xs={4} className="text-center">
+        <Col xs={2} lg={8} className="text-center">
           <a className="powered-by" href="/">
             <small>
               By <strong>JPDevs</strong>
             </small>
           </a>
         </Col>
-        <Col xs={4}>
+        <Col xs={5} lg={2}>
           <Row>
             <Col className="text-right">
               <Image
                 src="/mercadopago-logo.png"
                 alt="Mercadopago"
+                layout="intrinsic"
                 width={64}
                 height={64}
               />
@@ -51,6 +52,7 @@ const Footer = () => (
               <Image
                 src="/paypal-logo.png"
                 alt="PayPal"
+                layout="intrinsic"
                 width={64}
                 height={64}
               />
@@ -78,14 +80,12 @@ const Footer = () => (
         font-size: 12px;
       }
 
-      .payment-img {
-        display: inline-block;
-        width: 48px;
-        height: 80px;
-      }
-
       @media screen and (min-width: 768px) {
         .powered-by {
+          font-size: 14px;
+        }
+
+        .social-media {
           font-size: 14px;
         }
       }
