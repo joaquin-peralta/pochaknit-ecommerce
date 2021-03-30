@@ -2,7 +2,16 @@ import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern/FeaturedPattern';
 
-export default function Home() {
+interface Props {
+  featuredPatterns: Array<object>;
+}
+
+export default function Home({ featuredPatterns }: Props) {
+  // console.log(featuredPatterns[0].pattern.type);
+  console.log(featuredPatterns[0].id);
+  // console.log(featuredPatterns[0].pattern.images[0].url);
+  // console.log(typeof featuredPatterns[0]);
+
   return (
     <>
       <Head>
@@ -10,24 +19,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <FeaturedPattern
-        type="medias"
-        name="lola"
-        img="/medias-lola.jpeg"
-        alt="medias"
-        titleColor="green"
-        indexOfArray={1}
-      />
-      <FeaturedPattern
-        type="chaleco"
-        name="nina"
-        img="/chaleco-nina.jpeg"
-        alt="chaleco de lana"
-        titleColor="red"
-        indexOfArray={2}
-      />
+      {featuredPatterns.map((obj, index) => (
+        <FeaturedPattern
+          key={obj.id}
+          category={obj.pattern.category}
+          name={obj.pattern.name}
+          img="http://localhost:1337/uploads/medias_lola_4988cd310d.jpeg"
+          indexOfArray={index + 1}
+          titleColor="blue"
+        />
+      ))}
 
       <GlobalStyles />
     </>
   );
+}
+
+export async function getStaticProps() {
+  const featuredPatterns = await fetch(
+    'http://localhost:1337/featured-patterns',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((response) => response.json());
+
+  return {
+    props: {
+      featuredPatterns,
+    },
+  };
 }

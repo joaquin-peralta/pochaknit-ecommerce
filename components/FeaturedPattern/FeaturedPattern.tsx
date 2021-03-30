@@ -6,19 +6,17 @@ import Image from 'next/image';
 import isOdd from 'is-odd';
 
 interface Props {
-  type: string;
+  category: string;
   name: string;
   img: string;
-  alt: string;
   titleColor: string;
   indexOfArray: number;
 }
 
 const FeaturedPattern = ({
-  type,
+  category,
   name,
   img,
-  alt,
   titleColor = 'red',
   indexOfArray,
 }: Props) => {
@@ -41,15 +39,9 @@ const FeaturedPattern = ({
               <h4 className="title font-italic">
                 <span>New</span> in
               </h4>
-              <Image
-                src={img}
-                alt={alt}
-                layout="intrinsic"
-                width={900}
-                height={1124}
-              />
+              <Image src={img} layout="intrinsic" width={900} height={1124} />
               <h2 className="title">
-                {type} <span style={{ fontSize: '1.2em' }}>{name}</span>
+                {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
               </h2>
             </Col>
           </Row>
@@ -59,20 +51,14 @@ const FeaturedPattern = ({
         <Container>
           <Row className="align-items-center">
             <Col md={{ order: position }}>
-              <Image
-                src={img}
-                alt={alt}
-                layout="intrinsic"
-                width={900}
-                height={1124}
-              />
+              <Image src={img} layout="intrinsic" width={900} height={1124} />
             </Col>
             <Col>
               <h4 className="title font-italic">
                 <span>New</span> in
               </h4>
               <h2 className="title">
-                {type} <span style={{ fontSize: '1.2em' }}>{name}</span>
+                {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
               </h2>
             </Col>
           </Row>
