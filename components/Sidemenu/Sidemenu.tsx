@@ -14,48 +14,73 @@ const Sidemenu = () => {
     setMenuVisibility(false);
   };
 
-  const menuTranslation = menuVisibility
-    ? 'translate3d(0)'
-    : 'translate3d(-100%, 0, 0)';
-
   return (
     <>
       <IconContext.Provider
         value={{ size: '24px', color: `${colors.analogous500}` }}
       >
-        <div className="sidemenu">
-          <button className="close-btn" type="button" onClick={hideMenu}>
-            <AiOutlineClose />
-          </button>
-          <nav>
-            <ul className="list">
-              {SidemenuData.map((item) => (
-                <Link key={item.title} href={item.path}>
-                  <a className="list-anchor">
-                    <li className="list-item">
-                      <span>{item.icon}</span>
-                      <span className="list-item__title">{item.title}</span>
-                    </li>
-                  </a>
-                </Link>
-              ))}
-            </ul>
-          </nav>
-          <div className="inner-image">
-            <Image src="/sheep.png" alt="Una oveja" width={128} height={128} />
-            <p className="font-italic">¡No olvides de seguirnos!</p>
-          </div>
-          <div className="log-in">
-            <div className="log-in__content">
-              <a>Crear cuenta</a>
-              {' | '}
-              <a>Iniciar sesión</a>
+        <div className={menuVisibility ? 'back-layer-show' : 'back-layer'}>
+          <div className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}>
+            <button className="close-btn" type="button" onClick={hideMenu}>
+              <AiOutlineClose />
+            </button>
+            <nav>
+              <ul className="list">
+                {SidemenuData.map((item) => (
+                  <Link key={item.title} href={item.path}>
+                    <a className="list-anchor">
+                      <li className="list-item">
+                        <span>{item.icon}</span>
+                        <span className="list-item__title">{item.title}</span>
+                      </li>
+                    </a>
+                  </Link>
+                ))}
+              </ul>
+            </nav>
+            <div className="inner-image">
+              <Image
+                src="/sheep.png"
+                alt="Una oveja"
+                width={128}
+                height={128}
+              />
+              <p className="font-italic">¡No olvides de seguirnos!</p>
+            </div>
+            <div className="log-in">
+              <div className="log-in__content">
+                <a>Crear cuenta</a>
+                {' | '}
+                <a>Iniciar sesión</a>
+              </div>
             </div>
           </div>
         </div>
       </IconContext.Provider>
 
       <style jsx>{`
+        .back-layer {
+          positon: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 1002;
+          background: transparent;
+          transition-duration: 0.4s;
+          transform: translate3d(-100%, 0, 0);
+        }
+
+        .back-layer-show {
+          position: fixed;
+          width: 100%;
+          height: 100vh;
+          top: 0;
+          left: 0;
+          z-index: 1002;
+          background-color: rgba(0, 0, 0, 0.6);
+          transition-duration: 0.4s;
+          transform: translate3d(0);
+        }
         .sidemenu {
           width: 304px;
           height: 100vh;
@@ -65,7 +90,19 @@ const Sidemenu = () => {
           z-index: 1003;
           background-color: ${colors.background};
           transition-duration: 0.4s;
-          transform: ${menuTranslation};
+          transform: translate3d(-100%, 0, 0);
+        }
+
+        .sidemenu-open {
+          width: 304px;
+          height: 100vh;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 1003;
+          background-color: ${colors.background};
+          transition-duration: 0.4s;
+          transform: translate3d(0);
         }
 
         .close-btn {
