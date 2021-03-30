@@ -65,7 +65,6 @@ const Sidemenu = () => {
           top: 0;
           left: 0;
           z-index: 1002;
-          background: transparent;
           transition-duration: 0.4s;
           transform: translate3d(-100%, 0, 0);
         }
@@ -78,7 +77,6 @@ const Sidemenu = () => {
           left: 0;
           z-index: 1002;
           background-color: rgba(0, 0, 0, 0.6);
-          transition-duration: 0.4s;
           transform: translate3d(0);
         }
         .sidemenu {
@@ -89,7 +87,6 @@ const Sidemenu = () => {
           left: 0;
           z-index: 1003;
           background-color: ${colors.background};
-          transition-duration: 0.4s;
           transform: translate3d(-100%, 0, 0);
         }
 
@@ -101,7 +98,7 @@ const Sidemenu = () => {
           left: 0;
           z-index: 1003;
           background-color: ${colors.background};
-          transition-duration: 0.4s;
+          transition-duration: 0.5s;
           transform: translate3d(0);
         }
 

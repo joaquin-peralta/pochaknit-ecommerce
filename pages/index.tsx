@@ -1,3 +1,4 @@
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern/FeaturedPattern';
@@ -7,6 +8,13 @@ interface Props {
 }
 
 export default function Home({ featuredPatterns }: Props) {
+  interface Pattern {
+    category: string;
+    name: string;
+    images: any;
+    titleColor: string;
+  }
+
   return (
     <>
       <Head>
@@ -14,12 +22,12 @@ export default function Home({ featuredPatterns }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {featuredPatterns.map((obj: Array<object>, index) => (
+      {featuredPatterns.map((obj: { id: number; pattern: Pattern }, index) => (
         <FeaturedPattern
           key={obj.id}
           category={obj.pattern.category}
           name={obj.pattern.name}
-          img={`${process.env.BASE_URL}${obj.pattern.images[0].url}`}
+          img={`http://localhost:1337${obj.pattern.images[0].url}`}
           indexOfArray={index + 1}
           titleColor={obj.pattern.titleColor}
         />
@@ -30,7 +38,7 @@ export default function Home({ featuredPatterns }: Props) {
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const featuredPatterns = await fetch(
     'http://localhost:1337/featured-patterns',
     {
@@ -46,4 +54,4 @@ export async function getStaticProps() {
       featuredPatterns,
     },
   };
-}
+};
