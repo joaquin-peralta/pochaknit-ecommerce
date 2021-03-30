@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
-import SideshopbagContext from '@context/SideshopbagContext';
+import CartmenuContext from '@context/CartmenuContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconContext } from 'react-icons';
@@ -9,18 +9,18 @@ import { colors } from '@utils/themes';
 import SidemenuData from '@components/Sidemenu/SidemenuData';
 
 const TopNavbar = () => {
+  // eslint-disable-next-line no-unused-vars
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
-  const [shopVisibility, setShopVisibility] = useContext(SideshopbagContext);
+  // eslint-disable-next-line no-unused-vars
+  const [shopVisibility, setShopVisibility] = useContext(CartmenuContext);
 
   const showSidemenu = () => {
     setMenuVisibility(true);
   };
 
-  const showSideshopbag = () => {
+  const showCartmenu = () => {
     setShopVisibility(true);
   };
-
-  const opacity = menuVisibility || shopVisibility ? '0.2' : '1';
 
   return (
     <IconContext.Provider value={{ color: '#fff', size: '24px' }}>
@@ -49,7 +49,7 @@ const TopNavbar = () => {
             ))}
           </ul>
         </nav>
-        <button type="button" className="shop-btn" onClick={showSideshopbag}>
+        <button type="button" className="shop-btn" onClick={showCartmenu}>
           <AiOutlineShopping />
         </button>
 

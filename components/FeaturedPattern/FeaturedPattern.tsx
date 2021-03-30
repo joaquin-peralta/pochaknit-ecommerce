@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
 import isOdd from 'is-odd';
 
@@ -20,73 +18,86 @@ const FeaturedPattern = ({
   titleColor,
   indexOfArray,
 }: Props) => {
-  const [position, setPosition] = useState(0);
+  const [alignText, setAlignText] = useState('');
+  const [alignImg, setAlignImg] = useState('');
 
   useEffect(() => {
     if (isOdd(indexOfArray)) {
-      setPosition(0);
+      setAlignText('2');
+      setAlignImg('1');
     } else {
-      setPosition(12);
+      setAlignText('1');
+      setAlignImg('2');
     }
   }, []);
 
   return (
-    <div className="py-4">
-      <div className="mobile">
-        <Container>
-          <Row>
-            <Col>
-              <h4 className="title font-italic">
-                <span>New</span> in
-              </h4>
-              <Image src={img} layout="intrinsic" width={900} height={1124} />
-              <h2 className="title">
-                {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
-              </h2>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <div className="tablet">
-        <Container>
-          <Row className="align-items-center">
-            <Col md={{ order: position }}>
-              <Image src={img} layout="intrinsic" width={900} height={1124} />
-            </Col>
-            <Col>
-              <h4 className="title font-italic">
-                <span>New</span> in
-              </h4>
-              <h2 className="title">
-                {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
-              </h2>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+    <>
+      <Container className="py-4">
+        <div className="wrapper">
+          <div className="one">
+            <h4 className="title font-italic">
+              <span>New</span> in
+            </h4>
+          </div>
+          <div className="two">
+            <Image src={img} layout="intrinsic" width={900} height={1124} />
+          </div>
+          <div className="three">
+            <h2 className="title">
+              {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
+            </h2>
+          </div>
+        </div>
+      </Container>
 
       <style jsx>{`
+        .wrapper {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-auto-rows: auto;
+        }
+
+        .one {
+          grid-column: 1 / 3;
+          grid-row: 1;
+        }
+
+        .two {
+          grid-column: 1 / 3;
+          grid-row: 2;
+        }
+
+        .three {
+          grid-column: 1 / 3;
+          grid-row: 3;
+        }
         .title,
         .title span {
           color: ${titleColor};
           text-align: center;
           text-transform: uppercase;
         }
-        .tablet {
-          display: none;
-        }
 
         @media screen and (min-width: 768px) {
-          .mobile {
-            display: none;
+          .one {
+            grid-column: ${alignText};
+            grid-row: 1;
+            align-self: end;
           }
 
-          .tablet {
-            display: block;
+          .two {
+            grid-column: ${alignImg};
+            grid-row: 1 / 3;
+          }
+
+          .three {
+            grid-column: ${alignText};
+            grid-row: 2;
           }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 

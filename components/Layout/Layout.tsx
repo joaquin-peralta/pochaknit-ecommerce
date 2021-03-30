@@ -2,8 +2,8 @@ import { useState, ReactNode } from 'react';
 import TopNavbar from '@components/TopNavbar/TopNavbar';
 import Sidemenu from '@components/Sidemenu/Sidemenu';
 import SidemenuContext from '@context/SidemenuContext';
-import Sideshopbag from '@components/Sideshopbag/Sideshopbag';
-import SideshopbagContext from '@context/SideshopbagContext';
+import Cartmenu from '@components/Cartmenu/Cartmenu';
+import CartmenuContext from '@context/CartmenuContext';
 import Footer from '@components/Footer/Footer';
 
 interface Props {
@@ -17,15 +17,13 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <SidemenuContext.Provider value={[menuVisibility, setMenuVisibility]}>
-        <SideshopbagContext.Provider
-          value={[shopVisibility, setShopVisibility]}
-        >
+        <CartmenuContext.Provider value={[shopVisibility, setShopVisibility]}>
           <TopNavbar />
           <Sidemenu />
-          <Sideshopbag />
+          <Cartmenu />
           {children}
           <Footer />
-        </SideshopbagContext.Provider>
+        </CartmenuContext.Provider>
       </SidemenuContext.Provider>
     </>
   );

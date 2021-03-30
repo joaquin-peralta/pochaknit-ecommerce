@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -10,6 +10,24 @@ import SidemenuData from './SidemenuData';
 const Sidemenu = () => {
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
 
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (menuVisibility === true && !ref.current.contains(event.target)) {
+          setMenuVisibility(false);
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [menuVisibility]);
+  }
+
+  const sideMenuRef = useRef(null);
+  useOutsideAlerter(sideMenuRef);
+
   const hideMenu = () => {
     setMenuVisibility(false);
   };
@@ -20,7 +38,10 @@ const Sidemenu = () => {
         value={{ size: '24px', color: `${colors.analogous500}` }}
       >
         <div className={menuVisibility ? 'back-layer-show' : 'back-layer'}>
-          <div className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}>
+          <div
+            ref={sideMenuRef}
+            className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}
+          >
             <button className="close-btn" type="button" onClick={hideMenu}>
               <AiOutlineClose />
             </button>

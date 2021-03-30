@@ -15,6 +15,7 @@ const GlobalStyles = () => (
         margin: 0;
         padding: 72px 0 0 0;
         color: ${colors.darkgray};
+        font-family: 'Playfair Display', serif;
       }
     `}</style>
   </>
