@@ -3,13 +3,13 @@ import Container from 'react-bootstrap/Container';
 import Image from 'next/image';
 import isOdd from 'is-odd';
 
-interface Props {
+type Props = {
   category: string;
   name: string;
   img: string;
   titleColor: string;
   indexOfArray: number;
-}
+};
 
 const FeaturedPattern = ({
   category,
