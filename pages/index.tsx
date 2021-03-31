@@ -2,19 +2,15 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern/FeaturedPattern';
+import { Pattern } from '../types/index';
 
-interface Props {
-  featuredPatterns: Array<object>;
-}
+const API_URL = 'http://localhost:1337/featured-patterns';
 
-export default function Home({ featuredPatterns }: Props) {
-  interface Pattern {
-    category: string;
-    name: string;
-    images: any;
-    titleColor: string;
-  }
+type Props = {
+  patterns: Pattern[];
+};
 
+export default function Home({ patterns }: Props) {
   return (
     <>
       <Head>
@@ -27,14 +23,11 @@ export default function Home({ featuredPatterns }: Props) {
         />
       </Head>
 
-      {featuredPatterns.map((obj: { id: number; pattern: Pattern }, index) => (
+      {patterns.map((pattern, index) => (
         <FeaturedPattern
-          key={obj.id}
-          category={obj.pattern.category}
-          name={obj.pattern.name}
-          img={`http://localhost:1337${obj.pattern.images[0].url}`}
-          indexOfArray={index + 1}
-          titleColor={obj.pattern.titleColor}
+          key={pattern.id}
+          pattern={pattern}
+          indexOfArray={index}
         />
       ))}
 
@@ -44,19 +37,16 @@ export default function Home({ featuredPatterns }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featuredPatterns = await fetch(
-    'http://localhost:1337/featured-patterns',
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  const patterns: Pattern[] = await fetch(API_URL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  ).then((response) => response.json());
+  }).then((response) => response.json());
 
   return {
     props: {
-      featuredPatterns,
+      patterns,
     },
   };
 };

@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import QuiltedImages from '@components/QuiltedImages/QuiltedImages';
 
-const PatternsList = ({ pattern }) => (
+const PatternsList = () => (
   <Container fluid="md">
     <Row xs={1} lg={2} className="align-items-center">
       <Col lg={8}>

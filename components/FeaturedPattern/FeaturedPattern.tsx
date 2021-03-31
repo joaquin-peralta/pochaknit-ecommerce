@@ -2,22 +2,14 @@ import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Image from 'next/image';
 import isOdd from 'is-odd';
+import { Pattern } from '../../types/index';
 
 type Props = {
-  category: string;
-  name: string;
-  img: string;
-  titleColor: string;
+  pattern: Pattern;
   indexOfArray: number;
 };
 
-const FeaturedPattern = ({
-  category,
-  name,
-  img,
-  titleColor,
-  indexOfArray,
-}: Props) => {
+const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
   const [alignText, setAlignText] = useState('');
   const [alignImg, setAlignImg] = useState('');
 
@@ -41,11 +33,17 @@ const FeaturedPattern = ({
             </h4>
           </div>
           <div className="two">
-            <Image src={img} layout="intrinsic" width={900} height={1124} />
+            <Image
+              src={pattern.images[0]}
+              layout="intrinsic"
+              width={900}
+              height={1124}
+            />
           </div>
           <div className="three">
             <h2 className="title">
-              {category} <span style={{ fontSize: '1.2em' }}>{name}</span>
+              {pattern.category}{' '}
+              <span style={{ fontSize: '1.2em' }}>{pattern.name}</span>
             </h2>
           </div>
         </div>
@@ -74,7 +72,7 @@ const FeaturedPattern = ({
         }
         .title,
         .title span {
-          color: ${titleColor};
+          color: ${pattern.titleColor};
           text-align: center;
           text-transform: uppercase;
         }
