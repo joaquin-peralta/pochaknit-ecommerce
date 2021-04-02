@@ -1,10 +1,10 @@
 import { useState, ReactNode } from 'react';
-import TopNavbar from '@components/TopNavbar/TopNavbar';
-import Sidemenu from '@components/Sidemenu/Sidemenu';
+import TopNavbar from '@components/TopNavbar';
+import Sidemenu from '@components/Sidemenu';
 import SidemenuContext from '@context/SidemenuContext';
-import Cartmenu from '@components/Cartmenu/Cartmenu';
+import Cartmenu from '@components/Cartmenu';
 import CartmenuContext from '@context/CartmenuContext';
-import Footer from '@components/Footer/Footer';
+import Footer from '@components/Footer';
 
 interface Props {
   children: ReactNode;

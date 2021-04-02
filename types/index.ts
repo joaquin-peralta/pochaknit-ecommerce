@@ -5,5 +5,5 @@ export interface Pattern {
   description: string;
   price: number;
   titleColor: string;
-  images: any;
+  images: object;
 }

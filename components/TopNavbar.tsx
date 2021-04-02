@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineShopping } from 'react-icons/ai';
 import { colors } from '@utils/themes';
-import SidemenuData from '@components/Sidemenu/SidemenuData';
+import SidemenuData from '@components/SidemenuData';
 
 const TopNavbar = () => {
   // eslint-disable-next-line no-unused-vars

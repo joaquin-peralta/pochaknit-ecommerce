@@ -23,7 +23,7 @@
       "@context/*": ["context/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
-      "@types/*": ["types/*"],
+      "@types": ["types"],
       "@utils/*": ["utils/*"]
     }
   },

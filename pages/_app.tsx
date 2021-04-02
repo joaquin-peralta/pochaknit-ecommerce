@@ -1,6 +1,6 @@
 import { ElementType } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Layout from '@components/Layout/Layout';
+import Layout from '@components/Layout';
 
 interface Props {
   Component: ElementType;

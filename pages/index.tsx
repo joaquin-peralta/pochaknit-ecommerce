@@ -1,8 +1,8 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
-import FeaturedPattern from '@components/FeaturedPattern/FeaturedPattern';
-import { Pattern } from '../types/index';
+import FeaturedPattern from '@components/FeaturedPattern';
+import { Pattern } from '@types';
 
 const API_URL = 'http://localhost:1337/featured-patterns';
 

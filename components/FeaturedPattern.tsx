@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Image from 'next/image';
 import isOdd from 'is-odd';
-import { Pattern } from '../../types/index';
+import { Pattern } from '@types';
 
 type Props = {
   pattern: Pattern;
@@ -34,7 +34,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           </div>
           <div className="two">
             <Image
-              src={pattern.images[0]}
+              src={pattern.images[0].url}
               layout="intrinsic"
               width={900}
               height={1124}

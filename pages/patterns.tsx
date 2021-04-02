@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import PatternsList from '@components/PatternsList/PatternsList';
+import DetailedPattern from '@components/DetailedPattern';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export interface Pattern {

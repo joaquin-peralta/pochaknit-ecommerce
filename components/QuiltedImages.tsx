@@ -1,31 +1,20 @@
 import Image from 'next/image';
 
-const QuiltedImages = () => (
+type Props = {
+  images: object;
+};
+
+const QuiltedImages = ({ images }: Props) => (
   <>
     <div className="wrapper">
       <div className="one">
-        <Image
-          src="/medias-lola.jpeg"
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[0]} width={900} height={1124} layout="responsive" />
       </div>
       <div className="two">
-        <Image
-          src="/medias-lola.jpeg"
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[1]} width={900} height={1124} layout="responsive" />
       </div>
       <div className="three">
-        <Image
-          src="/medias-lola.jpeg"
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[2]} width={900} height={1124} layout="responsive" />
       </div>
     </div>
 
