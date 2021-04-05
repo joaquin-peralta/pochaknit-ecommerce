@@ -1,24 +1,20 @@
 import { GetStaticProps } from 'next';
 import DetailedPattern from '@components/DetailedPattern';
 import GlobalStyles from '@styles/GlobalStyles';
+import { Pattern } from '@types';
 
-export interface Pattern {
-  category: string;
-  name: string;
-  images: any;
-  titleColor: string;
-}
-const PatternsPage = (props) => {
-  const { patterns } = props;
-  console.log(patterns);
-
-  return (
-    <>
-      <h1>caca</h1>
-      <GlobalStyles />
-    </>
-  );
+type Props = {
+  patterns: Pattern[];
 };
+
+const PatternsPage = ({ patterns }: Props) => (
+  <>
+    {patterns.map((pattern) => (
+      <DetailedPattern key={pattern.id} pattern={pattern} />
+    ))}
+    <GlobalStyles />
+  </>
+);
 
 export default PatternsPage;
 

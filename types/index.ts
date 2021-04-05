@@ -5,5 +5,10 @@ export interface Pattern {
   description: string;
   price: number;
   titleColor: string;
-  images: object;
+  images: any;
+}
+
+export interface FtPattern {
+  id: number;
+  pattern: Pattern;
 }

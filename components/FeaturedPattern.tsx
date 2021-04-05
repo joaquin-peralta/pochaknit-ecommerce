@@ -34,10 +34,10 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           </div>
           <div className="two">
             <Image
-              src={pattern.images[0].url}
-              layout="intrinsic"
+              src={`http://localhost:1337${pattern.images[0].url}`}
               width={900}
               height={1124}
+              layout="responsive"
             />
           </div>
           <div className="three">

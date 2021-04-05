@@ -2,15 +2,15 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern';
-import { Pattern } from '@types';
+import { FtPattern } from '@types';
 
 const API_URL = 'http://localhost:1337/featured-patterns';
 
 type Props = {
-  patterns: Pattern[];
+  data: FtPattern[];
 };
 
-export default function Home({ patterns }: Props) {
+export default function Home({ data }: Props) {
   return (
     <>
       <Head>
@@ -23,10 +23,10 @@ export default function Home({ patterns }: Props) {
         />
       </Head>
 
-      {patterns.map((pattern, index) => (
+      {data.map((item, index) => (
         <FeaturedPattern
-          key={pattern.id}
-          pattern={pattern}
+          key={item.id}
+          pattern={item.pattern}
           indexOfArray={index}
         />
       ))}
@@ -37,7 +37,7 @@ export default function Home({ patterns }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const patterns: Pattern[] = await fetch(API_URL, {
+  const data: FtPattern[] = await fetch(API_URL, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      patterns,
+      data,
     },
   };
 };
