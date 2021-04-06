@@ -17,6 +17,22 @@ const GlobalStyles = () => (
         color: ${colors.darkgray};
         font-family: 'Playfair Display', serif;
       }
+
+      // ProfilePage
+      .avatar {
+        border-radius: 50%;
+      }
+
+      // SlideShowGallery
+      .slide-thumbnail {
+        opacity: 0.6;
+      }
+
+      .slide-active,
+      .slide-thumbnail:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
     `}</style>
   </>
 );
