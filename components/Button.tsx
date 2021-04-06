@@ -3,18 +3,18 @@ import { colors } from '@utils/themes';
 
 type Props = {
   variant: 'primary' | 'secondary' | 'purchaseNative' | 'purchaseExt';
-  content: string | ReactNode;
+  children: string | ReactNode;
 };
 
-const Button = ({ variant, content }: Props) => (
+const Button = ({ variant, children }: Props) => (
   <div>
     <button className={`${variant}`} type="button">
-      {content}
+      {children}
     </button>
 
     <style jsx>{`
       button {
-        width: 154px;
+        width: 100%;
         height: auto;
         padding: 0.5rem 0.5rem;
         border: 0;
