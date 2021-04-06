@@ -2,17 +2,15 @@ import { ReactNode } from 'react';
 import { colors } from '@utils/themes';
 
 type Props = {
-  variant: 'primary' | 'secondary';
-  text: string | ReactNode;
+  variant: 'primary' | 'secondary' | 'purchaseNative' | 'purchaseExt';
+  content: string | ReactNode;
 };
 
-const Button = ({ variant, text }: Props) => (
+const Button = ({ variant, content }: Props) => (
   <div>
-    {variant === 'primary' && (
-      <button className="primary" type="button">
-        {text}
-      </button>
-    )}
+    <button className={`${variant}`} type="button">
+      {content}
+    </button>
 
     <style jsx>{`
       button {
@@ -32,8 +30,53 @@ const Button = ({ variant, text }: Props) => (
         background-color: ${colors.primary800Dark};
       }
 
-      .primary:active {
-        border: 2px solid ${colors.primary800Transparent};
+      .primary:active,
+      .primary:focus {
+        box-shadow: 0px 0px 1px 3px ${colors.primary800Transparent};
+      }
+
+      .secondary {
+        background: transparent;
+        color: ${colors.darkgray};
+        border: 1px solid ${colors.darkgray};
+      }
+
+      .secondary:hover {
+        background-color: ${colors.darkgray};
+        color: #eee;
+      }
+
+      .secondary:active,
+      .secondary:focus {
+        box-shadow: 0px 0px 1px 3px ${colors.darkgrayTransparent};
+      }
+
+      .purchaseNative {
+        background-color: ${colors.primaryStrong};
+        color: #eee;
+      }
+
+      .purchaseNative:hover {
+        background-color: ${colors.primaryStrongDark};
+      }
+
+      .purchaseNative:active,
+      .purchaseNative:focus {
+        box-shadow: 0px 0px 1px 3px ${colors.primaryStrongTransparent};
+      }
+
+      .purchaseExt {
+        background-color: ${colors.triadic100};
+        color: #eee;
+      }
+
+      .purchaseExt:hover {
+        background-color: ${colors.triadic100Dark};
+      }
+
+      .purchaseExt:active,
+      .purchaseExt:focus {
+        box-shadow: 0px 0px 1px 3px ${colors.triadic100Transparent};
       }
     `}</style>
   </div>
