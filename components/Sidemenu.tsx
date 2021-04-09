@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useUser } from '@auth0/nextjs-auth0';
 import { IconContext } from 'react-icons';
 import { AiOutlineClose } from 'react-icons/ai';
 import { colors } from '@utils/themes';
@@ -9,6 +10,7 @@ import SidemenuData from './SidemenuData';
 
 const Sidemenu = () => {
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
+  const { user } = useUser();
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -69,11 +71,21 @@ const Sidemenu = () => {
               <p className="font-italic">¡No olvides de seguirnos!</p>
             </div>
             <div className="log-in">
-              <div className="log-in__content">
-                <a>Crear cuenta</a>
-                {' | '}
-                <a>Iniciar sesión</a>
-              </div>
+              {!user && (
+                <div className="log-in__content">
+                  <a href="/api/auth/login">Crear cuenta</a>
+                  {' | '}
+                  <a href="/api/auth/login">Iniciar sesión</a>
+                </div>
+              )}
+              {/* {user && (
+                <div className="log-in__content">
+                  <p>¡Hola {user.name}!</p>
+                  <Link>
+                    <a>Ver perfil</a>
+                  </Link>
+                </div>
+              )} */}
             </div>
           </div>
         </div>

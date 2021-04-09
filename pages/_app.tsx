@@ -1,4 +1,5 @@
 import { ElementType } from 'react';
+import { UserProvider } from '@auth0/nextjs-auth0';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from '@components/Layout';
 
@@ -9,9 +10,11 @@ interface Props {
 
 function MyApp({ Component, pageProps }: Props) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <UserProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </UserProvider>
   );
 }
 

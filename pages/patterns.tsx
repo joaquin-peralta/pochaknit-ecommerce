@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
 import DetailedPattern from '@components/DetailedPattern';
 import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
@@ -10,7 +11,11 @@ type Props = {
 const PatternsPage = ({ patterns }: Props) => (
   <>
     {patterns.map((pattern) => (
-      <DetailedPattern key={pattern.id} pattern={pattern} />
+      <Link key={pattern.id} href={`/product/${pattern.id}`}>
+        <a>
+          <DetailedPattern pattern={pattern} />
+        </a>
+      </Link>
     ))}
     <GlobalStyles />
   </>

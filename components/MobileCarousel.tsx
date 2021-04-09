@@ -1,69 +1,25 @@
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'next/image';
 
-const MobileCarousel = () => (
+type Props = {
+  images: any;
+};
+
+const MobileCarousel = ({ images }: Props) => (
   <div>
     <Carousel>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-block w-100">
-          <Image
-            src="/medias-lola.jpeg"
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
-        </div>
-      </Carousel.Item>
+      {images.map((image) => (
+        <Carousel.Item key={image.id}>
+          <div className="d-block w-100">
+            <Image
+              src={`http://localhost:1337${image.url}`}
+              width={900}
+              height={1124}
+              layout="responsive"
+            />
+          </div>
+        </Carousel.Item>
+      ))}
     </Carousel>
   </div>
 );
