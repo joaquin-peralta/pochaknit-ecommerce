@@ -17,8 +17,8 @@ import GlobalStyles from '@styles/GlobalStyles';
 
 const ProductPage = () => (
   <Container>
-    <Row xs={1} md={2} className="py-4">
-      <Col md={8} lg>
+    <Row xs={1} md={2} className="py-5 justify-content-between">
+      <Col xs md={6}>
         <div className="mobile-breakpoint">
           <MobileCarousel />
         </div>
@@ -26,7 +26,7 @@ const ProductPage = () => (
           <SlideShowGallery />
         </div>
       </Col>
-      <Col md={4} lg className="py-4">
+      <Col xs md={{ span: 4, offset: 1 }}>
         <h3>Chaleco Nina</h3>
         <p className="h5">$ 1.499</p>
         <div className="btn-container pt-3 pb-1">
@@ -59,7 +59,7 @@ const ProductPage = () => (
         </ul>
       </Col>
     </Row>
-    <div>
+    <div className="product-description">
       <h3>Lorem Ipsum</h3>
       <p>
         Nam maximus lectus nec dui efficitur vulputate. Quisque at magna
@@ -120,6 +120,11 @@ const ProductPage = () => (
 
         .tablet-breakpoint {
           display: block;
+        }
+
+        .product-description {
+          padding-left: 15px;
+          padding-right: 15px;
         }
       }
     `}</style>

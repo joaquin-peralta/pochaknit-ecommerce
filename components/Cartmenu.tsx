@@ -1,6 +1,10 @@
 import { useContext, useEffect, useRef } from 'react';
 import CartmenuContext from '@context/CartmenuContext';
+import Image from 'next/image';
 import { AiOutlineClose } from 'react-icons/ai';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { colors } from '@utils/themes';
 
 const Cartmenu = () => {
@@ -41,13 +45,37 @@ const Cartmenu = () => {
             />
           </button>
           <hr className="divisor" />
-          <p className="cart-text-info">La bolsa está vacía</p>
+          {/* <p className="cart-text-info">La bolsa está vacía</p> */}
+
+          <div className="cart-items">
+            <Container>
+              <Row className="justify-content-between py-4">
+                <Col xs={3}>
+                  <Image
+                    src="/chaleco-nina.jpeg"
+                    width={72}
+                    height={72}
+                    layout="responsive"
+                  />
+                </Col>
+                <Col xs={6}>
+                  <p className="mb-0">Chaleco NINA</p>
+                  <small>$ 1.490</small>
+                </Col>
+                <Col xs={3}>
+                  <button type="button" className="btn-cancel-item">
+                    <AiOutlineClose />
+                  </button>
+                </Col>
+              </Row>
+            </Container>
+          </div>
         </div>
       </div>
 
       <style jsx>{`
         .back-layer {
-          positon: fixed;
+          position: fixed;
           width: 100%;
           top: 0;
           left: 0;
@@ -115,6 +143,17 @@ const Cartmenu = () => {
           position: absolute;
           top: 88px;
           left: 76px;
+        }
+
+        .cart-items {
+          position: absolute;
+          top: 88px;
+          width: 100%;
+        }
+
+        .btn-cancel-item {
+          border: 0;
+          background: transparent;
         }
       `}</style>
     </>
