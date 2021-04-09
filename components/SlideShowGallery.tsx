@@ -5,16 +5,14 @@ import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
 import GlobalStyles from '@styles/GlobalStyles';
 
-const SlideShowGallery = () => {
+type Props = {
+  images: any;
+};
+
+const SlideShowGallery = ({ images }: Props) => {
+  const slides = images.map((image) => image.url);
+  console.log(slides);
   const [slideIndex, setSlideIndex] = useState(0);
-  const slides = [
-    '/medias-lola.jpeg',
-    '/chaleco-nina.jpeg',
-    '/medias-lola.jpeg',
-    '/medias-lola.jpeg',
-    '/medias-lola.jpeg',
-    '/medias-lola.jpeg',
-  ];
 
   const plus = () => {
     if (slideIndex === slides.length - 1) {

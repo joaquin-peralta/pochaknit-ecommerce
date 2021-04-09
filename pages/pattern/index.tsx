@@ -11,7 +11,7 @@ type Props = {
 const PatternsPage = ({ patterns }: Props) => (
   <>
     {patterns.map((pattern) => (
-      <Link key={pattern.id} href={`/product/${pattern.id}`}>
+      <Link key={pattern.id} href={`/pattern/${pattern.id}`}>
         <a>
           <DetailedPattern pattern={pattern} />
         </a>

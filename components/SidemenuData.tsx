@@ -11,7 +11,7 @@ const SidemenuData = [
   {
     title: 'Patrones',
     icon: <GiWool />,
-    path: '/patterns',
+    path: '/pattern',
   },
   {
     title: 'Videos',
