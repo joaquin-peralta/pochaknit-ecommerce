@@ -1,10 +1,11 @@
 import { useContext, useEffect, useRef } from 'react';
 import CartmenuContext from '@context/CartmenuContext';
 import Image from 'next/image';
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from '@components/Button';
 import { colors } from '@utils/themes';
 
 const Cartmenu = () => {
@@ -39,37 +40,65 @@ const Cartmenu = () => {
           ref={cartMenuRef}
           className={cartVisibility ? 'cartmenu-open' : 'cartmenu'}
         >
-          <button className="close-btn" type="button" onClick={hideCartMenu}>
-            <AiOutlineClose
-              style={{ color: `${colors.analogous500}`, fontSize: '24px' }}
-            />
-          </button>
-          <hr className="divisor" />
-          {/* <p className="cart-text-info">La bolsa está vacía</p> */}
-
-          <div className="cart-items">
-            <Container>
-              <Row className="justify-content-between py-4">
-                <Col xs={3}>
-                  <Image
-                    src="/chaleco-nina.jpeg"
-                    width={72}
-                    height={72}
-                    layout="responsive"
+          <Container>
+            <Row className="justify-content-end">
+              <Col xs="auto" className="px-0">
+                <button
+                  className="close-btn"
+                  type="button"
+                  onClick={hideCartMenu}
+                >
+                  <AiOutlineClose
+                    style={{
+                      color: `${colors.analogous500}`,
+                      fontSize: '24px',
+                    }}
                   />
-                </Col>
-                <Col xs={6}>
-                  <p className="mb-0">Chaleco NINA</p>
-                  <small>$ 1.490</small>
-                </Col>
-                <Col xs={3}>
-                  <button type="button" className="btn-cancel-item">
-                    <AiOutlineClose />
-                  </button>
-                </Col>
-              </Row>
-            </Container>
-          </div>
+                </button>
+              </Col>
+            </Row>
+            <hr className="divisor" />
+            {/* <p className="cart-text-info">La bolsa está vacía</p> */}
+
+            <Row className="py-4 align-items-center">
+              <Col xs={3}>
+                <Image
+                  src="/chaleco-nina.jpeg"
+                  width={72}
+                  height={72}
+                  layout="responsive"
+                />
+              </Col>
+              <Col xs={6}>
+                <p className="mb-0">Chaleco NINA</p>
+                <small>$ 1.490</small>
+              </Col>
+              <Col xs={3} className="text-center">
+                <button type="button" className="btn-cancel-item">
+                  <AiOutlineClose />
+                </button>
+              </Col>
+            </Row>
+            <Row className="justify-content-end py-2">
+              <Col xs="auto">
+                <p className="mb-0 h4">Total</p>
+                <p className="mb-0 h4">$ 1.490</p>
+              </Col>
+            </Row>
+            <hr />
+            <Row className="justify-content-center py-1">
+              <Col xs="auto">
+                <Button variant="primary">
+                  <div className="px-5">
+                    <AiOutlineShopping
+                      style={{ fontSize: '24px', paddingBottom: '3px' }}
+                    />
+                    <p className="d-inline-block mb-0 ml-2">Ver Bolsa</p>
+                  </div>
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </div>
       </div>
 
@@ -123,16 +152,9 @@ const Cartmenu = () => {
           height: 72px;
           border: 0;
           background-color: ${colors.background};
-          position: absolute;
-          top: 0;
-          right: 0;
         }
 
         .divisor {
-          position: absolute;
-          top: 72px;
-          left: 24px;
-          right: 24px;
           color: ${colors.analogous500};
           margin-top: 0;
           margin-bottom: 0;
@@ -140,14 +162,9 @@ const Cartmenu = () => {
 
         .cart-text-info {
           font-style: italic;
-          position: absolute;
-          top: 88px;
-          left: 76px;
         }
 
         .cart-items {
-          position: absolute;
-          top: 88px;
           width: 100%;
         }
 
