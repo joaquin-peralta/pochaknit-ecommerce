@@ -21,7 +21,7 @@ type Props = {
   product: Pattern;
 };
 
-const ProductPage = ({ product }: Props) => (
+const SinglePatternPage = ({ product }: Props) => (
   <Container>
     <Row xs={1} md={2} className="py-4 justify-content-between">
       <Col xs md={6}>
@@ -32,13 +32,14 @@ const ProductPage = ({ product }: Props) => (
           <TabletGallery images={product.images} />
         </div>
       </Col>
-      <Col xs md={{ span: 4, offset: 1 }} className="py-3">
-        <h3>
-          {product.category} {product.name}
-        </h3>
-        <p className="h5">$ {product.price}</p>
+      <Col xs md={{ span: 4, offset: 1 }} className="pt-5 pb-2">
+        <h2 className="mb-3">
+          {product.category}{' '}
+          <span className="text-uppercase">{product.name}</span>
+        </h2>
+        <p className="h3">$ {product.price}</p>
 
-        <div className="btn-container py-2">
+        <div className="btn-container">
           <Button variant="primary">
             <AiOutlinePlus /> Agregar a la Bolsa
           </Button>
@@ -83,6 +84,8 @@ const ProductPage = ({ product }: Props) => (
       }
       .btn-container {
         width: 11rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
       }
       .tablet-breakpoint {
         display: none;
@@ -134,4 +137,4 @@ export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
   };
 };
 
-export default ProductPage;
+export default SinglePatternPage;

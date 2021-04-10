@@ -34,7 +34,7 @@
         {
           "components": ["Link"],
           "specialLink": ["hrefLeft", "hrefRight"],
-          "aspects": ["invalidHref", "preferButton"]
+          "aspects": ["invalidHref"]
         }
       ],
       "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],

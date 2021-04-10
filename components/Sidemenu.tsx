@@ -51,7 +51,13 @@ const Sidemenu = () => {
               <ul className="list">
                 {SidemenuData.map((item) => (
                   <Link key={item.title} href={item.path}>
-                    <a className="list-anchor">
+                    <a
+                      className="list-anchor"
+                      onClick={hideMenu}
+                      onKeyDown={hideMenu}
+                      role="link"
+                      tabIndex={0}
+                    >
                       <li className="list-item">
                         <span>{item.icon}</span>
                         <span className="list-item__title">{item.title}</span>

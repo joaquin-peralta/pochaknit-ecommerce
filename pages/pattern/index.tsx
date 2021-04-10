@@ -8,7 +8,7 @@ type Props = {
   patterns: Pattern[];
 };
 
-const PatternsPage = ({ patterns }: Props) => (
+const ListOfPatternsPage = ({ patterns }: Props) => (
   <>
     {patterns.map((pattern) => (
       <Link key={pattern.id} href={`/pattern/${pattern.id}`}>
@@ -21,7 +21,7 @@ const PatternsPage = ({ patterns }: Props) => (
   </>
 );
 
-export default PatternsPage;
+export default ListOfPatternsPage;
 
 export const getStaticProps: GetStaticProps = async () => {
   const patterns: object[] = await fetch('http://localhost:1337/patterns', {

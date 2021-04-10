@@ -10,12 +10,10 @@ type Props = {
 };
 
 const SlideShowGallery = ({ images }: Props) => {
-  const slides = images.map((image) => image.url);
-  console.log(slides);
   const [slideIndex, setSlideIndex] = useState(0);
 
   const plus = () => {
-    if (slideIndex === slides.length - 1) {
+    if (slideIndex === images.length - 1) {
       setSlideIndex(0);
     } else {
       setSlideIndex(slideIndex + 1);
@@ -24,7 +22,7 @@ const SlideShowGallery = ({ images }: Props) => {
 
   const substract = () => {
     if (slideIndex <= 0) {
-      setSlideIndex(slides.length - 1);
+      setSlideIndex(images.length - 1);
     } else {
       setSlideIndex(slideIndex - 1);
     }
@@ -40,100 +38,51 @@ const SlideShowGallery = ({ images }: Props) => {
   };
 
   return (
-    <Container className="gallery-container">
-      <div className={slideIndex === 0 ? 'show' : 'hide'}>
-        <Image src={slides[0]} width={900} height={1124} layout="responsive" />
-      </div>
-      <div className={slideIndex === 1 ? 'show' : 'hide'}>
-        <Image src={slides[1]} width={900} height={1124} layout="responsive" />
-      </div>
-      <div className={slideIndex === 2 ? 'show' : 'hide'}>
-        <Image src={slides[2]} width={900} height={1124} layout="responsive" />
-      </div>
-      <div className={slideIndex === 3 ? 'show' : 'hide'}>
-        <Image src={slides[3]} width={900} height={1124} layout="responsive" />
-      </div>
-      <div className={slideIndex === 4 ? 'show' : 'hide'}>
-        <Image src={slides[4]} width={900} height={1124} layout="responsive" />
-      </div>
-      <div className={slideIndex === 5 ? 'show' : 'hide'}>
-        <Image src={slides[5]} width={900} height={1124} layout="responsive" />
-      </div>
-
-      <Row className="align-items-center py-2">
-        <Col className="px-0 text-center">
-          <button type="button" className="prev" onClick={substract}>
-            &#10094;
-          </button>
-        </Col>
-        <Col className="px-2">
-          <div>
+    <>
+      <Container className="gallery-container">
+        {images.map((image, index) => (
+          <div
+            key={image.id}
+            className={slideIndex === index ? 'show' : 'hide'}
+          >
             <Image
-              className={`slide-thumbnail ${slideActive(0)}`}
-              src={slides[0]}
-              width={1124}
+              src={`http://localhost:1337${image.url}`}
+              width={900}
               height={1124}
               layout="responsive"
-              onClick={() => currentSlide(0)}
             />
           </div>
-        </Col>
-        <Col className="px-2">
-          <Image
-            className={`slide-thumbnail ${slideActive(1)}`}
-            src={slides[1]}
-            width={1124}
-            height={1124}
-            layout="responsive"
-            onClick={() => currentSlide(1)}
-          />
-        </Col>
-        <Col className="px-2">
-          <Image
-            className={`slide-thumbnail ${slideActive(2)}`}
-            src={slides[2]}
-            width={1124}
-            height={1124}
-            layout="responsive"
-            onClick={() => currentSlide(2)}
-          />
-        </Col>
-        <Col className="px-2">
-          <Image
-            className={`slide-thumbnail ${slideActive(3)}`}
-            src={slides[3]}
-            width={1124}
-            height={1124}
-            layout="responsive"
-            onClick={() => currentSlide(3)}
-          />
-        </Col>
-        <Col className="px-2">
-          <Image
-            className={`slide-thumbnail ${slideActive(4)}`}
-            src={slides[4]}
-            width={1124}
-            height={1124}
-            layout="responsive"
-            onClick={() => currentSlide(4)}
-          />
-        </Col>
-        <Col className="px-2">
-          <Image
-            className={`slide-thumbnail ${slideActive(5)}`}
-            src={slides[5]}
-            width={1124}
-            height={1124}
-            layout="responsive"
-            onClick={() => currentSlide(5)}
-          />
-        </Col>
-        <Col className="px-0 text-center">
-          <button type="button" className="next" onClick={plus}>
-            &#10095;
-          </button>
-        </Col>
-      </Row>
+        ))}
+
+        <Row className="align-items-center py-2">
+          <Col className="px-0 text-center">
+            <button type="button" className="prev" onClick={substract}>
+              &#10094;
+            </button>
+          </Col>
+
+          {images.map((image, index) => (
+            <Col key={image.id} className="px-2">
+              <div>
+                <Image
+                  className={`slide-thumbnail ${slideActive(index)}`}
+                  src={`http://localhost:1337${image.url}`}
+                  width={1124}
+                  height={1124}
+                  layout="responsive"
+                  onClick={() => currentSlide(index)}
+                />
+              </div>
+            </Col>
+          ))}
+
+          <Col className="px-0 text-center">
+            <button type="button" className="next" onClick={plus}>
+              &#10095;
+            </button>
+          </Col>
+        </Row>
+      </Container>
 
       <GlobalStyles />
 
@@ -172,7 +121,7 @@ const SlideShowGallery = ({ images }: Props) => {
           border-radius: 3px 0 0 3px;
         }
       `}</style>
-    </Container>
+    </>
   );
 };
 
