@@ -12,7 +12,7 @@ const ListOfPatternsPage = ({ patterns }: Props) => (
   <>
     {patterns.map((pattern) => (
       <Link key={pattern.id} href={`/pattern/${pattern.id}`}>
-        <a>
+        <a className="text-decoration-none text-reset">
           <DetailedPattern pattern={pattern} />
         </a>
       </Link>

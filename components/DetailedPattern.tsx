@@ -9,16 +9,19 @@ type Props = {
 };
 
 const DetailedPattern = ({ pattern }: Props) => (
-  <Container className="py-4" fluid="md">
-    <Row xs={1} lg={2} className="align-items-center">
-      <Col lg={8}>
+  <Container className="py-5">
+    <Row className="align-items-center">
+      <Col>
         <QuiltedImages images={pattern.images} />
       </Col>
-      <Col lg={4} className="text-center">
+    </Row>
+    <Row>
+      <Col className="text-center py-3">
         <h2>
-          {pattern.category} {pattern.name}
+          {pattern.category}{' '}
+          <span className="text-uppercase">{pattern.name}</span>
         </h2>
-        <p className="h5">$ {pattern.price}</p>
+        <p className="h3">$ {pattern.price}</p>
       </Col>
     </Row>
   </Container>

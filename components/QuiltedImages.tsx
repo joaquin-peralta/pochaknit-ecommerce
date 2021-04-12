@@ -20,17 +20,17 @@ const QuiltedImages = ({ images }: Props) => (
       <div className="two">
         <Image
           src={BASE_URL + images[1].url}
-          width={1124}
+          width={900}
           height={1124}
-          layout="intrinsic"
+          layout="responsive"
         />
       </div>
       <div className="three">
         <Image
           src={BASE_URL + images[2].url}
-          width={1124}
+          width={900}
           height={1124}
-          layout="intrinsic"
+          layout="responsive"
         />
       </div>
     </div>

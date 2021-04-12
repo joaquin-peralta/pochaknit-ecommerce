@@ -84,14 +84,14 @@ const Sidemenu = () => {
                   <a href="/api/auth/login">Iniciar sesión</a>
                 </div>
               )}
-              {/* {user && (
+              {user && (
                 <div className="log-in__content">
-                  <p>¡Hola {user.name}!</p>
-                  <Link>
+                  <p>¡Hola {user.nickname}!</p>
+                  <Link href="/profile/123}">
                     <a>Ver perfil</a>
                   </Link>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
         </div>
