@@ -9,7 +9,7 @@ type Props = {
 };
 
 const DetailedPattern = ({ pattern }: Props) => (
-  <Container className="py-5">
+  <Container className="py-3">
     <Row className="align-items-center">
       <Col>
         <QuiltedImages images={pattern.images} />

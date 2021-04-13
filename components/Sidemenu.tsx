@@ -2,15 +2,14 @@ import { useContext, useEffect, useRef } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUser } from '@auth0/nextjs-auth0';
 import { IconContext } from 'react-icons';
 import { AiOutlineClose } from 'react-icons/ai';
 import { colors } from '@utils/themes';
+import SessionNav from '@components/SessionNav';
 import SidemenuData from './SidemenuData';
 
 const Sidemenu = () => {
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
-  const { user } = useUser();
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -77,21 +76,7 @@ const Sidemenu = () => {
               <p className="font-italic">¡No olvides de seguirnos!</p>
             </div>
             <div className="log-in">
-              {!user && (
-                <div className="log-in__content">
-                  <a href="/api/auth/login">Crear cuenta</a>
-                  {' | '}
-                  <a href="/api/auth/login">Iniciar sesión</a>
-                </div>
-              )}
-              {user && (
-                <div className="log-in__content">
-                  <p>¡Hola {user.nickname}!</p>
-                  <Link href="/profile/123}">
-                    <a>Ver perfil</a>
-                  </Link>
-                </div>
-              )}
+              <SessionNav />
             </div>
           </div>
         </div>
@@ -186,19 +171,7 @@ const Sidemenu = () => {
           width: 304px;
           padding-top: 16px;
           padding-bottom: 16px;
-        }
-
-        .log-in__content {
           text-align: center;
-        }
-
-        .log-in__content a {
-          text-decoration: none;
-          color: ${colors.darkgray};
-        }
-
-        .log-in__content a:first-of-type {
-          font-weight: bold;
         }
       `}</style>
     </>

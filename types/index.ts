@@ -12,3 +12,15 @@ export interface FtPattern {
   id: number;
   pattern: Pattern;
 }
+
+export interface Video {
+  id: number;
+  title: string;
+  url: string;
+}
+export interface Purchase {
+  id: number;
+  pattern: Pattern;
+  pdf: string;
+  videos: Video[];
+}

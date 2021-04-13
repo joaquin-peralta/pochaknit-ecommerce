@@ -1,10 +1,9 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
+import SessionNav from '@components/SessionNav';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern';
 import { FtPattern } from '@types';
-
-const API_URL = 'http://localhost:1337/featured-patterns';
 
 type Props = {
   data: FtPattern[];
@@ -23,6 +22,8 @@ export default function Home({ data }: Props) {
         />
       </Head>
 
+      <SessionNav />
+
       {data.map((item, index) => (
         <FeaturedPattern
           key={item.id}
@@ -37,12 +38,15 @@ export default function Home({ data }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const data: FtPattern[] = await fetch(API_URL, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+  const data: FtPattern[] = await fetch(
+    `${process.env.HOST}/featured-patterns`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  }).then((response) => response.json());
+  ).then((response) => response.json());
 
   return {
     props: {

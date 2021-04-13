@@ -14,6 +14,8 @@ import GlobalStyles from '@styles/GlobalStyles';
 export default withPageAuthRequired(() => {
   const { user, error, isLoading } = useUser();
   const [menu, setMenu] = useState(true);
+  const [purchases, setPurchases] = useState([{}]);
+  const USER_ID = user.sub.slice(6, user.sub.length);
 
   const patternButton = () => {
     setMenu(true);
@@ -30,6 +32,9 @@ export default withPageAuthRequired(() => {
   return (
     user && (
       <Container>
+        <div className="text-right">
+          <a href="/api/auth/logout">Cerrar sesión</a>
+        </div>
         <Row xs={1} className="text-center py-4 mb-4">
           <Col>
             <Image
@@ -46,7 +51,6 @@ export default withPageAuthRequired(() => {
           </Col>
           <Col>
             <small style={{ color: colors.analogous500 }}>{user.email}</small>
-            <a href="/api/auth/logout">Cerrar sesión</a>
           </Col>
         </Row>
         <Row>
@@ -100,7 +104,11 @@ export default withPageAuthRequired(() => {
           </Col>
         </Row>
         <div className="items-container">
-          {menu ? <ProfilePatternItem /> : <ProfileVideoItem />}
+          {menu ? (
+            <ProfilePatternItem item={purchases} />
+          ) : (
+            <ProfileVideoItem item={purchases} />
+          )}
         </div>
         <GlobalStyles />
 

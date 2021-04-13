@@ -115,7 +115,7 @@ const SinglePatternPage = ({ product }: Props) => (
 );
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch('http://localhost:1337/patterns/');
+  const response = await fetch(`${process.env.HOST}/patterns/`);
   const products = await response.json();
 
   return {
@@ -127,7 +127,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
-  const response = await fetch(`http://localhost:1337/patterns/?id=${id}`);
+  const response = await fetch(`${process.env.HOST}/patterns/?id=${id}`);
   const found = await response.json();
 
   return {
