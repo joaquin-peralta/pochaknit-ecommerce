@@ -1,26 +1,35 @@
+export interface File {
+  id: string;
+  url: string;
+}
+
+export interface CloudImage {
+  id: string;
+  alternativeText: string;
+  url: string;
+}
+
+export interface CloudVideo {
+  id: string;
+  url: string;
+}
 export interface Pattern {
   id: number;
   category: string;
   name: string;
   description: string;
   price: number;
-  titleColor: string;
-  images: any;
+  primaryColor: string;
+  files: File[];
+  images: CloudImage[];
+  videos: CloudVideo[];
 }
 
-export interface FtPattern {
+export interface Featured {
   id: number;
   pattern: Pattern;
-}
-
-export interface Video {
-  id: number;
-  title: string;
-  url: string;
 }
 export interface Purchase {
   id: number;
   pattern: Pattern;
-  pdf: string;
-  videos: Video[];
 }

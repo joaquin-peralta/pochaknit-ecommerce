@@ -3,10 +3,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
+import { CloudImage } from '@types';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
-  images: any;
+  images: CloudImage[];
 };
 
 const SlideShowGallery = ({ images }: Props) => {
@@ -46,7 +47,7 @@ const SlideShowGallery = ({ images }: Props) => {
             className={slideIndex === index ? 'show' : 'hide'}
           >
             <Image
-              src={`http://localhost:1337${image.url}`}
+              src={image.url}
               width={900}
               height={1124}
               layout="responsive"
@@ -66,7 +67,7 @@ const SlideShowGallery = ({ images }: Props) => {
               <div>
                 <Image
                   className={`slide-thumbnail ${slideActive(index)}`}
-                  src={`http://localhost:1337${image.url}`}
+                  src={image.url}
                   width={1124}
                   height={1124}
                   layout="responsive"

@@ -2,11 +2,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FaFilm, FaPlay } from 'react-icons/fa';
-import { Video } from '@types';
+import { CloudVideo } from '@types';
 
 type Props = {
   visibility: boolean;
-  videos: Video[];
+  videos: CloudVideo[];
 };
 
 const ProfileVideoInnerItem = ({ visibility, videos }: Props) => (

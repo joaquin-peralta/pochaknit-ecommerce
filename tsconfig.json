@@ -21,6 +21,7 @@
     "paths": {
       "@components/*": ["components/*"],
       "@context/*": ["context/*"],
+      "@models/*": ["models/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
       "@types": ["types"],

@@ -1,17 +1,16 @@
 import Image from 'next/image';
+import { CloudImage } from '@types';
 
 type Props = {
-  images: object;
+  images: CloudImage[];
 };
-
-const BASE_URL = 'http://localhost:1337';
 
 const QuiltedImages = ({ images }: Props) => (
   <>
     <div className="wrapper">
       <div className="one">
         <Image
-          src={BASE_URL + images[0].url}
+          src={images[0].url}
           width={900}
           height={1124}
           layout="responsive"
@@ -19,7 +18,7 @@ const QuiltedImages = ({ images }: Props) => (
       </div>
       <div className="two">
         <Image
-          src={BASE_URL + images[1].url}
+          src={images[1].url}
           width={900}
           height={1124}
           layout="responsive"
@@ -27,7 +26,7 @@ const QuiltedImages = ({ images }: Props) => (
       </div>
       <div className="three">
         <Image
-          src={BASE_URL + images[2].url}
+          src={images[2].url}
           width={900}
           height={1124}
           layout="responsive"

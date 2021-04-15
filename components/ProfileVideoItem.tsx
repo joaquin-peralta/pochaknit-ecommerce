@@ -18,6 +18,10 @@ const ProfileVideoItem = ({ purchases }: Props) => {
     setIsVisible(!isVisible);
   };
 
+  if (purchases.length === 0) {
+    return <div>No hay videos...</div>;
+  }
+
   return (
     <Container>
       {purchases.map((purchase) => (
@@ -25,7 +29,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
           <Row className="justify-content-around align-items-center">
             <Col xs={3}>
               <Image
-                src={`${process.env.HOST}${purchase.pattern.images[0].url}`}
+                src={purchase.pattern.images[0].url}
                 width={48}
                 height={48}
                 layout="intrinsic"
@@ -44,7 +48,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
           </Row>
           <ProfileVideoInnerItem
             visibility={isVisible}
-            videos={purchase.videos}
+            videos={purchase.pattern.videos}
           />
         </div>
       ))}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GetStaticProps, GetStaticPaths } from 'next';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,7 +15,7 @@ import GlobalStyles from '@styles/GlobalStyles';
 export default withPageAuthRequired(() => {
   const { user, error, isLoading } = useUser();
   const [menu, setMenu] = useState(true);
-  const [purchases, setPurchases] = useState([{}]);
+  const [purchases, setPurchases] = useState([]);
   const USER_ID = user.sub.slice(6, user.sub.length);
 
   const patternButton = () => {
@@ -105,9 +106,9 @@ export default withPageAuthRequired(() => {
         </Row>
         <div className="items-container">
           {menu ? (
-            <ProfilePatternItem item={purchases} />
+            <ProfilePatternItem purchases={purchases} />
           ) : (
-            <ProfileVideoItem item={purchases} />
+            <ProfileVideoItem purchases={purchases} />
           )}
         </div>
         <GlobalStyles />
@@ -126,3 +127,26 @@ export default withPageAuthRequired(() => {
     )
   );
 });
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const response = await fetch('/api');
+  const patterns = await response.json();
+
+  return {
+    paths: patterns.map((pattern) => ({
+      params: { id: String(pattern.id) },
+    })),
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
+  const response = await fetch(`${process.env.HOST}/profile/?id=${id}`);
+  const found = await response.json();
+
+  return {
+    props: {
+      pattern: found[0],
+    },
+  };
+};

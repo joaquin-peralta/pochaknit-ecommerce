@@ -9,35 +9,40 @@ type Props = {
   purchases: Purchase[];
 };
 
-const ProfilePatternItem = ({ purchases }: Props) => (
-  <Container>
-    {purchases.map((purchase) => (
-      <Row
-        key={purchase.id}
-        className="justify-content-around align-items-center"
-      >
-        <Col xs={3}>
-          <Image
-            src={`${process.env.HOST}${purchase.pattern.images[0].url}`}
-            width={48}
-            height={48}
-            layout="intrinsic"
-          />
-        </Col>
-        <Col xs={7}>
-          <h6 className="mb-0">
-            {purchase.pattern.category} {purchase.pattern.name}
-          </h6>
-        </Col>
-        <Col xs={2}>
-          <a href={purchase.pdf}>
-            <IoMdDownload style={{ fontSize: '24px' }} />
-          </a>
-        </Col>
-      </Row>
-    ))}
-    <hr className="mt-2" />
-  </Container>
-);
+const ProfilePatternItem = ({ purchases }: Props) => {
+  if (purchases.length === 0) {
+    return <div>No hay patrones...</div>;
+  }
+  return (
+    <Container>
+      {purchases.map((purchase) => (
+        <Row
+          key={purchase.id}
+          className="justify-content-around align-items-center"
+        >
+          <Col xs={3}>
+            <Image
+              src={purchase.pattern.images[0].url}
+              width={48}
+              height={48}
+              layout="intrinsic"
+            />
+          </Col>
+          <Col xs={7}>
+            <h6 className="mb-0">
+              {purchase.pattern.category} {purchase.pattern.name}
+            </h6>
+          </Col>
+          <Col xs={2}>
+            <a href={purchase.pattern.files[0].url}>
+              <IoMdDownload style={{ fontSize: '24px' }} />
+            </a>
+          </Col>
+        </Row>
+      ))}
+      <hr className="mt-2" />
+    </Container>
+  );
+};
 
 export default ProfilePatternItem;

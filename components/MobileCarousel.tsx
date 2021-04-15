@@ -1,8 +1,9 @@
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'next/image';
+import { CloudImage } from '@types';
 
 type Props = {
-  images: any;
+  images: CloudImage[];
 };
 
 const MobileCarousel = ({ images }: Props) => (
@@ -12,7 +13,7 @@ const MobileCarousel = ({ images }: Props) => (
         <Carousel.Item key={image.id}>
           <div className="d-block w-100">
             <Image
-              src={`http://localhost:1337${image.url}`}
+              src={image.url}
               width={900}
               height={1124}
               layout="responsive"

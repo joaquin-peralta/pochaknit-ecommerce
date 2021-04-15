@@ -25,7 +25,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
 
   return (
     <>
-      <Container className="py-4">
+      <Container>
         <div className="wrapper">
           <div className="one">
             <h4 className="title font-italic">
@@ -34,7 +34,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           </div>
           <div className="two">
             <Image
-              src={`http://localhost:1337${pattern.images[0].url}`}
+              src={pattern.images[0].url}
               width={900}
               height={1124}
               layout="responsive"
@@ -72,7 +72,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
         }
         .title,
         .title span {
-          color: ${pattern.titleColor};
+          color: ${pattern.primaryColor};
           text-align: center;
           text-transform: uppercase;
         }

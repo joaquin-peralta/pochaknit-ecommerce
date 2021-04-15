@@ -1,15 +1,16 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import SessionNav from '@components/SessionNav';
 import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern';
-import { FtPattern } from '@types';
+import { Featured } from '@types';
 
 type Props = {
-  data: FtPattern[];
+  featured: Featured[];
 };
 
-export default function Home({ data }: Props) {
+export default function Home({ featured }: Props) {
   return (
     <>
       <Head>
@@ -24,12 +25,12 @@ export default function Home({ data }: Props) {
 
       <SessionNav />
 
-      {data.map((item, index) => (
-        <FeaturedPattern
-          key={item.id}
-          pattern={item.pattern}
-          indexOfArray={index}
-        />
+      {featured.map((obj, index) => (
+        <Link key={obj.id} href={`/patterns/${obj.pattern.id}`}>
+          <a className="text-decoration-none text-reset">
+            <FeaturedPattern pattern={obj.pattern} indexOfArray={index} />
+          </a>
+        </Link>
       ))}
 
       <GlobalStyles />
@@ -38,19 +39,15 @@ export default function Home({ data }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const data: FtPattern[] = await fetch(
+  const featured: Featured[] = await fetch(
     `${process.env.HOST}/featured-patterns`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((response) => response.json());
+  )
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
 
   return {
     props: {
-      data,
+      featured,
     },
   };
 };

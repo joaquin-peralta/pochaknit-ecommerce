@@ -18,30 +18,30 @@ import { Pattern } from '@types';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
-  product: Pattern;
+  pattern: Pattern;
 };
 
-const SinglePatternPage = ({ product }: Props) => (
+const SinglePatternPage = ({ pattern }: Props) => (
   <Container>
     <Row xs={1} md={2} className="py-4 justify-content-between">
       <Col xs md={6}>
         <div className="mobile-breakpoint">
-          <MobileGallery images={product.images} />
+          <MobileGallery images={pattern.images} />
         </div>
         <div className="tablet-breakpoint">
-          <TabletGallery images={product.images} />
+          <TabletGallery images={pattern.images} />
         </div>
       </Col>
       <Col xs md={{ span: 4, offset: 1 }} className="pt-5 pb-2">
         <h2 className="mb-3">
-          {product.category}{' '}
-          <span className="text-uppercase">{product.name}</span>
+          {pattern.category}{' '}
+          <span className="text-uppercase">{pattern.name}</span>
         </h2>
-        <p className="h3">$ {product.price}</p>
+        <p className="h3">$ {pattern.price}</p>
 
         <div className="btn-container">
           <Button variant="primary">
-            <AiOutlinePlus /> Agregar a la Bolsa
+            <AiOutlinePlus /> Añadir a la bolsa
           </Button>
         </div>
 
@@ -66,7 +66,7 @@ const SinglePatternPage = ({ product }: Props) => (
         </ul>
       </Col>
     </Row>
-    <div className="product-description">{product.description}</div>
+    <div className="product-description">{pattern.description}</div>
     <GlobalStyles />
 
     <style jsx>{`
@@ -116,11 +116,11 @@ const SinglePatternPage = ({ product }: Props) => (
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await fetch(`${process.env.HOST}/patterns/`);
-  const products = await response.json();
+  const patterns = await response.json();
 
   return {
-    paths: products.map((product) => ({
-      params: { id: String(product.id) },
+    paths: patterns.map((pattern) => ({
+      params: { id: String(pattern.id) },
     })),
     fallback: false,
   };
@@ -132,7 +132,7 @@ export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
 
   return {
     props: {
-      product: found[0],
+      pattern: found[0],
     },
   };
 };
