@@ -1,15 +1,16 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import CartmenuContext from '@context/CartmenuContext';
-import Image from 'next/image';
 import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from '@components/Button';
+import CartmenuItem from '@components/CartmenuItem';
 import { colors } from '@utils/themes';
 
 const Cartmenu = () => {
   const [cartVisibility, setCartVisibility] = useContext(CartmenuContext);
+  const [cartItems, setCartItems] = useState([]);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -58,46 +59,30 @@ const Cartmenu = () => {
               </Col>
             </Row>
             <hr className="divisor" />
-            {/* <p className="cart-text-info">La bolsa está vacía</p> */}
-
-            <Row className="py-4 align-items-center">
-              <Col xs={3}>
-                <Image
-                  src="/chaleco-nina.jpeg"
-                  width={72}
-                  height={72}
-                  layout="responsive"
-                />
-              </Col>
-              <Col xs={6}>
-                <p className="mb-0">Chaleco NINA</p>
-                <small>$ 1.490</small>
-              </Col>
-              <Col xs={3} className="text-center">
-                <button type="button" className="btn-cancel-item">
-                  <AiOutlineClose />
-                </button>
-              </Col>
-            </Row>
-            <Row className="justify-content-end py-2">
-              <Col xs="auto">
-                <p className="mb-0 h4">Total</p>
-                <p className="mb-0 h4">$ 1.490</p>
-              </Col>
-            </Row>
+            {cartItems.length === 0 && (
+              <p className="cart-text-info">La bolsa está vacía</p>
+            )}
             <hr />
-            <Row className="justify-content-center py-1">
-              <Col xs="auto">
-                <Button variant="primary">
-                  <div className="px-5">
-                    <AiOutlineShopping
-                      style={{ fontSize: '24px', paddingBottom: '3px' }}
-                    />
-                    <p className="d-inline-block mb-0 ml-2">Ver Bolsa</p>
-                  </div>
-                </Button>
-              </Col>
-            </Row>
+
+            {cartItems.length > 0 && (
+              <div>
+                {cartItems.map((item) => (
+                  <CartmenuItem />
+                ))}
+                <Row className="justify-content-center py-1">
+                  <Col xs="auto">
+                    <Button variant="primary">
+                      <div className="px-5">
+                        <AiOutlineShopping
+                          style={{ fontSize: '24px', paddingBottom: '3px' }}
+                        />
+                        <p className="d-inline-block mb-0 ml-2">Ver Bolsa</p>
+                      </div>
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            )}
           </Container>
         </div>
       </div>
@@ -166,11 +151,6 @@ const Cartmenu = () => {
 
         .cart-items {
           width: 100%;
-        }
-
-        .btn-cancel-item {
-          border: 0;
-          background: transparent;
         }
       `}</style>
     </>

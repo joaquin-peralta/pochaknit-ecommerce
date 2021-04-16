@@ -8,4 +8,4 @@ const UserSchema = new mongoose.Schema({
   purchases: Array,
 });
 
-export default mongoose.models.User || mongoose.model('Pet', UserSchema);
+export default mongoose.models.User || mongoose.model('User', UserSchema);

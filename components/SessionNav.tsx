@@ -29,7 +29,7 @@ const SessionNav = () => {
         <div className="mt-1 pl-4" style={{ color: `${colors.darkgray}` }}>
           <p className="d-inline-block mb-0">¡Hola {user.nickname}</p>
           {' | '}
-          <Link href={`/profile/${user.sub}`}>
+          <Link href="/profile">
             <a className="d-inline-block">Ver perfil</a>
           </Link>
         </div>

@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import MobileGallery from '@components/MobileCarousel';
 import TabletGallery from '@components/SlideShowGallery';
-import Button from '@components/Button';
+import Button from 'react-bootstrap/Button';
 import { colors } from '@utils/themes';
 import { IconContext } from 'react-icons';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -40,9 +40,7 @@ const SinglePatternPage = ({ pattern }: Props) => (
         <p className="h3">$ {pattern.price}</p>
 
         <div className="btn-container">
-          <Button variant="primary">
-            <AiOutlinePlus /> Añadir a la bolsa
-          </Button>
+          <Button variant="primary">Añadir a la bolsa</Button>
         </div>
 
         <ul className="social-media">
