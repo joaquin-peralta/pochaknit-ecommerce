@@ -1,16 +1,17 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import BagContext from '@context/BagContext';
 import CartmenuContext from '@context/CartmenuContext';
-import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from '@components/Button';
+import Button from 'react-bootstrap/Button';
 import CartmenuItem from '@components/CartmenuItem';
 import { colors } from '@utils/themes';
 
 const Cartmenu = () => {
+  const { bag } = useContext(BagContext);
   const [cartVisibility, setCartVisibility] = useContext(CartmenuContext);
-  const [cartItems, setCartItems] = useState([]);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -59,29 +60,23 @@ const Cartmenu = () => {
               </Col>
             </Row>
             <hr className="divisor" />
-            {cartItems.length === 0 && (
+            {bag.length === 0 && (
               <p className="cart-text-info">La bolsa está vacía</p>
             )}
-            <hr />
-
-            {cartItems.length > 0 && (
-              <div>
-                {cartItems.map((item) => (
-                  <CartmenuItem />
-                ))}
-                <Row className="justify-content-center py-1">
-                  <Col xs="auto">
-                    <Button variant="primary">
-                      <div className="px-5">
-                        <AiOutlineShopping
-                          style={{ fontSize: '24px', paddingBottom: '3px' }}
-                        />
-                        <p className="d-inline-block mb-0 ml-2">Ver Bolsa</p>
-                      </div>
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
+            {bag.length > 0 && (
+              <>
+                <ul className="list-unstyled mb-0">
+                  {bag.map((item) => (
+                    <li key={item.id}>
+                      <CartmenuItem item={item} />
+                    </li>
+                  ))}
+                </ul>
+                <hr className="mt-0 mb-4" />
+                <div className="text-center">
+                  <Button variant="outline-primary">Checkout</Button>
+                </div>
+              </>
             )}
           </Container>
         </div>

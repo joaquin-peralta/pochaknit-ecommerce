@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import BagContext from '@context/BagContext';
 import SidemenuContext from '@context/SidemenuContext';
 import CartmenuContext from '@context/CartmenuContext';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import { colors } from '@utils/themes';
 import SidemenuData from '@components/SidemenuData';
 
 const TopNavbar = () => {
+  const { bag } = useContext(BagContext);
   // eslint-disable-next-line no-unused-vars
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
   // eslint-disable-next-line no-unused-vars
@@ -49,9 +51,16 @@ const TopNavbar = () => {
             ))}
           </ul>
         </nav>
-        <button type="button" className="shop-btn" onClick={showCartmenu}>
-          <AiOutlineShopping />
-        </button>
+        <div>
+          <button type="button" className="shop-btn" onClick={showCartmenu}>
+            <AiOutlineShopping />
+          </button>
+          {bag.length > 0 && (
+            <div className="bag-counter-container">
+              <small className="mb-0 font-weight-bold">{bag.length}</small>
+            </div>
+          )}
+        </div>
 
         <style jsx>{`
           .header {
@@ -114,6 +123,25 @@ const TopNavbar = () => {
           .list-item {
             display: inline-block;
             padding: 1rem 1.5rem;
+          }
+
+          .bag-counter-container {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: ${colors.background};
+            display: flex; /* or inline-flex */
+            align-items: center;
+            justify-content: center;
+          }
+
+          .bag-counter {
+            position: absolute;
+            top: 50%;
+            left: 35%;
           }
 
           @media screen and (min-width: 768px) {

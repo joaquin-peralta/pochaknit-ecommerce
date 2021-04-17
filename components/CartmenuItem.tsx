@@ -1,36 +1,60 @@
+import { useContext } from 'react';
+import BagContext from '@context/BagContext';
+import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { AiOutlineClose } from 'react-icons/ai';
+import { Pattern } from '@types';
+import { colors } from '@utils/themes';
 
-const CartmenuItem = () => (
-  <Container>
-    <Row className="py-4 align-items-center">
-      <Col xs={3}>
-        <Image
-          src="/chaleco-nina.jpeg"
-          width={72}
-          height={72}
-          layout="responsive"
-        />
-      </Col>
-      <Col xs={6}>
-        <p className="mb-0">Chaleco NINA</p>
-        <small>$ 1.490</small>
-      </Col>
-      <Col xs={3} className="text-center">
-        <button type="button" className="btn-cancel-item">
-          <AiOutlineClose />
-        </button>
-      </Col>
-    </Row>
+type Props = {
+  item: Pattern;
+};
 
-    <style jsx>{`
-      .btn-cancel-item {
-        border: 0;
-        background: transparent;
-      }
-    `}</style>
-  </Container>
-);
+const CartmenuItem = ({ item }: Props) => {
+  const { removeFromBag } = useContext(BagContext);
+
+  const handleRemoveFromBag = (product: Pattern) => {
+    removeFromBag(product);
+  };
+
+  return (
+    <Container>
+      <Row className="py-4 align-items-center">
+        <Col xs={3}>
+          <Image
+            src={item.images[0].url}
+            width={900}
+            height={1124}
+            layout="responsive"
+          />
+        </Col>
+        <Col xs={6}>
+          <p className="mb-0" style={{ color: `${colors.darkgray}` }}>
+            {item.category} <span className="text-uppercase">{item.name}</span>
+          </p>
+          <small style={{ color: `${colors.darkgray}` }}>$ {item.price}</small>
+        </Col>
+        <Col xs={3} className="text-center">
+          <button
+            type="button"
+            className="btn-cancel-item"
+            onClick={() => handleRemoveFromBag(item)}
+          >
+            <AiOutlineClose style={{ color: `${colors.darkgray}` }} />
+          </button>
+        </Col>
+      </Row>
+
+      <style jsx>{`
+        .btn-cancel-item {
+          border: 0;
+          background: transparent;
+        }
+      `}</style>
+    </Container>
+  );
+};
 
 export default CartmenuItem;

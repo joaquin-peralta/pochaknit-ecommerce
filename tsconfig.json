@@ -21,6 +21,7 @@
     "paths": {
       "@components/*": ["components/*"],
       "@context/*": ["context/*"],
+      "@hooks/*": ["hooks/*"],
       "@models/*": ["models/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
