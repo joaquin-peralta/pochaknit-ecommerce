@@ -1,7 +1,8 @@
-import { useContext, useState, useEffect } from 'react';
-import useLocalStorage from '@hooks/useLocalStorage';
+import { useContext, useEffect } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import BagContext from '@context/BagContext';
+import useLocalStorage from '@hooks/useLocalStorage';
+import localStorage from '@utils/localStorage';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -25,10 +26,10 @@ type Props = {
 
 const SinglePatternPage = ({ pattern }: Props) => {
   const { bag, addToBag } = useContext(BagContext);
-  const key = `disable-${pattern.id}`;
 
   const handleAddToBag = (product: Pattern) => {
     addToBag(product);
+    window.localStorage.setItem(String(product.id), JSON.stringify(product));
   };
 
   const isDisabled = (product: Pattern) => {
