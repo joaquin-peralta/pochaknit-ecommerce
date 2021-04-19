@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import useLocalStorage from '@hooks/useLocalStorage';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import BagContext from '@context/BagContext';
 import Container from 'react-bootstrap/Container';
@@ -24,14 +25,21 @@ type Props = {
 
 const SinglePatternPage = ({ pattern }: Props) => {
   const { bag, addToBag } = useContext(BagContext);
-  const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  const key = `disable-${pattern.id}`;
 
-  const handleAddToBag = (product: Pattern, listProduct: Pattern[]) => {
-    if (listProduct.includes(product)) {
-      setIsBtnDisabled(true);
-      return;
-    }
+  const handleAddToBag = (product: Pattern) => {
     addToBag(product);
+  };
+
+  const isDisabled = (product: Pattern) => {
+    if (bag.length !== 0) {
+      for (const element of bag) {
+        if (element.id === product.id) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   return (
@@ -55,8 +63,8 @@ const SinglePatternPage = ({ pattern }: Props) => {
           <div className="btn-container">
             <Button
               variant="primary"
-              onClick={() => handleAddToBag(pattern, bag)}
-              disabled={isBtnDisabled}
+              onClick={() => handleAddToBag(pattern)}
+              disabled={isDisabled(pattern)}
             >
               Añadir a la bolsa
             </Button>
