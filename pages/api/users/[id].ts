@@ -1,13 +1,17 @@
-import dbConnect from '@utils/dbConnect';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { dbConnectUsers } from '@utils/dbConnect';
 import User from '@models/User';
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   const {
     query: { id },
     method,
   } = req;
 
-  await dbConnect();
+  await dbConnectUsers();
 
   switch (method) {
     case 'GET' /* Get a model by its ID */:

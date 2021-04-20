@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { dbConnectUsers } from '@utils/dbConnect';
-import User from '@models/User';
+import { dbConnectStrapi } from '@utils/dbConnect';
+import Product from '@models/Product';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,13 +8,13 @@ export default async function handler(
 ) {
   const { method } = req;
 
-  await dbConnectUsers();
+  await dbConnectStrapi();
 
   switch (method) {
     case 'GET':
       try {
-        const users = await User.find({});
-        res.status(200).json({ success: true, data: users });
+        const products = await Product.find({});
+        res.status(200).json({ success: true, data: products });
       } catch (error) {
         res.status(400).json({ success: false });
       }

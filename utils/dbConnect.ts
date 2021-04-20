@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-async function dbConnect() {
+export async function dbConnectUsers() {
   // check if we have a connection to the database or if it's currently
   // connecting or disconnecting (readyState 1, 2 and 3)
   if (mongoose.connection.readyState >= 1) {
@@ -16,4 +16,18 @@ async function dbConnect() {
   });
 }
 
-export default dbConnect;
+export async function dbConnectStrapi() {
+  // check if we have a connection to the database or if it's currently
+  // connecting or disconnecting (readyState 1, 2 and 3)
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
+
+  // eslint-disable-next-line consistent-return
+  return mongoose.connect(process.env.MONGODB_URI_STRAPI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  });
+}

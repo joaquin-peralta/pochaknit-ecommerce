@@ -17,6 +17,7 @@ const CartmenuItem = ({ item }: Props) => {
 
   const handleRemoveFromBag = (product: Pattern) => {
     removeFromBag(product);
+    window.localStorage.removeItem(String(product.id));
   };
 
   return (
