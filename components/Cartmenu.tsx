@@ -74,7 +74,9 @@ const Cartmenu = () => {
                 </ul>
                 <hr className="mt-0 mb-4" />
                 <div className="text-center">
-                  <Button variant="outline-primary">Checkout</Button>
+                  <Button href="/checkout" variant="outline-primary">
+                    Checkout
+                  </Button>
                 </div>
               </>
             )}

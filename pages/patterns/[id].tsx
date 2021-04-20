@@ -1,8 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import BagContext from '@context/BagContext';
-import useLocalStorage from '@hooks/useLocalStorage';
-import localStorage from '@utils/localStorage';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
