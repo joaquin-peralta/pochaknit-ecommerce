@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Pattern } from '@types';
 
 const mercadopago = require('mercadopago');
 
@@ -11,35 +12,39 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if (req.method === 'POST') {
-    const product = req.body[0];
+    const cart = req.body.map((item: Pattern) => ({
+      id: item.id,
+      title: `${item.category} ${item.name}`,
+      description: 'Patrón de tejido',
+      picture_url: item.images[0].url,
+      unit_price: Number(item.price),
+      currency_id: 'ARS',
+      quantity: 1,
+    }));
 
     const preference = {
-      items: [
-        {
-          title: `${product.category} ${product.name}`,
-          unit_price: Number(product.price),
-          quantity: 1,
-        },
-      ],
+      items: cart,
       back_urls: {
-        success: 'http://localhost:3000/',
+        success: 'http://localhost:3000/success',
         failure: 'http://localhost:3000/',
         pending: 'http://localhost:3000/',
       },
       auto_return: 'approved',
     };
 
-    mercadopago.preferences
+    await mercadopago.preferences
       .create(preference)
       .then((response) => {
-        res.status(201).json({ init_point: response.body.init_point });
+        res
+          .status(201)
+          .json({ id: response.body.id, init_point: response.body.init_point });
+        res.end();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        res.status(500).end();
       });
-
-    res.status(201);
   } else {
-    res.status(400).json({ success: false });
+    res.status(405);
+    res.end();
   }
 }

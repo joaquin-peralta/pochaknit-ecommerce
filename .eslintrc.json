@@ -41,7 +41,8 @@
       "react/jsx-props-no-spreading": ["error", {
         "custom": "ignore"
     }],
-      "no-restricted-syntax": ["error", "FunctionExpression", "WithStatement", "BinaryExpression[operator='in']"],
+      "prefer-arrow-callback": [ "error", { "allowNamedFunctions": true } ],
+      "no-restricted-syntax": ["error", "WithStatement", "BinaryExpression[operator='in']"],
       "prettier/prettier": "error"
     }
 }

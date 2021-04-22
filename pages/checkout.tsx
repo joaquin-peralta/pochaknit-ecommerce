@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,17 +9,10 @@ import SummaryBag from '@components/SummaryBag';
 import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
-export default function CheckoutPage() {
+export default withPageAuthRequired(function CheckoutPage() {
   const { bag } = useContext(BagContext);
-
-  /* const createMercadoPagoButton = (id) => {
-    const script = document.createElement('script');
-    script.src =
-      'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';
-    script.type = 'text/javascript';
-    script.dataset.preferenceId = id;
-    document.querySelector('#mp-btn-checkout').appendChild(script);
-  }; */
+  const { user } = useUser();
+  const USER_ID = user.sub.slice(6, user.sub.length);
 
   const handleLocal = async (items: Pattern[]) => {
     const createPreference = async () => {
@@ -31,6 +25,7 @@ export default function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const data = await response.json();
+        window.localStorage.setItem(USER_ID, data.id);
         window.location.href = await data.init_point;
       } catch (err) {
         console.error(err);
@@ -82,4 +77,4 @@ export default function CheckoutPage() {
       `}</style>
     </div>
   );
-}
+});
