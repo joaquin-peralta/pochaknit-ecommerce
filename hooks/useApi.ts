@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function initialState(...args) {
+function initialState(args?) {
   return {
     response: null,
     error: null,

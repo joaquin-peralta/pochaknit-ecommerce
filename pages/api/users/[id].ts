@@ -14,19 +14,19 @@ export default async function handler(
   await dbConnectUsers();
 
   switch (method) {
-    case 'GET' /* Get a model by its ID */:
+    case 'GET':
       try {
         const user = await User.findOne({ sub });
         if (!user) {
           return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: user });
+        res.status(200).json(user);
       } catch (error) {
         res.status(400).json({ success: false });
       }
       break;
 
-    case 'PUT' /* Edit a model by its ID */:
+    case 'PUT':
       try {
         const filter = { sub };
         const update = { purchases: req.body };

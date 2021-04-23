@@ -30,6 +30,12 @@ export interface Featured {
   pattern: Pattern;
 }
 export interface Purchase {
-  id: number;
-  pattern: Pattern;
+  categoryId: string;
+  currencyId: string;
+  description: string;
+  id: string;
+  pictureUrl: string;
+  quantity: number;
+  title: string;
+  unitPrice: number;
 }

@@ -21,7 +21,6 @@ export default function Home({ featured }: Props) {
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
           rel="stylesheet"
         />
-        <script src="https://sdk.mercadopago.com/js/v2" />
       </Head>
 
       <SessionNav />
@@ -44,6 +43,7 @@ export const getStaticProps: GetStaticProps = async () => {
     `${process.env.HOST}/featured-patterns`,
   )
     .then((response) => response.json())
+    .then((data) => data)
     .catch((error) => console.error(error));
 
   return {
