@@ -35,9 +35,7 @@ export default async function handler(
     await mercadopago.preferences
       .create(preference)
       .then((response) => {
-        res
-          .status(201)
-          .json({ id: response.body.id, init_point: response.body.init_point });
+        res.status(201).json({ data: response.body });
         res.end();
       })
       .catch(() => {

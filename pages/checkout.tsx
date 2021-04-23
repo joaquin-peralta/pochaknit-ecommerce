@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,6 +15,7 @@ export default withPageAuthRequired(function CheckoutPage() {
   const USER_ID = user.sub.slice(6, user.sub.length);
 
   const handleLocal = async (items: Pattern[]) => {
+    window.localStorage.setItem('usr', String(USER_ID));
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -24,15 +25,27 @@ export default withPageAuthRequired(function CheckoutPage() {
           },
           body: JSON.stringify(items),
         });
-        const data = await response.json();
-        window.localStorage.setItem(USER_ID, data.id);
-        window.location.href = await data.init_point;
+        const preference = await response.json();
+        window.localStorage.setItem(
+          `_${USER_ID}`,
+          JSON.stringify(await preference.data),
+        );
+        window.location.href = await preference.data.init_point;
       } catch (err) {
         console.error(err);
       }
     };
     createPreference();
   };
+
+  // eslint-disable-next-line arrow-body-style
+  useEffect(() => {
+    return () => {
+      for (const item of bag) {
+        window.localStorage.removeItem(String(item.id));
+      }
+    };
+  }, []);
 
   return (
     <div className="page">

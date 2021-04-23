@@ -15,8 +15,7 @@ const useInitialBagState = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const updatedBag = await populateBag();
-      setBag(updatedBag);
+      setBag(await populateBag());
     };
     fetchData();
   }, []);

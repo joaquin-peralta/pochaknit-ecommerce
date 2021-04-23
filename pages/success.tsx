@@ -1,21 +1,38 @@
-import { useEffect } from 'react';
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useState, useEffect } from 'react';
 import GlobalStyles from '@styles/GlobalStyles';
 
-export default withPageAuthRequired(function SuccessPage() {
-  const { user } = useUser();
+export default function SuccessPage() {
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const USER_ID = user.sub.slice(6, user.sub.length);
-    const preferenceId = window.localStorage.getItem(USER_ID);
-
-    window.localStorage.clear();
+    const USER_ID = window.localStorage.getItem('usr');
+    const preference = JSON.parse(window.localStorage.getItem(`_${USER_ID}`));
+    const updateUserPurchase = async () => {
+      try {
+        await fetch(`http://localhost:3000/api/users/${USER_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(preference.items),
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    updateUserPurchase();
+    setIsLoading(false);
   }, []);
 
-  return (
-    <>
-      <h2>Compra exitosa...</h2>
-      <GlobalStyles />
-    </>
-  );
-});
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!isLoading) {
+    window.localStorage.clear();
+    return (
+      <>
+        <h2>Compra exitosa...</h2>
+        <GlobalStyles />
+      </>
+    );
+  }
+}
