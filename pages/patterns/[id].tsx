@@ -1,6 +1,7 @@
+import { InferGetStaticPropsType, GetStaticPaths } from 'next';
 import { useContext } from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
 import BagContext from '@context/BagContext';
+import { Pattern } from '@types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,20 +10,33 @@ import TabletGallery from '@components/SlideShowGallery';
 import Button from 'react-bootstrap/Button';
 import { colors } from '@utils/themes';
 import { IconContext } from 'react-icons';
-import {
-  FaShareAlt,
-  FaWhatsapp,
-  FaInstagram,
-  FaPinterest,
-} from 'react-icons/fa';
-import { Pattern } from '@types';
+import { FaShareAlt, FaWhatsapp, FaInstagram, FaPinterest } from 'react-icons/fa';
 import GlobalStyles from '@styles/GlobalStyles';
 
-type Props = {
-  pattern: Pattern;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const response = await fetch(`${process.env.HOST}/patterns/`);
+  const patterns: Pattern[] = await response.json();
+
+  return {
+    paths: patterns.map((pattern) => ({
+      params: { id: String(pattern.id) },
+    })),
+    fallback: false,
+  };
 };
 
-const SinglePatternPage = ({ pattern }: Props) => {
+export const getStaticProps = async ({ params: { id } }) => {
+  const response = await fetch(`${process.env.HOST}/patterns/?id=${id}`);
+  const found: Pattern[] = await response.json();
+
+  return {
+    props: {
+      pattern: found[0],
+    },
+  };
+};
+
+const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { bag, addToBag } = useContext(BagContext);
 
   const handleAddToBag = (product: Pattern) => {
@@ -54,8 +68,7 @@ const SinglePatternPage = ({ pattern }: Props) => {
         </Col>
         <Col xs md={{ span: 4, offset: 1 }} className="pt-5 pb-2">
           <h2 className="mb-3">
-            {pattern.category}{' '}
-            <span className="text-uppercase">{pattern.name}</span>
+            {pattern.category} <span className="text-uppercase">{pattern.name}</span>
           </h2>
           <p className="h3">$ {pattern.price}</p>
 
@@ -70,9 +83,7 @@ const SinglePatternPage = ({ pattern }: Props) => {
           </div>
 
           <ul className="social-media">
-            <IconContext.Provider
-              value={{ size: '24px', color: `${colors.primary800}` }}
-            >
+            <IconContext.Provider value={{ size: '24px', color: `${colors.primary800}` }}>
               <li>
                 <FaWhatsapp />
               </li>
@@ -137,29 +148,6 @@ const SinglePatternPage = ({ pattern }: Props) => {
       `}</style>
     </Container>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch(`${process.env.HOST}/patterns/`);
-  const patterns = await response.json();
-
-  return {
-    paths: patterns.map((pattern) => ({
-      params: { id: String(pattern.id) },
-    })),
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
-  const response = await fetch(`${process.env.HOST}/patterns/?id=${id}`);
-  const found = await response.json();
-
-  return {
-    props: {
-      pattern: found[0],
-    },
-  };
 };
 
 export default SinglePatternPage;

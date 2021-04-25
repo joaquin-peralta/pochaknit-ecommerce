@@ -1,81 +1,71 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
-import { IoIosArrowDown } from 'react-icons/io';
+import { IconContext } from 'react-icons';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import ProfileVideoInnerItem from '@components/ProfileVideoInnerItem';
-import { Purchase, Pattern } from '@types';
+import { Pattern } from '@types';
+import { colors } from '@utils/themes';
 
 type Props = {
-  purchases: Purchase[];
+  purchases: Pattern[];
 };
 
 const ProfileVideoItem = ({ purchases }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [products, setProducts] = useState<Pattern[]>([]);
 
   const handleClick = () => {
     setIsVisible(!isVisible);
   };
 
-  useEffect(() => {
-    const purchasesId = purchases.map((purchase) => purchase.id);
-    const fetchData = async () => {
-      const res = await fetch('http://localhost:1337/patterns');
-      const data: Pattern[] = await res.json();
-      for (const pattern of data) {
-        if (purchasesId.includes(String(pattern.id))) {
-          setProducts([...products, pattern]);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (products.length === 0) {
-    return <div>No hay videos...</div>;
-  }
-
   return (
     <Container>
-      {products.map((product) => (
-        <div key={product.id}>
-          <Row className="justify-content-around align-items-center">
-            <Col xs={3}>
-              <Image
-                src={product.images[0].url}
-                alt={product.images[0].alternativeText}
-                width={48}
-                height={48}
-                layout="intrinsic"
-              />
-            </Col>
-            <Col xs={7}>
-              <h6 className="mb-0">
-                {product.category} {product.name}
-              </h6>
-            </Col>
-            <Col xs={2}>
-              <button className="arrow-btn" type="button" onClick={handleClick}>
-                <IoIosArrowDown style={{ fontSize: '24px' }} />
-              </button>
-            </Col>
-          </Row>
-          <ProfileVideoInnerItem
-            visibility={isVisible}
-            videos={product.videos}
-          />
-        </div>
-      ))}
-      <hr className="mt-2" />
+      {purchases === undefined && <div>Cargando...</div>}
 
-      <style jsx>{`
-        .arrow-btn {
-          border: 0;
-          background: transparent;
-        }
-      `}</style>
+      {purchases.length === 0 && <div>No hay patrones</div>}
+
+      {purchases.length > 0 && (
+        <>
+          {purchases.map((purchase) => (
+            <div key={purchase.id}>
+              <Row className="justify-content-around align-items-center">
+                <Col xs={3}>
+                  <Image
+                    src={purchase.images[0].url}
+                    alt={purchase.images[0].alternativeText}
+                    width={48}
+                    height={48}
+                    layout="intrinsic"
+                  />
+                </Col>
+                <Col xs={7}>
+                  <h6 className="mb-0">
+                    {purchase.category} {purchase.name}
+                  </h6>
+                </Col>
+                <Col xs={2}>
+                  <button className="arrow-btn" type="button" onClick={handleClick}>
+                    <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
+                      {isVisible ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                    </IconContext.Provider>
+                  </button>
+                </Col>
+              </Row>
+              <ProfileVideoInnerItem visibility={isVisible} videos={purchase.videos} />
+            </div>
+          ))}
+          <hr className="mt-2" />
+
+          <style jsx>{`
+            .arrow-btn {
+              border: 0;
+              background: transparent;
+            }
+          `}</style>
+        </>
+      )}
     </Container>
   );
 };

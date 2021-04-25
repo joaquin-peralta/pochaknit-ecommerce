@@ -26,10 +26,7 @@ export default withPageAuthRequired(function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const preference = await response.json();
-        window.localStorage.setItem(
-          `_${USER_ID}`,
-          JSON.stringify(await preference.data),
-        );
+        window.localStorage.setItem(`_${USER_ID}`, JSON.stringify(await preference.data));
         window.location.href = await preference.data.init_point;
       } catch (err) {
         console.error(err);
@@ -60,11 +57,7 @@ export default withPageAuthRequired(function CheckoutPage() {
               <Container className="py-4">
                 <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button
-                      onClick={() => handleLocal(bag)}
-                      variant="local"
-                      block
-                    >
+                    <Button onClick={() => handleLocal(bag)} variant="local" block>
                       Comprar desde Argentina
                     </Button>
                   </Col>

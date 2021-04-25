@@ -4,7 +4,7 @@ function initialState(args?) {
   return {
     response: null,
     error: null,
-    isLoading: true,
+    loading: true,
     ...args,
   };
 }
@@ -23,14 +23,14 @@ const useApi = (url: string, options = {}) => {
           setState(
             initialState({
               error: await res.json(),
-              isLoading: false,
+              loading: false,
             }),
           );
         } else {
           setState(
             initialState({
               response: await res.json(),
-              isLoading: false,
+              loading: false,
             }),
           );
         }
@@ -40,7 +40,7 @@ const useApi = (url: string, options = {}) => {
             error: {
               error: error.message,
             },
-            isLoading: false,
+            loading: false,
           }),
         );
       }

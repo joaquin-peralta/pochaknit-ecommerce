@@ -2,10 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbConnectUsers } from '@utils/dbConnect';
 import User from '@models/User';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
 
   await dbConnectUsers();
@@ -24,4 +21,4 @@ export default async function handler(
       res.status(400).json({ error: 'Bad request' });
       break;
   }
-}
+};

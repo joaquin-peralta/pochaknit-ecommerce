@@ -1,50 +1,19 @@
-import { GetStaticProps } from 'next';
+import { Pattern } from '@types';
+import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import SessionNav from '@components/SessionNav';
-import GlobalStyles from '@styles/GlobalStyles';
 import FeaturedPattern from '@components/FeaturedPattern';
-import { Featured } from '@types';
+import GlobalStyles from '@styles/GlobalStyles';
 
-type Props = {
-  featured: Featured[];
+type Featured = {
+  id: string;
+  pattern: Pattern;
 };
 
-export default function Home({ featured }: Props) {
-  return (
-    <>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
-      <SessionNav />
-
-      {featured.map((obj, index) => (
-        <Link key={obj.id} href={`/patterns/${obj.pattern.id}`}>
-          <a className="text-decoration-none text-reset">
-            <FeaturedPattern pattern={obj.pattern} indexOfArray={index} />
-          </a>
-        </Link>
-      ))}
-
-      <GlobalStyles />
-    </>
-  );
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  const featured: Featured[] = await fetch(
-    `${process.env.HOST}/featured-patterns`,
-  )
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => console.error(error));
+export const getStaticProps = async () => {
+  const res = await fetch(`${process.env.HOST}/featured-patterns`);
+  const featured: Featured[] = await res.json();
 
   return {
     props: {
@@ -52,3 +21,22 @@ export const getStaticProps: GetStaticProps = async () => {
     },
   };
 };
+
+const Home = ({ featured }: InferGetStaticPropsType<typeof getStaticProps>) => (
+  <>
+    <Head>
+      <title>Create Next App</title>
+    </Head>
+    <SessionNav /> {/* Temporal */}
+    {featured.map((item, index) => (
+      <Link key={item.id} href={`/patterns/${item.pattern.id}`}>
+        <a className="text-decoration-none text-reset">
+          <FeaturedPattern pattern={item.pattern} indexOfArray={index} />
+        </a>
+      </Link>
+    ))}
+    <GlobalStyles />
+  </>
+);
+
+export default Home;

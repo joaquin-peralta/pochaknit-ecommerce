@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import useApi from '@hooks/useApi';
 import Container from 'react-bootstrap/Container';
@@ -9,14 +9,42 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { FaVideo } from 'react-icons/fa';
 import ProfilePatternItem from '@components/ProfilePatternItem';
 import ProfileVideoItem from '@components/ProfileVideoItem';
+import { Pattern } from '@types';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
-export default withPageAuthRequired(function Profile(): ReactElement {
-  const { user } = useUser();
+export const getStaticProps = async () => {
+  const res = await fetch(`${process.env.HOST}/patterns`);
+  const patterns: Pattern[] = await res.json();
+
+  return {
+    props: {
+      patterns,
+    },
+  };
+};
+
+type Props = {
+  patterns: Pattern[];
+};
+
+const Profile = ({ patterns }: Props) => {
+  const { user, isLoading } = useUser();
   const USER_ID = user.sub.slice(6, user.sub.length);
-  const { response, error, isLoading } = useApi(`/api/users/${USER_ID}`);
   const [menu, setMenu] = useState(true);
+  const [purchases, setPurchases] = useState([]);
+  const { response, loading } = useApi(`api/users/${USER_ID}`);
+
+  useEffect(() => {
+    if (response !== null) {
+      const purchasesID = response.purchases.map((purchase) => purchase.id);
+      for (const pattern of patterns) {
+        if (purchasesID.includes(String(pattern.id))) {
+          setPurchases([...purchases, pattern]);
+        }
+      }
+    }
+  }, [response]);
 
   const patternButton = () => {
     setMenu(true);
@@ -25,16 +53,11 @@ export default withPageAuthRequired(function Profile(): ReactElement {
   const videoButton = () => {
     setMenu(false);
   };
-
-  if (isLoading) return <div>Loading profile...</div>;
-
-  if (error) return <div>{error.message}</div>;
-
-  if (user && response) {
-    console.log(response.purchases);
-    return (
-      user && (
-        <Container>
+  return (
+    <Container>
+      {isLoading && <div>Cargando perfil...</div>}
+      {!isLoading && (
+        <>
           <div className="text-right">
             <a href="/api/auth/logout">Cerrar sesión</a>
           </div>
@@ -50,87 +73,82 @@ export default withPageAuthRequired(function Profile(): ReactElement {
               />
             </Col>
             <Col>
-              <p className="font-weight-bold mb-0">{user.name}</p>
+              <p className="font-weight-bold mb-0">{user.nickname}</p>
             </Col>
             <Col>
               <small style={{ color: colors.analogous500 }}>{user.email}</small>
             </Col>
           </Row>
-          <Row>
-            <Col className="text-center pr-0">
-              <div className="d-block">
-                <button
-                  type="button"
-                  onClick={patternButton}
-                  className="btn-menu"
-                >
-                  <AiFillFilePdf
-                    style={{
-                      fontSize: '24px',
-                      color: menu
-                        ? `${colors.primaryStrong}`
-                        : `${colors.darkgray}`,
-                    }}
-                  />
-                </button>
-              </div>
-              <small>Patrones</small>
-              <hr
+        </>
+      )}
+      <Row>
+        <Col className="text-center pr-0">
+          <div className="d-block">
+            <button type="button" onClick={patternButton} className="btn-menu">
+              <AiFillFilePdf
                 style={{
-                  borderTop: menu
-                    ? `2px solid ${colors.primaryStrong}`
-                    : '1px solid rgba(0, 0, 0, 0.1)',
+                  fontSize: '24px',
+                  color: menu ? `${colors.primaryStrong}` : `${colors.darkgray}`,
                 }}
               />
-            </Col>
-            <Col className="text-center pl-0">
-              <div className="d-block">
-                <button
-                  type="button"
-                  onClick={videoButton}
-                  className="btn-menu"
-                >
-                  <FaVideo
-                    style={{
-                      fontSize: '24px',
-                      color: menu
-                        ? `${colors.darkgray}`
-                        : `${colors.primaryStrong}`,
-                    }}
-                  />
-                </button>
-              </div>
-              <small>Videos</small>
-              <hr
-                style={{
-                  borderTop: menu
-                    ? '1px solid rgba(0, 0, 0, 0.1)'
-                    : `2px solid ${colors.primaryStrong}`,
-                }}
-              />
-            </Col>
-          </Row>
-          <div className="items-container">
-            {menu ? (
-              <ProfilePatternItem purchases={response.purchases} />
-            ) : (
-              <ProfileVideoItem purchases={response.purchases} />
-            )}
+            </button>
           </div>
-          <GlobalStyles />
+          <small>Patrones</small>
+          <hr
+            style={{
+              borderTop: menu
+                ? `2px solid ${colors.primaryStrong}`
+                : '1px solid rgba(0, 0, 0, 0.1)',
+            }}
+          />
+        </Col>
+        <Col className="text-center pl-0">
+          <div className="d-block">
+            <button type="button" onClick={videoButton} className="btn-menu">
+              <FaVideo
+                style={{
+                  fontSize: '24px',
+                  color: menu ? `${colors.darkgray}` : `${colors.primaryStrong}`,
+                }}
+              />
+            </button>
+          </div>
+          <small>Videos</small>
+          <hr
+            style={{
+              borderTop: menu
+                ? '1px solid rgba(0, 0, 0, 0.1)'
+                : `2px solid ${colors.primaryStrong}`,
+            }}
+          />
+        </Col>
+      </Row>
+      <div className="items-container">
+        {loading && <div>Cargando patrones...</div>}
+        {!loading && (
+          <>
+            {menu ? (
+              <ProfilePatternItem purchases={purchases} />
+            ) : (
+              <ProfileVideoItem purchases={purchases} />
+            )}
+          </>
+        )}
+      </div>
+      <GlobalStyles />
 
-          <style jsx>{`
-            .items-container {
-              height: 50vh;
-            }
+      <style jsx>{`
+        .items-container {
+          height: 50vh;
+        }
 
-            .btn-menu {
-              border: 0;
-              background: transparent;
-            }
-          `}</style>
-        </Container>
-      )
-    );
-  }
-});
+        .btn-menu {
+          border: 0;
+          background: transparent;
+        }
+      `}</style>
+    </Container>
+  );
+};
+
+export default withPageAuthRequired(Profile);

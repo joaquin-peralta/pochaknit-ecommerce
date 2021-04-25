@@ -2,10 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbConnectUsers } from '@utils/dbConnect';
 import User from '@models/User';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { sub },
     method,
@@ -18,11 +15,13 @@ export default async function handler(
       try {
         const user = await User.findOne({ sub });
         if (!user) {
-          return res.status(400).json({ success: false });
+          return res.status(400).json({ error: 'User does not exist' });
         }
         res.status(200).json(user);
+        res.end();
       } catch (error) {
-        res.status(400).json({ success: false });
+        console.error(error);
+        res.status(400).json({ error: error.message });
       }
       break;
 
@@ -36,16 +35,6 @@ export default async function handler(
           return res.status(400);
         }
         res.status(200);
-      } catch (error) {
-        res.status(400);
-      }
-      break;
-    case 'POST':
-      try {
-        const user = await User.findOne({ sub });
-        for (const purchase of req.body) {
-          user.purchases.push(purchase);
-        }
       } catch (error) {
         res.status(400);
       }
