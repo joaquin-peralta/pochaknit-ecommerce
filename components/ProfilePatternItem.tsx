@@ -35,7 +35,13 @@ const ProfilePatternItem = ({ purchases }: Props) => (
               </h6>
             </Col>
             <Col xs={2}>
-              <IoMdDownload style={{ fontSize: '24px', color: `${colors.darkgray}` }} />
+              <a
+                href="https://drive.google.com/file/d/1-cOd1As5RsVTekzvu8Py8-S8M1k1eKLD/view?usp=sharing"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <IoMdDownload style={{ fontSize: '24px', color: `${colors.darkgray}` }} />
+              </a>
             </Col>
           </Row>
         ))}

@@ -14,7 +14,7 @@ export interface CloudVideo {
   url: string;
 }
 export interface Pattern {
-  id: number;
+  id: string;
   category: string;
   name: string;
   description: string;
@@ -26,7 +26,7 @@ export interface Pattern {
 }
 
 export interface Featured {
-  id: number;
+  id: string;
   pattern: Pattern;
 }
 export interface Purchase {

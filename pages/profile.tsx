@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
-import useApi from '@hooks/useApi';
+import { InferGetStaticPropsType } from 'next';
+import useSWR from 'swr';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -24,27 +25,26 @@ export const getStaticProps = async () => {
   };
 };
 
-type Props = {
-  patterns: Pattern[];
-};
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Profile = ({ patterns }: Props) => {
+const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { user, isLoading } = useUser();
-  const USER_ID = user.sub.slice(6, user.sub.length);
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState([]);
-  const { response, loading } = useApi(`api/users/${USER_ID}`);
+  const USER_ID = user.sub.slice(6, user.sub.length);
+  const { data, error } = useSWR(`api/users/${USER_ID}`, fetcher);
 
   useEffect(() => {
-    if (response !== null) {
-      const purchasesID = response.purchases.map((purchase) => purchase.id);
-      for (const pattern of patterns) {
-        if (purchasesID.includes(String(pattern.id))) {
-          setPurchases([...purchases, pattern]);
-        }
+    if (!data && !error) {
+      return;
+    }
+    const purchasesIDs = data.purchases.map((purchase) => purchase.id);
+    for (const pattern of patterns) {
+      if (purchasesIDs.includes(pattern.id)) {
+        setPurchases([...purchases, pattern]);
       }
     }
-  }, [response]);
+  }, [data]);
 
   const patternButton = () => {
     setMenu(true);
@@ -124,8 +124,8 @@ const Profile = ({ patterns }: Props) => {
         </Col>
       </Row>
       <div className="items-container">
-        {loading && <div>Cargando patrones...</div>}
-        {!loading && (
+        {!data && !error && <div>Cargando patrones...</div>}
+        {data && (
           <>
             {menu ? (
               <ProfilePatternItem purchases={purchases} />

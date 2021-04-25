@@ -14,8 +14,14 @@ export default withPageAuthRequired(function CheckoutPage() {
   const { user } = useUser();
   const USER_ID = user.sub.slice(6, user.sub.length);
 
-  const handleLocal = async (items: Pattern[]) => {
-    window.localStorage.setItem('usr', String(USER_ID));
+  const handleMercadoPago = async (items: Pattern[]) => {
+    const preferenceContent = {
+      additional_info: USER_ID,
+      payer: {
+        email: user.email,
+      },
+      items,
+    };
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -23,7 +29,7 @@ export default withPageAuthRequired(function CheckoutPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(items),
+          body: JSON.stringify(preferenceContent),
         });
         const preference = await response.json();
         window.localStorage.setItem(`_${USER_ID}`, JSON.stringify(await preference.data));
@@ -57,7 +63,7 @@ export default withPageAuthRequired(function CheckoutPage() {
               <Container className="py-4">
                 <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button onClick={() => handleLocal(bag)} variant="local" block>
+                    <Button onClick={() => handleMercadoPago(bag)} variant="local" block>
                       Comprar desde Argentina
                     </Button>
                   </Col>

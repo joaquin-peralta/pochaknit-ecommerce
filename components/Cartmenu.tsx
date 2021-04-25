@@ -38,18 +38,11 @@ const Cartmenu = () => {
   return (
     <>
       <div className={cartVisibility ? 'back-layer-show' : 'back-layer'}>
-        <div
-          ref={cartMenuRef}
-          className={cartVisibility ? 'cartmenu-open' : 'cartmenu'}
-        >
+        <div ref={cartMenuRef} className={cartVisibility ? 'cartmenu-open' : 'cartmenu'}>
           <Container>
             <Row className="justify-content-end">
               <Col xs="auto" className="px-0">
-                <button
-                  className="close-btn"
-                  type="button"
-                  onClick={hideCartMenu}
-                >
+                <button className="close-btn" type="button" onClick={hideCartMenu}>
                   <AiOutlineClose
                     style={{
                       color: `${colors.analogous500}`,
@@ -60,9 +53,7 @@ const Cartmenu = () => {
               </Col>
             </Row>
             <hr className="divisor" />
-            {bag.length === 0 && (
-              <p className="cart-text-info">La bolsa está vacía</p>
-            )}
+            {bag.length === 0 && <p className="cart-text-info">La bolsa está vacía</p>}
             {bag.length > 0 && (
               <>
                 <ul className="list-unstyled mb-0">

@@ -3,7 +3,7 @@ import { UserProvider } from '@auth0/nextjs-auth0';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from '@components/Layout';
 import BagContext from '@context/BagContext';
-import useInitialBagState from '@hooks/useInitialBagState';
+import useInitialState from '@hooks/useInitialState';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -18,10 +18,10 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: Props) {
-  const initialBagState = useInitialBagState();
+  const initialState = useInitialState();
   return (
     <UserProvider>
-      <BagContext.Provider value={initialBagState}>
+      <BagContext.Provider value={initialState}>
         <Layout>
           <Component {...pageProps} />
         </Layout>

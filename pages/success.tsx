@@ -9,7 +9,7 @@ export default function SuccessPage() {
     const preference = JSON.parse(window.localStorage.getItem(`_${USER_ID}`));
     const updateUserPurchase = async () => {
       try {
-        await fetch(`http://localhost:3000/api/users/${USER_ID}`, {
+        await fetch(`/api/users/${USER_ID}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

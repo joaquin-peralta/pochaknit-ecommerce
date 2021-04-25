@@ -1,11 +1,13 @@
 import { useContext } from 'react';
 import BagContext from '@context/BagContext';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { Pattern } from '@types';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { AiOutlineClose } from 'react-icons/ai';
-import { Pattern } from '@types';
+
 import { colors } from '@utils/themes';
 
 type Props = {
@@ -14,22 +16,18 @@ type Props = {
 
 const CartmenuItem = ({ item }: Props) => {
   const { removeFromBag } = useContext(BagContext);
+  const { removeValue } = useLocalStorage(item.id, false);
 
-  const handleRemoveFromBag = (product: Pattern) => {
-    removeFromBag(product);
-    window.localStorage.removeItem(String(product.id));
+  const handleRemoveFromBag = () => {
+    removeFromBag(item);
+    removeValue();
   };
 
   return (
     <Container>
       <Row className="py-4 align-items-center">
         <Col xs={3}>
-          <Image
-            src={item.images[0].url}
-            width={900}
-            height={1124}
-            layout="responsive"
-          />
+          <Image src={item.images[0].url} width={900} height={1124} layout="responsive" />
         </Col>
         <Col xs={6}>
           <p className="mb-0" style={{ color: `${colors.darkgray}` }}>
@@ -38,11 +36,7 @@ const CartmenuItem = ({ item }: Props) => {
           <small style={{ color: `${colors.darkgray}` }}>$ {item.price}</small>
         </Col>
         <Col xs={3} className="text-center">
-          <button
-            type="button"
-            className="btn-cancel-item"
-            onClick={() => handleRemoveFromBag(item)}
-          >
+          <button type="button" className="btn-cancel-item" onClick={handleRemoveFromBag}>
             <AiOutlineClose style={{ color: `${colors.darkgray}` }} />
           </button>
         </Col>

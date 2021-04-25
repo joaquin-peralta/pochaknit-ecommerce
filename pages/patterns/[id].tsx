@@ -12,6 +12,7 @@ import { colors } from '@utils/themes';
 import { IconContext } from 'react-icons';
 import { FaShareAlt, FaWhatsapp, FaInstagram, FaPinterest } from 'react-icons/fa';
 import GlobalStyles from '@styles/GlobalStyles';
+import useLocalStorage from '@hooks/useLocalStorage';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await fetch(`${process.env.HOST}/patterns/`);
@@ -19,7 +20,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: patterns.map((pattern) => ({
-      params: { id: String(pattern.id) },
+      params: { id: pattern.id },
     })),
     fallback: false,
   };
@@ -38,14 +39,15 @@ export const getStaticProps = async ({ params: { id } }) => {
 
 const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { bag, addToBag } = useContext(BagContext);
+  const { setLocalStorage } = useLocalStorage(pattern.id, false);
 
-  const handleAddToBag = (product: Pattern) => {
-    addToBag(product);
-    window.localStorage.setItem(String(product.id), JSON.stringify(product));
+  const handleAddToBag = () => {
+    addToBag(pattern);
+    setLocalStorage(pattern);
   };
 
-  const isDisabled = (product: Pattern) => {
-    if (bag.length !== 0) {
+  const handleDisable = (product: Pattern) => {
+    if (bag.length > 0) {
       for (const element of bag) {
         if (element.id === product.id) {
           return true;
@@ -73,11 +75,7 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           <p className="h3">$ {pattern.price}</p>
 
           <div className="btn-container">
-            <Button
-              variant="primary"
-              onClick={() => handleAddToBag(pattern)}
-              disabled={isDisabled(pattern)}
-            >
+            <Button variant="primary" onClick={handleAddToBag} disabled={handleDisable(pattern)}>
               Añadir a la bolsa
             </Button>
           </div>
