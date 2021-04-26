@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,13 +15,6 @@ export default withPageAuthRequired(function CheckoutPage() {
   const USER_ID = user.sub.slice(6, user.sub.length);
 
   const handleMercadoPago = async (items: Pattern[]) => {
-    const preferenceContent = {
-      additional_info: USER_ID,
-      payer: {
-        email: user.email,
-      },
-      items,
-    };
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -29,10 +22,23 @@ export default withPageAuthRequired(function CheckoutPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(preferenceContent),
+          body: JSON.stringify(items),
         });
         const preference = await response.json();
-        window.localStorage.setItem(`_${USER_ID}`, JSON.stringify(await preference.data));
+        console.log(preference.data.id);
+        fetch(`/api/users/${USER_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            purchases: {
+              mercadopago: {
+                preferences: preference.data.id,
+              },
+            },
+          }),
+        });
         window.location.href = await preference.data.init_point;
       } catch (err) {
         console.error(err);
@@ -41,14 +47,18 @@ export default withPageAuthRequired(function CheckoutPage() {
     createPreference();
   };
 
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
+  /* useEffect(
+    () => () => {
       for (const item of bag) {
-        window.localStorage.removeItem(String(item.id));
+        try {
+          window.localStorage.removeItem(String(item.id));
+        } catch (error) {
+          console.error(error);
+        }
       }
-    };
-  }, []);
+    },
+    [],
+  ); */
 
   return (
     <div className="page">

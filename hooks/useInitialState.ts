@@ -6,7 +6,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const useInitialState = () => {
   const [bag, setBag] = useState<Pattern[]>([]);
-  const { data, error } = useSWR('http://localhost:1337/patterns', fetcher);
+  const { data } = useSWR('http://localhost:1337/patterns', fetcher);
+  console.log(bag);
 
   const addToBag = (payload: Pattern) => {
     setBag([...bag, payload]);
@@ -17,13 +18,15 @@ const useInitialState = () => {
   };
 
   useEffect(() => {
-    if (!data && !error) {
-      return;
-    }
-    for (const item of data) {
-      if (window.localStorage.getItem(item.id) !== null) {
-        addToBag(item);
+    if (data) {
+      const updatedBag = [];
+      for (const item of data) {
+        if (window.localStorage.getItem(item.id) !== null) {
+          updatedBag.push(item);
+          console.log(`${item.id} added!`);
+        }
       }
+      setBag(updatedBag);
     }
   }, [data]);
 

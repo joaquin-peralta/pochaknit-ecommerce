@@ -38,9 +38,12 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
     if (!data && !error) {
       return;
     }
-    const purchasesIDs = data.purchases.map((purchase) => purchase.id);
+    if (data.patternsID.length === 0) {
+      setPurchases([]);
+      return;
+    }
     for (const pattern of patterns) {
-      if (purchasesIDs.includes(pattern.id)) {
+      if (data.patternsID.includes(pattern.id)) {
         setPurchases([...purchases, pattern]);
       }
     }

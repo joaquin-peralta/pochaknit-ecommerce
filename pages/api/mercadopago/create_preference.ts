@@ -7,10 +7,7 @@ mercadopago.configure({
   access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const cart = req.body.map((item: Pattern) => ({
       id: item.id,
