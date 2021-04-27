@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,8 +11,8 @@ import { Pattern } from '@types';
 
 export default withPageAuthRequired(function CheckoutPage() {
   const { bag } = useContext(BagContext);
-  const { user } = useUser();
-  const USER_ID = user.sub.slice(6, user.sub.length);
+  // const { user } = useUser();
+  // const USER_ID = user.sub.slice(6, user.sub.length);
 
   const handleMercadoPago = async (items: Pattern[]) => {
     const createPreference = async () => {
@@ -25,20 +25,7 @@ export default withPageAuthRequired(function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const preference = await response.json();
-        console.log(preference.data.id);
-        fetch(`/api/users/${USER_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            purchases: {
-              mercadopago: {
-                preferences: preference.data.id,
-              },
-            },
-          }),
-        });
+        window.localStorage.setItem('pref-id', preference.data.id);
         window.location.href = await preference.data.init_point;
       } catch (err) {
         console.error(err);
@@ -47,7 +34,7 @@ export default withPageAuthRequired(function CheckoutPage() {
     createPreference();
   };
 
-  /* useEffect(
+  useEffect(
     () => () => {
       for (const item of bag) {
         try {
@@ -58,7 +45,7 @@ export default withPageAuthRequired(function CheckoutPage() {
       }
     },
     [],
-  ); */
+  );
 
   return (
     <div className="page">

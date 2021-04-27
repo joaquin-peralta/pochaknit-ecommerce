@@ -10,15 +10,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'GET':
       try {
-        const users = await User.find({});
-        res.status(200).json(users);
+        const user = await User.find({});
+        res.status(200).json(user);
+        if (!user) {
+          res.status(500).json({ error: 'User does not exist' });
+        }
       } catch (error) {
         console.error(error);
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
       }
       break;
     default:
-      res.status(400).json({ error: 'Bad request' });
+      res.status(405).json({ error: 'Bad request' });
       break;
   }
 };

@@ -25,19 +25,21 @@ export const getStaticProps = async () => {
   };
 };
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { user, isLoading } = useUser();
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState([]);
-  const USER_ID = user.sub.slice(6, user.sub.length);
-  const { data, error } = useSWR(`api/users/${USER_ID}`, fetcher);
+  const sub = user.sub.slice(6, user.sub.length);
 
-  useEffect(() => {
+  // const { data, error } = useSWR(`/api/users/?sub=${sub}`, fetcher);
+
+  /* useEffect(() => {
     if (!data && !error) {
       return;
     }
+    console.log(data);
     if (data.patternsID.length === 0) {
       setPurchases([]);
       return;
@@ -47,7 +49,20 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
         setPurchases([...purchases, pattern]);
       }
     }
-  }, [data]);
+  }, [data]); */
+
+  /* useEffect(() => {
+    const putData = async () => {
+      fetch(`/api/users/${USER_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(['728092531-394f12c3-bf35-490c-bc53-8019da6f5ea8']),
+      });
+    };
+    putData();
+  }, []); */
 
   const patternButton = () => {
     setMenu(true);
@@ -127,7 +142,7 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
         </Col>
       </Row>
       <div className="items-container">
-        {!data && !error && <div>Cargando patrones...</div>}
+        {/* {!data && !error && <div>Cargando patrones...</div>}
         {data && (
           <>
             {menu ? (
@@ -136,7 +151,7 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
               <ProfileVideoItem purchases={purchases} />
             )}
           </>
-        )}
+        )} */}
       </div>
       <GlobalStyles />
 

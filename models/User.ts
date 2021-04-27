@@ -5,12 +5,7 @@ const UserSchema = new mongoose.Schema({
   username: String,
   email: String,
   emailVerified: Boolean,
-  patternsID: [String],
-  purchases: {
-    mercadopago: {
-      preferences: [String],
-    },
-  },
+  purchases: [String],
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

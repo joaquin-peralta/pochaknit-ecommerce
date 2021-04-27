@@ -3,17 +3,14 @@ import { dbConnectUsers } from '@utils/dbConnect';
 import User from '@models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    query: { sub },
-    method,
-  } = req;
+  const { method, query } = req;
 
   await dbConnectUsers();
 
   switch (method) {
     case 'GET':
       try {
-        const user = await User.findOne({ sub });
+        const user = await User.findOne({ query });
         if (!user) {
           return res.status(400).json({ error: 'User does not exist' });
         }
@@ -27,9 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     case 'PUT':
       try {
-        const filter = { sub };
-        const update = { purchases: req.body };
-        // @ts-ignore
+        const filter = { query };
+        const update = { purchases: '66666666' };
         const user = await User.findOneAndUpdate(filter, { $push: update });
         if (!user) {
           return res.status(400);
