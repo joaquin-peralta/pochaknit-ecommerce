@@ -25,6 +25,15 @@ export interface Pattern {
   videos: CloudVideo[];
 }
 
+export interface Profile {
+  _id: string;
+  sub: string;
+  username: string;
+  email: string;
+  emailVerified: Boolean;
+  purchases: [string];
+}
+
 export interface Featured {
   id: string;
   pattern: Pattern;

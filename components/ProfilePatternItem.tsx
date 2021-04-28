@@ -12,7 +12,7 @@ type Props = {
 
 const ProfilePatternItem = ({ purchases }: Props) => (
   <Container>
-    {purchases === undefined && <div>Cargando...</div>}
+    {purchases === null && <div>Cargando...</div>}
 
     {purchases.length === 0 && <div>No hay patrones</div>}
 

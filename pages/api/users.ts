@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { dbConnectUsers } from '@utils/dbConnect';
+import dbConnect from '@utils/dbConnect';
 import User from '@models/User';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
 
-  await dbConnectUsers();
+  await dbConnect();
 
   switch (method) {
     case 'GET':

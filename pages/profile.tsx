@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { InferGetStaticPropsType } from 'next';
@@ -10,7 +11,7 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { FaVideo } from 'react-icons/fa';
 import ProfilePatternItem from '@components/ProfilePatternItem';
 import ProfileVideoItem from '@components/ProfileVideoItem';
-import { Pattern } from '@types';
+import { Pattern, Profile } from '@types';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
@@ -25,44 +26,32 @@ export const getStaticProps = async () => {
   };
 };
 
-// const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { user, isLoading } = useUser();
+const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { user, isLoading, error } = useUser();
   const [menu, setMenu] = useState(true);
-  const [purchases, setPurchases] = useState([]);
-  const sub = user.sub.slice(6, user.sub.length);
+  const [purchases, setPurchases] = useState<Pattern[]>([]);
+  const [userID, setUserID] = useState('');
+  const { data } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
 
-  // const { data, error } = useSWR(`/api/users/?sub=${sub}`, fetcher);
+  useEffect(() => {
+    if (user) {
+      setUserID(user.sub.slice(6, user.sub.length));
+    }
+  }, []);
 
-  /* useEffect(() => {
-    if (!data && !error) {
-      return;
-    }
-    console.log(data);
-    if (data.patternsID.length === 0) {
-      setPurchases([]);
-      return;
-    }
-    for (const pattern of patterns) {
-      if (data.patternsID.includes(pattern.id)) {
-        setPurchases([...purchases, pattern]);
+  useEffect(() => {
+    if (data) {
+      if (data.purchases.length > 0) {
+        for (const pattern of patterns) {
+          if (data.purchases.includes(pattern.id)) {
+            setPurchases([...purchases, pattern]);
+          }
+        }
       }
     }
-  }, [data]); */
-
-  /* useEffect(() => {
-    const putData = async () => {
-      fetch(`/api/users/${USER_ID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(['728092531-394f12c3-bf35-490c-bc53-8019da6f5ea8']),
-      });
-    };
-    putData();
-  }, []); */
+  }, [data]);
 
   const patternButton = () => {
     setMenu(true);
@@ -71,34 +60,45 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
   const videoButton = () => {
     setMenu(false);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <>
+        <h2>Error</h2>
+        <p>{error.message}</p>
+      </>
+    );
+  }
+
   return (
     <Container>
-      {isLoading && <div>Cargando perfil...</div>}
-      {!isLoading && (
-        <>
-          <div className="text-right">
-            <a href="/api/auth/logout">Cerrar sesión</a>
-          </div>
-          <Row xs={1} className="text-center py-4 mb-4">
-            <Col>
-              <Image
-                className="avatar"
-                src={user.picture}
-                alt={user.nickname}
-                width={72}
-                height={72}
-                layout="intrinsic"
-              />
-            </Col>
-            <Col>
-              <p className="font-weight-bold mb-0">{user.nickname}</p>
-            </Col>
-            <Col>
-              <small style={{ color: colors.analogous500 }}>{user.email}</small>
-            </Col>
-          </Row>
-        </>
-      )}
+      <>
+        <div className="text-right">
+          <a href="/api/auth/logout">Cerrar sesión</a>
+        </div>
+        <Row xs={1} className="text-center py-4 mb-4">
+          <Col>
+            <Image
+              className="avatar"
+              src={user.picture}
+              alt={user.nickname}
+              width={72}
+              height={72}
+              layout="intrinsic"
+            />
+          </Col>
+          <Col>
+            <p className="font-weight-bold mb-0">{user.nickname}</p>
+          </Col>
+          <Col>
+            <small style={{ color: colors.analogous500 }}>{user.email}</small>
+          </Col>
+        </Row>
+      </>
       <Row>
         <Col className="text-center pr-0">
           <div className="d-block">
@@ -142,7 +142,7 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
         </Col>
       </Row>
       <div className="items-container">
-        {/* {!data && !error && <div>Cargando patrones...</div>}
+        {!data && <div>Cargando patrones...</div>}
         {data && (
           <>
             {menu ? (
@@ -151,7 +151,7 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
               <ProfileVideoItem purchases={purchases} />
             )}
           </>
-        )} */}
+        )}
       </div>
       <GlobalStyles />
 
@@ -169,4 +169,4 @@ const Profile = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) =
   );
 };
 
-export default withPageAuthRequired(Profile);
+export default withPageAuthRequired(ProfilePage);

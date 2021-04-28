@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,8 +11,9 @@ import { Pattern } from '@types';
 
 export default withPageAuthRequired(function CheckoutPage() {
   const { bag } = useContext(BagContext);
-  // const { user } = useUser();
-  // const USER_ID = user.sub.slice(6, user.sub.length);
+  const { user } = useUser();
+  const [userID, setUserID] = useState('');
+  const [mercadoPagoID, setMercadoPagoID] = useState(null);
 
   const handleMercadoPago = async (items: Pattern[]) => {
     const createPreference = async () => {
@@ -25,14 +26,40 @@ export default withPageAuthRequired(function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const preference = await response.json();
-        window.localStorage.setItem('pref-id', preference.data.id);
-        window.location.href = await preference.data.init_point;
-      } catch (err) {
-        console.error(err);
+        setMercadoPagoID(preference.data.id);
+        // window.location.href = await preference.data.init_point;
+      } catch (error) {
+        console.error(error);
       }
     };
     createPreference();
   };
+
+  useEffect(() => {
+    if (user) {
+      setUserID(user.sub.slice(6, user.sub.length));
+    }
+    const updateDB = async () => {
+      try {
+        const response = await fetch(`/api/user/${userID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            payments: {
+              mercadopago: mercadoPagoID,
+            },
+          }),
+        });
+        const update = await response.json();
+        console.log(update);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    updateDB();
+  }, [mercadoPagoID]);
 
   useEffect(
     () => () => {
