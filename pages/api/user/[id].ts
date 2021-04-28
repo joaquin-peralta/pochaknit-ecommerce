@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     case 'PUT':
       try {
-        const user = await User.findOne({ sub: id }).update({ $push: req.body });
+        const user = await User.findOne({ sub: id }).updateOne({ $push: req.body });
         if (!user) {
           return res.status(400).json({ success: false, data: 'User ID does not match.' });
         }

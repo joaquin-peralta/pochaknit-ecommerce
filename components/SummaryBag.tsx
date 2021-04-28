@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import BagContext from '@context/BagContext';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
@@ -14,11 +14,22 @@ type Props = {
 
 const SummaryBag = ({ items }: Props) => {
   const { removeFromBag } = useContext(BagContext);
+  const [total, setTotal] = useState(0);
 
   const handleRemoveFromBag = (product: Pattern) => {
     removeFromBag(product);
     window.localStorage.removeItem(String(product.id));
   };
+
+  useEffect(() => {
+    if (items !== null) {
+      let sum = 0;
+      for (const item of items) {
+        sum += item.price;
+      }
+      setTotal(sum);
+    }
+  }, [items]);
 
   return (
     <Container fluid>
@@ -67,7 +78,7 @@ const SummaryBag = ({ items }: Props) => {
           <p className="mb-0">Total</p>
         </Col>
         <Col className="text-right">
-          <p className="h4 font-weight-bold mb-0">$ xxxx</p>
+          <p className="h4 font-weight-bold mb-0">$ {total}</p>
         </Col>
       </Row>
 

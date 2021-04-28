@@ -5,6 +5,7 @@ type GlobalBagContent = {
   bag: Pattern[];
   addToBag: (payload: Pattern) => void;
   removeFromBag: (payload: Pattern) => void;
+  cleanBag: () => void;
 };
 
 const BagContext = createContext<GlobalBagContent>(null);

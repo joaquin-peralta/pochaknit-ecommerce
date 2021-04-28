@@ -32,6 +32,8 @@ export interface Profile {
   email: string;
   emailVerified: Boolean;
   purchases: [string];
+  mercadopago: [string];
+  paypal: [string];
 }
 
 export interface Featured {

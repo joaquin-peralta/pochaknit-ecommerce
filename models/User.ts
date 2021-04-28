@@ -6,10 +6,8 @@ const UserSchema = new mongoose.Schema({
   email: String,
   emailVerified: Boolean,
   purchases: [String],
-  payments: {
-    mercadopago: { type: [String] },
-    paypal: { type: [String] },
-  },
+  mercadopago: [String],
+  paypal: [String],
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

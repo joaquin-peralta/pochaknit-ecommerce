@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react';
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useContext, useState } from 'react';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,11 +11,10 @@ import { Pattern } from '@types';
 
 export default withPageAuthRequired(function CheckoutPage() {
   const { bag } = useContext(BagContext);
-  const { user } = useUser();
-  const [userID, setUserID] = useState('');
-  const [mercadoPagoID, setMercadoPagoID] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleMercadoPago = async (items: Pattern[]) => {
+    setIsDisabled(true);
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -26,53 +25,13 @@ export default withPageAuthRequired(function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const preference = await response.json();
-        setMercadoPagoID(preference.data.id);
-        // window.location.href = await preference.data.init_point;
+        window.location.href = await preference.data.init_point;
       } catch (error) {
         console.error(error);
       }
     };
     createPreference();
   };
-
-  useEffect(() => {
-    if (user) {
-      setUserID(user.sub.slice(6, user.sub.length));
-    }
-    const updateDB = async () => {
-      try {
-        const response = await fetch(`/api/user/${userID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            payments: {
-              mercadopago: mercadoPagoID,
-            },
-          }),
-        });
-        const update = await response.json();
-        console.log(update);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    updateDB();
-  }, [mercadoPagoID]);
-
-  useEffect(
-    () => () => {
-      for (const item of bag) {
-        try {
-          window.localStorage.removeItem(String(item.id));
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    },
-    [],
-  );
 
   return (
     <div className="page">
@@ -87,14 +46,19 @@ export default withPageAuthRequired(function CheckoutPage() {
               <Container className="py-4">
                 <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button onClick={() => handleMercadoPago(bag)} variant="local" block>
+                    <Button
+                      onClick={() => handleMercadoPago(bag)}
+                      variant="local"
+                      block
+                      disabled={isDisabled}
+                    >
                       Comprar desde Argentina
                     </Button>
                   </Col>
                 </Row>
                 <Row className="justify-content-center">
                   <Col xs={9}>
-                    <Button variant="ext" block>
+                    <Button variant="ext" block disabled={isDisabled}>
                       Comprar desde el Exterior
                     </Button>
                   </Col>

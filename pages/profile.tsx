@@ -33,7 +33,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState<Pattern[]>([]);
   const [userID, setUserID] = useState('');
-  const { data } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
+  const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
 
   useEffect(() => {
     if (user) {
@@ -42,16 +42,16 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
   }, []);
 
   useEffect(() => {
-    if (data) {
-      if (data.purchases.length > 0) {
+    if (profile) {
+      if (profile.purchases.length > 0) {
         for (const pattern of patterns) {
-          if (data.purchases.includes(pattern.id)) {
+          if (profile.purchases.includes(pattern.id)) {
             setPurchases([...purchases, pattern]);
           }
         }
       }
     }
-  }, [data]);
+  }, [profile]);
 
   const patternButton = () => {
     setMenu(true);
@@ -142,8 +142,8 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         </Col>
       </Row>
       <div className="items-container">
-        {!data && <div>Cargando patrones...</div>}
-        {data && (
+        {!profile && <div>Cargando patrones...</div>}
+        {profile && (
           <>
             {menu ? (
               <ProfilePatternItem purchases={purchases} />
