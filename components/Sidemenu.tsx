@@ -35,14 +35,9 @@ const Sidemenu = () => {
 
   return (
     <>
-      <IconContext.Provider
-        value={{ size: '24px', color: `${colors.analogous500}` }}
-      >
+      <IconContext.Provider value={{ size: '24px', color: `${colors.analogous500}` }}>
         <div className={menuVisibility ? 'back-layer-show' : 'back-layer'}>
-          <div
-            ref={sideMenuRef}
-            className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}
-          >
+          <div ref={sideMenuRef} className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}>
             <button className="close-btn" type="button" onClick={hideMenu}>
               <AiOutlineClose />
             </button>
@@ -67,12 +62,7 @@ const Sidemenu = () => {
               </ul>
             </nav>
             <div className="inner-image">
-              <Image
-                src="/sheep.png"
-                alt="Una oveja"
-                width={128}
-                height={128}
-              />
+              <Image src="/sheep.png" alt="Una oveja" width={128} height={128} />
               <p className="font-italic">¡No olvides de seguirnos!</p>
             </div>
             <div className="log-in">

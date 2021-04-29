@@ -2,7 +2,6 @@ import { Pattern } from '@types';
 import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import SessionNav from '@components/SessionNav';
 import FeaturedPattern from '@components/FeaturedPattern';
 import GlobalStyles from '@styles/GlobalStyles';
 
@@ -27,7 +26,6 @@ const Home = ({ featured }: InferGetStaticPropsType<typeof getStaticProps>) => (
     <Head>
       <title>Create Next App</title>
     </Head>
-    <SessionNav /> {/* Temporal */}
     {featured.map((item, index) => (
       <Link key={item.id} href={`/patterns/${item.pattern.id}`}>
         <a className="text-decoration-none text-reset">

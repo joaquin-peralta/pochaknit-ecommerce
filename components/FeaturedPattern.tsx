@@ -28,22 +28,16 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
       <Container>
         <div className="wrapper">
           <div className="one">
-            <h4 className="title font-italic">
+            <h3 className="title font-italic">
               <span>New</span> in
-            </h4>
+            </h3>
           </div>
           <div className="two">
-            <Image
-              src={pattern.images[0].url}
-              width={900}
-              height={1124}
-              layout="responsive"
-            />
+            <Image src={pattern.images[0].url} width={900} height={1124} layout="responsive" />
           </div>
           <div className="three">
             <h2 className="title">
-              {pattern.category}{' '}
-              <span style={{ fontSize: '1.2em' }}>{pattern.name}</span>
+              {pattern.category} <span style={{ fontSize: '1.2em' }}>{pattern.name}</span>
             </h2>
           </div>
         </div>
@@ -54,6 +48,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           grid-auto-rows: auto;
+          margin-bottom: 3rem;
         }
 
         .one {
@@ -78,6 +73,9 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
         }
 
         @media screen and (min-width: 768px) {
+          .wrapper {
+            margin-bottom: 0;
+          }
           .one {
             grid-column: ${alignText};
             grid-row: 1;

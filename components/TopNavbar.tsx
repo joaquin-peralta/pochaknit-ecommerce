@@ -2,10 +2,11 @@ import { useContext } from 'react';
 import BagContext from '@context/BagContext';
 import SidemenuContext from '@context/SidemenuContext';
 import CartmenuContext from '@context/CartmenuContext';
+import UsermenuContext from '@context/UsermenuContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconContext } from 'react-icons';
-import { AiOutlineMenu, AiOutlineShopping } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineShopping, AiOutlineUser } from 'react-icons/ai';
 import { colors } from '@utils/themes';
 import SidemenuData from '@components/SidemenuData';
 
@@ -15,6 +16,8 @@ const TopNavbar = () => {
   const [menuVisibility, setMenuVisibility] = useContext(SidemenuContext);
   // eslint-disable-next-line no-unused-vars
   const [shopVisibility, setShopVisibility] = useContext(CartmenuContext);
+  // eslint-disable-next-line no-unused-vars
+  const [userMenuVisibility, setUserMenuVisibility] = useContext(UsermenuContext);
 
   const showSidemenu = () => {
     setMenuVisibility(true);
@@ -22,6 +25,10 @@ const TopNavbar = () => {
 
   const showCartmenu = () => {
     setShopVisibility(true);
+  };
+
+  const showUsermenu = () => {
+    setUserMenuVisibility(!userMenuVisibility);
   };
 
   return (
@@ -52,6 +59,9 @@ const TopNavbar = () => {
           </ul>
         </nav>
         <div>
+          <button type="button" className="user-btn" onClick={showUsermenu}>
+            <AiOutlineUser />
+          </button>
           <button type="button" className="shop-btn" onClick={showCartmenu}>
             <AiOutlineShopping />
           </button>
@@ -80,6 +90,10 @@ const TopNavbar = () => {
             height: 72px;
             border: 0;
             background-color: ${colors.primary};
+          }
+
+          .user-btn {
+            display: none;
           }
 
           .shop-btn {
@@ -175,6 +189,14 @@ const TopNavbar = () => {
             .list {
               display: block;
               flex: 1;
+            }
+
+            .user-btn {
+              display: inline-block;
+              width: 36px;
+              height: 72px;
+              border: 0;
+              background-color: ${colors.primary};
             }
           }
         `}</style>
