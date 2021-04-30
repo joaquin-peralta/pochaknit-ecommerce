@@ -25,6 +25,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       break;
 
+    case 'POST':
+      try {
+        const userID = id.slice(6, id.length);
+        const user = await User.findOneAndUpdate({ sub: userID }, req.body, {
+          new: true,
+        });
+        if (!user) {
+          return res.status(400).json({ success: false, data: 'User ID does not match.' });
+        }
+        res.status(200).json({ success: true, data: user });
+      } catch (error) {
+        res.status(400).json({ success: false, data: error.message });
+      }
+      break;
+
     case 'PUT':
       try {
         const user = await User.findOne({ sub: id }).updateOne({ $push: req.body });
@@ -36,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).json({ success: false, data: error.message });
       }
       break;
+
     default:
       res.status(405).json({ success: false, data: 'Bad request.' });
       break;

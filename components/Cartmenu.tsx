@@ -65,7 +65,7 @@ const Cartmenu = () => {
                 </ul>
                 <hr className="mt-0 mb-4" />
                 <div className="text-center">
-                  <Button href="/checkout" variant="outline-primary">
+                  <Button href="/checkout" variant="outlinePrimary">
                     Checkout
                   </Button>
                 </div>
@@ -135,6 +135,8 @@ const Cartmenu = () => {
 
         .cart-text-info {
           font-style: italic;
+          text-align: center;
+          font-weight: 700;
         }
 
         .cart-items {

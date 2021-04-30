@@ -8,9 +8,7 @@ import Col from 'react-bootstrap/Col';
 import MobileGallery from '@components/MobileCarousel';
 import TabletGallery from '@components/SlideShowGallery';
 import Button from 'react-bootstrap/Button';
-import { colors } from '@utils/themes';
-import { IconContext } from 'react-icons';
-import { FaShareAlt, FaWhatsapp, FaInstagram, FaPinterest } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md';
 import GlobalStyles from '@styles/GlobalStyles';
 import useLocalStorage from '@hooks/useLocalStorage';
 
@@ -75,28 +73,16 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           <p className="h3">$ {pattern.price}</p>
 
           <div className="btn-container">
-            <Button variant="primary" onClick={handleAddToBag} disabled={handleDisable(pattern)}>
-              Añadir a la bolsa
+            <Button
+              variant="primary"
+              onClick={handleAddToBag}
+              disabled={handleDisable(pattern)}
+              block
+            >
+              <MdAdd style={{ fontSize: '18px' }} />
+              <span className="ml-2">Añadir a la bolsa</span>
             </Button>
           </div>
-
-          <ul className="social-media">
-            <IconContext.Provider value={{ size: '24px', color: `${colors.primary800}` }}>
-              <li>
-                <FaWhatsapp />
-              </li>
-              <li>
-                <FaInstagram />
-              </li>
-              <li>
-                <FaPinterest />
-              </li>
-            </IconContext.Provider>
-            <li>
-              <FaShareAlt className="ml-2 mr-1" />
-              Share
-            </li>
-          </ul>
         </Col>
       </Row>
       <div className="product-description">{pattern.description}</div>
@@ -116,7 +102,7 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           margin-right: 0.5rem;
         }
         .btn-container {
-          width: 11rem;
+          width: 100%;
           padding-top: 1.5rem;
           padding-bottom: 1.5rem;
         }

@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import BagContext from '@context/BagContext';
 import SummaryBag from '@components/SummaryBag';
+import { FiAlertTriangle } from 'react-icons/fi';
 import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
@@ -14,12 +15,12 @@ export default withPageAuthRequired(function CheckoutPage() {
   const { bag } = useContext(BagContext);
   const { user } = useUser();
   const [isDisabled, setIsDisabled] = useState(true);
+  const [sendingEmail, setSendingEmail] = useState(null);
 
   useEffect(() => {
     if (user.email_verified) {
       setIsDisabled(false);
     }
-    console.log(user.email_verified);
   }, [user.email_verified]);
 
   const handleMercadoPago = async (items: Pattern[]) => {
@@ -42,19 +43,24 @@ export default withPageAuthRequired(function CheckoutPage() {
     createPreference();
   };
 
-  const handleVerification = () => {
+  const handleVerification = async () => {
+    setSendingEmail(true);
     const sendEmail = async () => {
       try {
         const res = await fetch(`/api/email_verification/${user.sub}`, {
           method: 'POST',
         });
         const data = await res.json();
-        console.log(data.success);
+        return data;
       } catch (error) {
         console.error(error);
+        return false;
       }
     };
-    sendEmail();
+    const data = await sendEmail();
+    if (data.success) {
+      setSendingEmail(false);
+    }
   };
 
   return (
@@ -72,7 +78,7 @@ export default withPageAuthRequired(function CheckoutPage() {
                   <Col xs={9}>
                     <Button
                       onClick={() => handleMercadoPago(bag)}
-                      variant="local"
+                      variant="primary"
                       block
                       disabled={isDisabled}
                     >
@@ -80,9 +86,9 @@ export default withPageAuthRequired(function CheckoutPage() {
                     </Button>
                   </Col>
                 </Row>
-                <Row className="justify-content-center">
+                <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button variant="ext" block disabled={isDisabled}>
+                    <Button variant="secondary" block disabled={isDisabled}>
                       Comprar desde el Exterior
                     </Button>
                   </Col>
@@ -91,11 +97,18 @@ export default withPageAuthRequired(function CheckoutPage() {
                   <Row>
                     <Col>
                       <Alert variant="warning">
-                        Por favor verifica tu email antes de realizar la compra.
+                        <FiAlertTriangle />
+                        <small className="ml-2 font-weight-bold">
+                          Por favor verifica tu cuenta para poder realizar la compra. Si no has
+                          reicibido aun un mail de verifiación, revisa tu correo spam o presiona{' '}
+                          <Button className="p-0" variant="link" onClick={handleVerification}>
+                            <strong>aquí</strong>
+                          </Button>{' '}
+                          para reenviarlo.
+                        </small>
                       </Alert>
-                      <button type="button" onClick={handleVerification}>
-                        Verificar email
-                      </button>
+                      {sendingEmail === true && <small>Enviando mail de verificación...</small>}
+                      {sendingEmail === false && <small>Mail de verificación enviado.</small>}
                     </Col>
                   </Row>
                 )}

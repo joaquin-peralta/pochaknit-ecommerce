@@ -34,10 +34,10 @@ const Usermenu = () => {
             ¡Bienvenid@ a <span style={{ color: `${colors.primaryStrong}` }}>Pocha Knit</span>!
           </p>
           <div className="w-75 text-center">
-            <Button href="/api/auth/login" className="mb-2" variant="secondary" block>
+            <Button href="/api/auth/login" className="mb-2" variant="primary" block>
               <span className="log-btn">Iniciar sesión</span>
             </Button>
-            <Button href="/api/auth/login" variant="outline-secondary" block>
+            <Button href="/api/auth/login" variant="outlinePrimary" block>
               <span className="log-btn">Crear cuenta</span>
             </Button>
           </div>
@@ -49,10 +49,10 @@ const Usermenu = () => {
             ¡Hola <span style={{ color: `${colors.primaryStrong}` }}>{user.nickname}</span>!
           </p>
           <div className="w-75 text-center">
-            <Button href="/profile" className="mb-2" variant="secondary" block>
+            <Button href="/profile" className="mb-2" variant="primary" block>
               <span className="log-btn">Ver perfil</span>
             </Button>
-            <Button href="/api/auth/logout" variant="outline-secondary" block>
+            <Button href="/api/auth/logout" variant="outlinePrimary" block>
               <span className="log-btn">Cerrar sesión</span>
             </Button>
           </div>

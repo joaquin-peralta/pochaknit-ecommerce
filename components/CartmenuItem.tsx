@@ -25,20 +25,26 @@ const CartmenuItem = ({ item }: Props) => {
 
   return (
     <Container>
-      <Row className="py-4 align-items-center">
-        <Col xs={3}>
+      <Row className="justify-content-end">
+        <Col xs={4}>
+          <button type="button" className="btn-cancel-item" onClick={handleRemoveFromBag}>
+            <AiOutlineClose style={{ color: `${colors.darkgray}` }} />
+          </button>
+        </Col>
+      </Row>
+      <Row className="py-1 justify-content-center">
+        <Col xs={6}>
           <Image src={item.images[0].url} width={900} height={1124} layout="responsive" />
         </Col>
+      </Row>
+      <Row className="py-2 justify-content-center">
         <Col xs={6}>
           <p className="mb-0" style={{ color: `${colors.darkgray}` }}>
             {item.category} <span className="text-uppercase">{item.name}</span>
           </p>
-          <small style={{ color: `${colors.darkgray}` }}>$ {item.price}</small>
-        </Col>
-        <Col xs={3} className="text-center">
-          <button type="button" className="btn-cancel-item" onClick={handleRemoveFromBag}>
-            <AiOutlineClose style={{ color: `${colors.darkgray}` }} />
-          </button>
+          <small className="font-weight-bold" style={{ color: `${colors.darkgray}` }}>
+            $ {item.price}
+          </small>
         </Col>
       </Row>
 

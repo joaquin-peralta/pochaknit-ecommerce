@@ -38,7 +38,7 @@ const SummaryBag = ({ items }: Props) => {
           <AiOutlineShopping style={{ fontSize: '24px' }} />
         </Col>
         <Col xs="auto">
-          <p className="h5 mb-0">Resumen de tu compra</p>
+          <p className="h5 font-weight-bold mb-0">Resumen de tu compra</p>
         </Col>
       </Row>
       <hr className="mt-0" />
@@ -75,7 +75,7 @@ const SummaryBag = ({ items }: Props) => {
       <hr />
       <Row className="align-items-center justify-content-between">
         <Col>
-          <p className="mb-0">Total</p>
+          <p className="h4 mb-0">Total</p>
         </Col>
         <Col className="text-right">
           <p className="h4 font-weight-bold mb-0">$ {total}</p>

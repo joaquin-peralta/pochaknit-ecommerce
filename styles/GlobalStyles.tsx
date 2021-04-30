@@ -89,6 +89,42 @@ const GlobalStyles = () => (
         box-shadow: 0 0 0 0.2rem ${colors.primaryStrongTransparent};
       }
 
+      .btn-outlinePrimary {
+        background-color: transparent;
+        color: ${colors.primaryStrong};
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .btn.btn-outlinePrimary {
+        color: ${colors.primaryStrong};
+        background-color: transparent;
+        border: 2px solid ${colors.primaryStrong};
+      }
+
+      .btn.btn-outlinePrimary:not(:disabled):not(.disabled):hover {
+        color: #fff;
+        background-color: ${colors.primaryStrongDark};
+        border: 2px solid ${colors.primaryStrongDark};
+      }
+
+      .btn.btn-outlinePrimary:not(:disabled):not(.disabled):active {
+        color: #fff;
+        background-color: ${colors.primaryStrongDark};
+        border: 2px solid ${colors.primaryStrong};
+      }
+
+      .btn.btn-outlinePrimary:not(:disabled):not(.disabled):focus {
+        box-shadow: 0 0 0 0.2rem ${colors.primaryStrongTransparent};
+      }
+
+      .btn-secondary {
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
       .btn-local {
         background-color: #fff;
         color: #000;
