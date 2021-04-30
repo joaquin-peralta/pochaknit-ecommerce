@@ -15,7 +15,12 @@ const GlobalStyles = () => (
         margin: 0;
         padding: 72px 0 0 0;
         color: ${colors.darkgray};
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Thasadith', sans-serif;
+      }
+
+      h2 {
+        font-size: 3rem;
+        font-weight: 700;
       }
 
       // ProfilePage
