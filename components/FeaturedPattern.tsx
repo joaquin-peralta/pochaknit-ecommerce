@@ -25,7 +25,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
 
   return (
     <>
-      <Container>
+      <Container fluid>
         <div className="wrapper">
           <div className="one">
             <h3 className="title font-italic">
@@ -53,17 +53,22 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
 
         .one {
           grid-column: 1 / 3;
-          grid-row: 1;
+          grid-row: 2;
         }
 
         .two {
           grid-column: 1 / 3;
-          grid-row: 2;
+          grid-row: 1;
         }
 
         .three {
           grid-column: 1 / 3;
           grid-row: 3;
+        }
+
+        .title {
+          margin-top: 1rem;
+          line-height: 0.5;
         }
         .title,
         .title span {
@@ -90,6 +95,13 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           .three {
             grid-column: ${alignText};
             grid-row: 2;
+          }
+        }
+
+        @media screen and (min-width: 992px) {
+          .title {
+            margin-top: 0;
+            line-height: 1;
           }
         }
       `}</style>

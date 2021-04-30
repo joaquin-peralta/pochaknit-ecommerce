@@ -35,7 +35,7 @@ const Sidemenu = () => {
 
   return (
     <>
-      <IconContext.Provider value={{ size: '24px', color: `${colors.analogous500}` }}>
+      <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
         <div className={menuVisibility ? 'back-layer-show' : 'back-layer'}>
           <div ref={sideMenuRef} className={menuVisibility ? 'sidemenu-open' : 'sidemenu'}>
             <button className="close-btn" type="button" onClick={hideMenu}>
@@ -132,7 +132,6 @@ const Sidemenu = () => {
         .list-anchor {
           text-decoration: none;
           color: ${colors.darkgray};
-          font-style: italic;
         }
 
         .list-item {
@@ -146,6 +145,7 @@ const Sidemenu = () => {
 
         .list-item__title {
           font-size: 18px;
+          text-transform: uppercase;
           margin-left: 0.5rem;
         }
 

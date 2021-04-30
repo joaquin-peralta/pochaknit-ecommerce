@@ -30,22 +30,32 @@ const Usermenu = () => {
     <div ref={sideUserMenuRef} className={userMenuVisibility ? 'usermenu-open' : 'usermenu'}>
       {!user && (
         <>
-          <Button href="/api/auth/login" className="mb-2">
-            Iniciar sesión
-          </Button>
-          <Button href="/api/auth/login" variant="outline-primary">
-            Crear cuenta
-          </Button>
+          <p className="font-weight-bold">
+            ¡Bienvenid@ a <span style={{ color: `${colors.primaryStrong}` }}>Pocha Knit</span>!
+          </p>
+          <div className="w-75 text-center">
+            <Button href="/api/auth/login" className="mb-2" variant="secondary" block>
+              <span className="log-btn">Iniciar sesión</span>
+            </Button>
+            <Button href="/api/auth/login" variant="outline-secondary" block>
+              <span className="log-btn">Crear cuenta</span>
+            </Button>
+          </div>
         </>
       )}
       {user && (
         <>
-          <Button href="/profile" className="mb-2">
-            Ver perfil
-          </Button>
-          <Button href="/api/auth/logout" variant="outline-primary">
-            Cerrar sesión
-          </Button>
+          <p className="font-weight-bold">
+            ¡Hola <span style={{ color: `${colors.primaryStrong}` }}>{user.nickname}</span>!
+          </p>
+          <div className="w-75 text-center">
+            <Button href="/profile" className="mb-2" variant="secondary" block>
+              <span className="log-btn">Ver perfil</span>
+            </Button>
+            <Button href="/api/auth/logout" variant="outline-secondary" block>
+              <span className="log-btn">Cerrar sesión</span>
+            </Button>
+          </div>
         </>
       )}
 
@@ -53,21 +63,34 @@ const Usermenu = () => {
         .usermenu {
           display: none;
         }
+
         .usermenu-open {
-          position: fixed;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-flow: column wrap;
-          top: 72px;
-          right: 72px;
-          width: 256px;
-          height: 128px;
-          z-index: 1001;
-          background-color: ${colors.background};
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+          display: none;
+        }
+
+        @media screen and (min-width: 992px) {
+          .usermenu-open {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-flow: column wrap;
+            top: 80px;
+            right: 72px;
+            width: 270px;
+            height: 170px;
+            z-index: 1001;
+            background-color: ${colors.background};
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+          }
+
+          .log-btn {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+          }
         }
       `}</style>
     </div>

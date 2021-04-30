@@ -16,11 +16,31 @@ const GlobalStyles = () => (
         padding: 72px 0 0 0;
         color: ${colors.darkgray};
         font-family: 'Thasadith', sans-serif;
+        font-size: 1.2rem;
+        background-color: ${colors.background};
       }
 
       h2 {
-        font-size: 3rem;
+        font-size: 2.6rem;
         font-weight: 700;
+      }
+
+      h3 {
+        font-size: 1.7rem;
+        font-weight: 700;
+      }
+
+      @media screen and (min-width: 992px) {
+        body {
+          padding: 82px 0 0 0;
+        }
+        h2 {
+          font-size: 3rem;
+        }
+
+        h3 {
+          font-size: 2.2rem;
+        }
       }
 
       // ProfilePage
@@ -37,6 +57,36 @@ const GlobalStyles = () => (
       .slide-thumbnail:hover {
         cursor: pointer;
         opacity: 1;
+      }
+
+      .btn-primary {
+        background-color: ${colors.primaryStrong};
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .btn.btn-primary {
+        color: #fff;
+        background-color: ${colors.primaryStrong};
+        border: 2px solid ${colors.primaryStrong};
+      }
+
+      .btn.btn-primary:not(:disabled):not(.disabled):hover {
+        color: #fff;
+        background-color: ${colors.primaryStrongDark};
+        border: 2px solid ${colors.primaryStrongDark};
+      }
+
+      .btn.btn-primary:not(:disabled):not(.disabled):active {
+        color: #fff;
+        background-color: ${colors.primaryStrongDark};
+        border: 2px solid ${colors.primaryStrong};
+      }
+
+      .btn.btn-primary:not(:disabled):not(.disabled):focus {
+        box-shadow: 0 0 0 0.2rem ${colors.primaryStrongTransparent};
       }
 
       .btn-local {

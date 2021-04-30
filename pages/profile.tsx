@@ -77,9 +77,6 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
   return (
     <Container>
       <>
-        <div className="text-right">
-          <a href="/api/auth/logout">Cerrar sesión</a>
-        </div>
         <Row xs={1} className="text-center py-4 mb-4">
           <Col>
             <Image
