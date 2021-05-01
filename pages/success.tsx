@@ -12,41 +12,53 @@ export default function SuccessPage() {
   const router = useRouter();
   const { bag, cleanBag } = useContext(BagContext);
   const { user, isLoading } = useUser();
-  const [userID, setUserID] = useState('');
-  const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
-  const [isUpdating, setIsUpdating] = useState(true);
+  const { data: profile } = useSWR<Profile>(
+    user ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
+    fetcher,
+  );
+  const [updated, setUpdated] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      setUserID(user.sub.slice(6, user.sub.length));
+    if (profile && bag) {
       console.log(bag);
-      console.log(userID);
-    }
-  }, [user]);
 
-  useEffect(() => {
-    if (profile) {
-      const updateDB = async () => {
-        await fetch(`/api/user/${userID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ purchases: bag, mercadopago: router.query.preference_id }),
-        })
-          .then(() => setIsUpdating(false))
-          .catch((err) => console.error(err))
-          .then(() => cleanBag());
+      const newPurchase = profile.purchases.map((item) => item);
+      const newPreference = profile.mercadopago.map((item) => item);
+
+      for (const item of bag) {
+        newPurchase.unshift(item.id);
+      }
+      // @ts-ignore
+      newPreference.unshift(router.query.preference_id);
+
+      const putData = async (purchases, mercadopago) => {
+        try {
+          const res = await fetch(`/api/user/${user.sub.slice(6, user.sub.length)}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ purchases, mercadopago }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            setUpdated(true);
+          } else {
+            setUpdated(false);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       };
-      updateDB();
+      putData(newPurchase, newPreference);
     }
-  }, [profile]);
+  }, [profile, bag]);
 
   if (isLoading) {
     return <div>Loading success page...</div>;
   }
 
-  if (isUpdating) {
+  if (updated === null) {
     return (
       <>
         <h2>Actualizando tu perfil...</h2>
@@ -55,10 +67,19 @@ export default function SuccessPage() {
     );
   }
 
-  if (!isUpdating) {
+  if (updated === false) {
     return (
       <>
-        <h2>Compra exitosa...</h2>
+        <h2>Ha ocurrido un error durante la actualización.</h2>
+        <GlobalStyles />
+      </>
+    );
+  }
+
+  if (updated === true) {
+    return (
+      <>
+        <h2>Perfil actualizado correctamente</h2>
         <GlobalStyles />
       </>
     );

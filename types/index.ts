@@ -27,13 +27,14 @@ export interface Pattern {
 
 export interface Profile {
   _id: string;
-  sub: string;
+  userID: string;
   username: string;
   email: string;
   emailVerified: Boolean;
   purchases: [string];
   mercadopago: [string];
   paypal: [string];
+  tempPurchase: [string];
 }
 
 export interface Featured {

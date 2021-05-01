@@ -2,33 +2,34 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@utils/dbConnect';
 import User from '@models/User';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+type Data = {
+  success: boolean;
+  data: string;
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const {
-    method,
     query: { id },
   } = req;
 
   await dbConnect();
 
-  switch (method) {
+  switch (req.method) {
     case 'GET':
       try {
         const user = await User.findOne({ sub: id });
         if (!user) {
-          return res.status(400).json({ error: 'User does not exist' });
+          res.status(400).json({ success: false, data: 'User does not exist' });
         }
         res.status(200).json(user);
-        res.end();
       } catch (error) {
-        console.error(error);
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ success: false, data: error.message });
       }
       break;
 
-    case 'POST':
+    /* case 'POST':
       try {
-        const userID = id.slice(6, id.length);
-        const user = await User.findOneAndUpdate({ sub: userID }, req.body, {
+        const user = await User.findOneAndUpdate({ sub }, req.body, {
           new: true,
         });
         if (!user) {
@@ -38,22 +39,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error) {
         res.status(400).json({ success: false, data: error.message });
       }
-      break;
+      break; */
 
     case 'PUT':
       try {
-        const user = await User.findOne({ sub: id }).updateOne({ $push: req.body });
+        const user = await User.findOneAndUpdate({ sub: id }, req.body, { new: true });
         if (!user) {
-          return res.status(400).json({ success: false, data: 'User ID does not match.' });
+          res.status(404).json({ success: false, data: 'User not found.' });
         }
-        res.status(200).json({ success: true, data: user });
+        res.status(201).json({ success: true, data: user });
       } catch (error) {
         res.status(400).json({ success: false, data: error.message });
       }
       break;
 
     default:
-      res.status(405).json({ success: false, data: 'Bad request.' });
+      res.status(405).json({ success: false, data: 'Method not allowed.' });
       break;
   }
   res.end();
