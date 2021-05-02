@@ -10,23 +10,33 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function SuccessPage() {
   const router = useRouter();
-  const { bag, cleanBag } = useContext(BagContext);
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
+  const { cleanBag } = useContext(BagContext);
   const { data: profile } = useSWR<Profile>(
     user ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
     fetcher,
   );
-  const [updated, setUpdated] = useState(null);
+  const [updating, setUpdating] = useState(null);
 
   useEffect(() => {
-    if (profile && bag) {
-      console.log(bag);
+    cleanBag();
+  }, []);
 
+  useEffect(() => {
+    if (profile && updating === null) {
+      if (profile.tempPurchase.length > 0) {
+        setUpdating(true);
+      }
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    if (updating) {
       const newPurchase = profile.purchases.map((item) => item);
       const newPreference = profile.mercadopago.map((item) => item);
 
-      for (const item of bag) {
-        newPurchase.unshift(item.id);
+      for (const id of profile.tempPurchase) {
+        newPurchase.unshift(id);
       }
       // @ts-ignore
       newPreference.unshift(router.query.preference_id);
@@ -38,13 +48,13 @@ export default function SuccessPage() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ purchases, mercadopago }),
+            body: JSON.stringify({ purchases, mercadopago, tempPurchase: [] }),
           });
           const data = await res.json();
           if (data.success) {
-            setUpdated(true);
+            setUpdating(false);
           } else {
-            setUpdated(false);
+            setUpdating(null);
           }
         } catch (error) {
           console.error(error);
@@ -52,13 +62,18 @@ export default function SuccessPage() {
       };
       putData(newPurchase, newPreference);
     }
-  }, [profile, bag]);
+  }, [updating]);
 
-  if (isLoading) {
-    return <div>Loading success page...</div>;
+  if (updating === null) {
+    return (
+      <>
+        <h2>Cargando página...</h2>
+        <GlobalStyles />
+      </>
+    );
   }
 
-  if (updated === null) {
+  if (updating === true) {
     return (
       <>
         <h2>Actualizando tu perfil...</h2>
@@ -67,16 +82,7 @@ export default function SuccessPage() {
     );
   }
 
-  if (updated === false) {
-    return (
-      <>
-        <h2>Ha ocurrido un error durante la actualización.</h2>
-        <GlobalStyles />
-      </>
-    );
-  }
-
-  if (updated === true) {
+  if (updating === false) {
     return (
       <>
         <h2>Perfil actualizado correctamente</h2>

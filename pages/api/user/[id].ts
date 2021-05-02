@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   switch (req.method) {
     case 'GET':
       try {
-        const user = await User.findOne({ sub: id });
+        const user = await User.findOne({ userID: id });
         if (!user) {
           res.status(400).json({ success: false, data: 'User does not exist' });
         }
@@ -27,23 +27,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       }
       break;
 
-    /* case 'POST':
-      try {
-        const user = await User.findOneAndUpdate({ sub }, req.body, {
-          new: true,
-        });
-        if (!user) {
-          return res.status(400).json({ success: false, data: 'User ID does not match.' });
-        }
-        res.status(200).json({ success: true, data: user });
-      } catch (error) {
-        res.status(400).json({ success: false, data: error.message });
-      }
-      break; */
-
     case 'PUT':
       try {
-        const user = await User.findOneAndUpdate({ sub: id }, req.body, { new: true });
+        const user = await User.findOneAndUpdate({ userID: id }, req.body, { new: true });
         if (!user) {
           res.status(404).json({ success: false, data: 'User not found.' });
         }

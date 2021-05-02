@@ -11,7 +11,7 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { FaVideo } from 'react-icons/fa';
 import ProfilePatternItem from '@components/ProfilePatternItem';
 import ProfileVideoItem from '@components/ProfileVideoItem';
-import { Pattern, Profile } from '@types';
+import { Pattern } from '@types';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
@@ -29,26 +29,24 @@ export const getStaticProps = async () => {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { user, isLoading, error } = useUser();
+  const { user, error } = useUser();
   const [menu, setMenu] = useState(true);
-  const [purchases, setPurchases] = useState<Pattern[]>([]);
-  const [userID, setUserID] = useState('');
-  const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
-
-  useEffect(() => {
-    if (user) {
-      setUserID(user.sub.slice(6, user.sub.length));
-    }
-  }, []);
+  const [purchases, setPurchases] = useState([]);
+  const { data: profile } = useSWR(
+    user ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
+    fetcher,
+  );
 
   useEffect(() => {
     if (profile) {
       if (profile.purchases.length > 0) {
+        const purch = [];
         for (const pattern of patterns) {
           if (profile.purchases.includes(pattern.id)) {
-            setPurchases([...purchases, pattern]);
+            purch.push(pattern);
           }
         }
+        setPurchases(purch);
       }
     }
   }, [profile]);
@@ -61,8 +59,12 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
     setMenu(false);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (!user) {
+    return (
+      <>
+        <h2>Cargando perfil...</h2>
+      </>
+    );
   }
 
   if (error) {

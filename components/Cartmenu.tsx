@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import BagContext from '@context/BagContext';
 import CartmenuContext from '@context/CartmenuContext';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -65,9 +66,9 @@ const Cartmenu = () => {
                 </ul>
                 <hr className="mt-0 mb-4" />
                 <div className="text-center">
-                  <Button href="/checkout" variant="outlinePrimary">
-                    Checkout
-                  </Button>
+                  <Link href="/checkout" passHref>
+                    <Button variant="outlinePrimary">Checkout</Button>
+                  </Link>
                 </div>
               </>
             )}

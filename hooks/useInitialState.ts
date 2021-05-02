@@ -6,7 +6,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const useInitialState = () => {
   const [bag, setBag] = useState<Pattern[]>([]);
-  const { data: patterns } = useSWR<Pattern[]>('http://localhost:1337/patterns', fetcher);
+  const { data: patterns } = useSWR('http://localhost:1337/patterns', fetcher);
 
   const addToBag = (payload: Pattern) => {
     setBag([...bag, payload]);

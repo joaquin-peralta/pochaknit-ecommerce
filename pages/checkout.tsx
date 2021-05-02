@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useRouter } from 'next/router';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,6 +13,7 @@ import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
 export default withPageAuthRequired(function CheckoutPage() {
+  const router = useRouter();
   const { bag } = useContext(BagContext);
   const { user } = useUser();
   const [isDisabled, setIsDisabled] = useState(true);
@@ -23,8 +25,28 @@ export default withPageAuthRequired(function CheckoutPage() {
     }
   }, [user.email_verified]);
 
+  const saveTempPurchase = async (items: Pattern[]) => {
+    try {
+      const temps = items.map((item) => item.id);
+      const res = await fetch(`/api/user/${user.sub.slice(6, user.sub.length)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tempPurchase: temps }),
+      });
+      const data = await res.json();
+      console.log(`saveTempPurchase ${data}`);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
   const handleMercadoPago = async (items: Pattern[]) => {
     setIsDisabled(true);
+    await saveTempPurchase(items);
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -35,7 +57,7 @@ export default withPageAuthRequired(function CheckoutPage() {
           body: JSON.stringify(items),
         });
         const preference = await response.json();
-        window.location.href = await preference.data.init_point;
+        router.push(await preference.data.init_point);
       } catch (error) {
         console.error(error);
       }
@@ -99,8 +121,8 @@ export default withPageAuthRequired(function CheckoutPage() {
                       <Alert variant="warning">
                         <FiAlertTriangle />
                         <small className="ml-2 font-weight-bold">
-                          Por favor verifica tu cuenta para poder realizar la compra. Si no has
-                          reicibido aun un mail de verifiación, revisa tu correo spam o presiona{' '}
+                          Por favor verifica tu cuenta para poder realizar la compra. Si aun no has
+                          reicibido un mail de verificación, revisa tu correo spam o presiona{' '}
                           <Button className="p-0" variant="link" onClick={handleVerification}>
                             <strong>aquí</strong>
                           </Button>{' '}

@@ -12,8 +12,8 @@ export default function VerifiedPage() {
 
   const updateDB = async () => {
     try {
-      const res = await fetch(`/api/user/${user.sub}`, {
-        method: 'POST',
+      const res = await fetch(`/api/user/${user.sub.slice(6, user.sub.length)}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -36,6 +36,7 @@ export default function VerifiedPage() {
     setLoading(false);
     if (user && router.query.code === 'success' && router.query.success) {
       setIsVerified(true);
+      console.log(router.query);
       updateDB();
     }
   }, [router.query, user]);
