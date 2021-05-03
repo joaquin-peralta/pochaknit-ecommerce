@@ -9,7 +9,8 @@ mercadopago.configure({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const cart = req.body.map((item: Pattern) => ({
+    const { bag } = req.body;
+    const cart = bag.map((item: Pattern) => ({
       id: item.id,
       title: `${item.category} ${item.name}`,
       description: 'Patrón de tejido',
