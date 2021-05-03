@@ -1,23 +1,26 @@
-import { useState } from 'react';
+/* eslint-disable no-return-assign */
+import { useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
-import { IconContext } from 'react-icons';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowDown } from 'react-icons/io';
 import ProfileVideoInnerItem from '@components/ProfileVideoInnerItem';
 import { Pattern } from '@types';
-import { colors } from '@utils/themes';
 
 type Props = {
   purchases: Pattern[];
 };
 
-const ProfileVideoItem = ({ purchases }: Props) => {
-  const [isVisible, setIsVisible] = useState(false);
+export default function ProfileVideoItem({ purchases }: Props) {
+  const itemEls = useRef({});
 
-  const handleClick = () => {
-    setIsVisible(!isVisible);
+  const handleClick = (index: number) => {
+    if (itemEls.current[index].style.display === 'none') {
+      itemEls.current[index].style.display = 'block';
+    } else {
+      itemEls.current[index].style.display = 'none';
+    }
   };
 
   if (purchases.length === null) {
@@ -32,7 +35,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
     return (
       <Container>
         <ul className="list-unstyled">
-          {purchases.map((purchase) => (
+          {purchases.map((purchase, index) => (
             <li key={purchase.id}>
               <Row className="py-3 justify-content-around align-items-center">
                 <Col xs={3}>
@@ -51,15 +54,18 @@ const ProfileVideoItem = ({ purchases }: Props) => {
                   </p>
                 </Col>
                 <Col xs={2}>
-                  <button className="arrow-btn" type="button" onClick={handleClick}>
-                    <IconContext.Provider value={{ size: '28px', color: `${colors.darkgray}` }}>
-                      {isVisible ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                    </IconContext.Provider>
+                  <button className="arrow-btn" type="button" onClick={() => handleClick(index)}>
+                    <IoIosArrowDown style={{ fontSize: '28px' }} />
                   </button>
                 </Col>
               </Row>
               <hr className="mt-2" />
-              <ProfileVideoInnerItem visibility={isVisible} videos={purchase.videos} />
+              <div
+                ref={(element) => (itemEls.current[index] = element)}
+                style={{ display: 'none' }}
+              >
+                <ProfileVideoInnerItem videos={purchase.videos} />
+              </div>
             </li>
           ))}
         </ul>
@@ -77,6 +83,4 @@ const ProfileVideoItem = ({ purchases }: Props) => {
       </Container>
     );
   }
-};
-
-export default ProfileVideoItem;
+}

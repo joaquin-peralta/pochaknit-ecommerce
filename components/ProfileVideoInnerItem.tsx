@@ -5,43 +5,30 @@ import { FaFilm, FaPlay } from 'react-icons/fa';
 import { CloudVideo } from '@types';
 
 type Props = {
-  visibility: boolean;
   videos: CloudVideo[];
 };
 
-const ProfileVideoInnerItem = ({ visibility, videos }: Props) => (
-  <div className={visibility ? 'show' : 'hide'}>
-    <Container className="py-2">
-      {videos.length === 0 && <div>No hay videos...</div>}
-      {videos.length > 0 && (
-        <>
-          {videos.map((video, index) => (
-            <Row key={video.id} className="justify-content-around align-items-center pt-2">
-              <Col xs={3}>
-                <FaFilm />
-              </Col>
-              <Col xs={7}>
-                <small className="mb-0">Video {index + 1}</small>
-              </Col>
-              <Col xs={2}>
-                <FaPlay />
-              </Col>
-            </Row>
-          ))}
-        </>
-      )}
-    </Container>
-
-    <style jsx>{`
-      .hide {
-        display: none;
-      }
-
-      .show {
-        display: block;
-      }
-    `}</style>
-  </div>
+const ProfileVideoInnerItem = ({ videos }: Props) => (
+  <Container className="py-2">
+    {videos.length === 0 && <div>No hay videos...</div>}
+    {videos.length > 0 && (
+      <>
+        {videos.map((video, index) => (
+          <Row key={video.id} className="justify-content-around align-items-center pt-2">
+            <Col xs={3}>
+              <FaFilm />
+            </Col>
+            <Col xs={7}>
+              <small className="mb-0">Video {index + 1}</small>
+            </Col>
+            <Col xs={2}>
+              <FaPlay />
+            </Col>
+          </Row>
+        ))}
+      </>
+    )}
+  </Container>
 );
 
 export default ProfileVideoInnerItem;
