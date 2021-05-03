@@ -16,7 +16,7 @@ export const postData = async (url: string, args?) => {
   return res.json();
 };
 
-export const putData = async (url: string, args?) => {
+export const putData = async (url: string, { ...args }) => {
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
