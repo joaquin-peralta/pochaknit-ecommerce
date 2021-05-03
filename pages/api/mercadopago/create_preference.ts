@@ -32,11 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await mercadopago.preferences
       .create(preference)
       .then((response) => {
-        res.status(201).json({ data: response.body });
+        res.status(201).json({ success: true, data: response.body });
         res.end();
       })
-      .catch(() => {
-        res.status(500).end();
+      .catch((error) => {
+        res.status(500).json({ success: false, data: error });
+        res.end();
       });
   } else {
     res.status(405);

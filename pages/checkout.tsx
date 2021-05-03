@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
+import useSWR, { mutate } from 'swr';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,41 +13,70 @@ import { FiAlertTriangle } from 'react-icons/fi';
 import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
+const savePurchase = async (url: string, purchaseID: string[]) => {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tempPurchase: purchaseID }),
+  });
+
+  if (!res.ok) {
+    const error = new Error('An error occurred while fetching the data.');
+    throw error;
+  }
+
+  return res.json();
+};
+
+const createPreference = async (items: Pattern[]) => {
+  const res = await fetch('/api/mercadopago/create_preference', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(items),
+  });
+  if (!res.ok) {
+    const error = new Error('No se ha podido procesar tu compra. Por favor intente nuevamente.');
+    throw error;
+  }
+
+  return res.json();
+};
+
 export default withPageAuthRequired(function CheckoutPage() {
   const router = useRouter();
   const { bag } = useContext(BagContext);
   const { user } = useUser();
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(null);
+  const { data } = useSWR(
+    paymentStatus ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
+    () =>
+      savePurchase(`/api/user/${user.sub.slice(6, user.sub.length)}`, ['607769291f06a51e69ea2f9f']),
+  );
+  const { data: preference } = useSWR(data ? '/api/mercadopago/create_preference' : null, () =>
+    createPreference(bag),
+  );
 
   useEffect(() => {
+    if (preference) {
+      if (preference.success) {
+        router.push(preference.data.init_point);
+      }
+    }
+  }, [preference]);
+
+  /* useEffect(() => {
     if (user.email_verified) {
-      setIsDisabled(false);
+      setPaymentStatus(false);
     }
-  }, [user.email_verified]);
+  }, [user.email_verified]); */
 
-  const saveTempPurchase = async (items: Pattern[]) => {
-    try {
-      const temps = items.map((item) => item.id);
-      const res = await fetch(`/api/user/${user.sub.slice(6, user.sub.length)}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tempPurchase: temps }),
-      });
-      const data = await res.json();
-      console.log(`saveTempPurchase ${data}`);
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-    return false;
-  };
-
-  const handleMercadoPago = async (items: Pattern[]) => {
-    setIsDisabled(true);
-    await saveTempPurchase(items);
+  /* const handleMercadoPagoPurchase = (items: Pattern[]) => {
+    setPaymentStatus(true);
     const createPreference = async () => {
       try {
         const response = await fetch('/api/mercadopago/create_preference', {
@@ -63,9 +93,9 @@ export default withPageAuthRequired(function CheckoutPage() {
       }
     };
     createPreference();
-  };
+  }; */
 
-  const handleVerification = async () => {
+  /* const handleVerification = async () => {
     setSendingEmail(true);
     const sendEmail = async () => {
       try {
@@ -83,7 +113,7 @@ export default withPageAuthRequired(function CheckoutPage() {
     if (data.success) {
       setSendingEmail(false);
     }
-  };
+  }; */
 
   return (
     <div className="page">
@@ -98,19 +128,14 @@ export default withPageAuthRequired(function CheckoutPage() {
               <Container className="py-4">
                 <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button
-                      onClick={() => handleMercadoPago(bag)}
-                      variant="primary"
-                      block
-                      disabled={isDisabled}
-                    >
+                    <Button onClick={() => setPaymentStatus(true)} variant="primary" block>
                       Comprar desde Argentina
                     </Button>
                   </Col>
                 </Row>
                 <Row className="justify-content-center mb-4">
                   <Col xs={9}>
-                    <Button variant="secondary" block disabled={isDisabled}>
+                    <Button variant="secondary" block disabled={paymentStatus}>
                       Comprar desde el Exterior
                     </Button>
                   </Col>
@@ -123,7 +148,7 @@ export default withPageAuthRequired(function CheckoutPage() {
                         <small className="ml-2 font-weight-bold">
                           Por favor verifica tu cuenta para poder realizar la compra. Si aun no has
                           reicibido un mail de verificación, revisa tu correo spam o presiona{' '}
-                          <Button className="p-0" variant="link" onClick={handleVerification}>
+                          <Button className="p-0" variant="link">
                             <strong>aquí</strong>
                           </Button>{' '}
                           para reenviarlo.
