@@ -140,7 +140,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
           />
         </Col>
       </Row>
-      <div className="items-container">
+      <>
         {!profile && <div>Cargando patrones...</div>}
         {profile && (
           <>
@@ -151,14 +151,10 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
             )}
           </>
         )}
-      </div>
+      </>
       <GlobalStyles />
 
       <style jsx>{`
-        .items-container {
-          height: 50vh;
-        }
-
         .btn-menu {
           border: 0;
           background: transparent;

@@ -10,45 +10,59 @@ type Props = {
   purchases: Pattern[];
 };
 
-const ProfilePatternItem = ({ purchases }: Props) => (
-  <Container>
-    {purchases === null && <div>Cargando...</div>}
+export default function ProfilePatternItem({ purchases }: Props) {
+  if (purchases.length === null) {
+    return <div>Cargando...</div>;
+  }
 
-    {purchases.length === 0 && <div>No hay patrones</div>}
+  if (purchases.length === 0) {
+    return <div>No hay patrones</div>;
+  }
 
-    {purchases.length > 0 && (
-      <>
-        {purchases.map((purchase) => (
-          <Row key={purchase.id} className="justify-content-around align-items-center ">
-            <Col xs={3}>
-              <Image
-                src={purchase.images[0].url}
-                alt={purchase.images[0].alternativeText}
-                width={48}
-                height={48}
-                layout="intrinsic"
-              />
-            </Col>
-            <Col xs={7}>
-              <h6 className="mb-0">
-                {purchase.category} {purchase.name}
-              </h6>
-            </Col>
-            <Col xs={2}>
-              <a
-                href="https://drive.google.com/file/d/1-cOd1As5RsVTekzvu8Py8-S8M1k1eKLD/view?usp=sharing"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <IoMdDownload style={{ fontSize: '24px', color: `${colors.darkgray}` }} />
-              </a>
-            </Col>
-          </Row>
-        ))}
-        <hr className="mt-2" />
-      </>
-    )}
-  </Container>
-);
+  if (purchases.length > 0) {
+    return (
+      <Container>
+        <ul className="list-unstyled">
+          {purchases.map((purchase) => (
+            <li key={purchase.id}>
+              <Row className="py-3 justify-content-around align-items-center ">
+                <Col xs={3}>
+                  <div className="image-container">
+                    <Image
+                      src={purchase.images[0].url}
+                      alt={purchase.images[0].alternativeText}
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
+                </Col>
+                <Col xs={7}>
+                  <p className="mb-0 font-weight-bold">
+                    {purchase.category} <span className="text-uppercase">{purchase.name}</span>
+                  </p>
+                </Col>
+                <Col xs={2}>
+                  <a
+                    href="https://drive.google.com/file/d/1-cOd1As5RsVTekzvu8Py8-S8M1k1eKLD/view?usp=sharing"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <IoMdDownload style={{ fontSize: '28px', color: `${colors.darkgray}` }} />
+                  </a>
+                </Col>
+              </Row>
+              <hr className="mt-2" />
+            </li>
+          ))}
+        </ul>
 
-export default ProfilePatternItem;
+        <style jsx>{`
+          .image-container {
+            width: 100%;
+            height: 100px;
+          }
+        `}</style>
+      </Container>
+    );
+  }
+}
