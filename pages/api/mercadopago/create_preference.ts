@@ -24,10 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       items: cart,
       back_urls: {
         success: 'http://localhost:3000/success',
-        failure: 'http://localhost:3000/',
+        failure: 'http://localhost:3000/failure',
         pending: 'http://localhost:3000/',
       },
       auto_return: 'approved',
+      payment_methods: {
+        excluded_payment_types: [{ id: 'atm' }, { id: 'ticket' }],
+      },
+      statement_descriptor: 'POCHA-KNIT-MERCADOPAGO',
     };
 
     await mercadopago.preferences

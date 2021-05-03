@@ -1,65 +1,47 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@auth0/nextjs-auth0';
+import useSWR from 'swr';
+import { putData } from '@utils/fetcher';
 import Alert from 'react-bootstrap/Alert';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export default function VerifiedPage() {
   const router = useRouter();
   const { user } = useUser();
-  const [loading, setLoading] = useState(true);
-  const [isVerified, setIsVerified] = useState(false);
-
-  const updateDB = async () => {
-    try {
-      const res = await fetch(`/api/user/${user.sub.slice(6, user.sub.length)}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ emailVerified: true }),
-      });
-      const data = await res.json();
-      console.log(data);
-      router.push('/api/auth/logout');
-      return data;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
+  const [userID, setUserID] = useState('');
+  const { data: isVerified } = useSWR(
+    userID && router.query.success ? `/api/user/${userID}` : null,
+    () => putData(`/api/user/${userID}`, { emailVerified: true }),
+  );
 
   useEffect(() => {
-    if (router.query === null || router.query === undefined) {
-      return;
+    if (user) {
+      setUserID(user.sub.slice(6, user.sub.length));
     }
-    setLoading(false);
-    if (user && router.query.code === 'success' && router.query.success) {
-      setIsVerified(true);
-      console.log(router.query);
-      updateDB();
-    }
-  }, [router.query, user]);
+  }, [user]);
 
-  if (loading) {
-    return (
-      <>
-        <p>Espere por favor...</p>
-      </>
-    );
+  useEffect(() => {
+    if (isVerified) {
+      router.push('/api/auth/logout');
+    }
+  }, [isVerified]);
+
+  if (!isVerified) {
+    return <div>Loading...</div>;
   }
 
-  return (
-    <>
-      {isVerified && (
+  if (isVerified) {
+    return (
+      <>
         <Alert variant="success">
           <span className="font-weight-bold">
             Tu email fue verificado. Si no eres redireccionado a Pocha Knit presiona{' '}
             <a href="/api/auth/logout">aquí.</a>
           </span>
         </Alert>
-      )}
-      <GlobalStyles />
-    </>
-  );
+        <GlobalStyles />
+      </>
+    );
+  }
 }

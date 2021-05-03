@@ -1,12 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    method,
-    query: { id },
-  } = req;
-
-  if (method === 'POST') {
+  if (req.method === 'POST') {
     const getClientCredentials = async () => {
       try {
         const response = await fetch('https://dev-lsbcedzv.us.auth0.com/oauth/token', {
@@ -24,7 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const data = await response.json();
         return data;
       } catch (error) {
-        return res.status(400).json({ success: false, data: error.message });
+        res.status(400).json({ success: false, data: error.message });
+        res.end();
+        return false;
       }
     };
     const credentials = await getClientCredentials();
@@ -40,18 +37,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ user_id: `${id}` }),
+            body: JSON.stringify(req.body),
           },
         );
         const data = await response.json();
+        res.status(201).json({ success: true, data });
+        res.end();
         return data;
       } catch (error) {
-        return res.status(400).json({ success: false, data: error.message });
+        res.status(400).json({ success: false, data: error.message });
+        res.end();
+        return false;
       }
     };
-    const data = await sendVerificationEmail();
-    res.status(201).json({ success: true, data });
-    res.end();
+    await sendVerificationEmail();
   } else {
     res.status(405).json({ success: false, data: 'Bad request.' });
     res.end();
