@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef } from 'react';
 import SidemenuContext from '@context/SidemenuContext';
 import Link from 'next/link';
-import Image from 'next/image';
 import { IconContext } from 'react-icons';
 import { AiOutlineClose } from 'react-icons/ai';
+import { FaInstagram, FaPinterest } from 'react-icons/fa';
 import { colors } from '@utils/themes';
 import SessionNav from '@components/SessionNav';
 import SidemenuData from './SidemenuData';
@@ -62,8 +62,16 @@ const Sidemenu = () => {
               </ul>
             </nav>
             <div className="inner-image">
-              <Image src="/sheep.png" alt="Una oveja" width={128} height={128} />
-              <p className="font-italic">¡No olvides de seguirnos!</p>
+              <img src="/sheep.png" alt="Una oveja" />
+            </div>
+            <p className="font-italic text-center h6 py-2">¡No olvides de seguirnos!</p>
+            <div className="text-center">
+              <a href="#" className="mr-3">
+                <FaInstagram />
+              </a>
+              <a href="#">
+                <FaPinterest />
+              </a>
             </div>
             <div className="log-in">
               <SessionNav />
@@ -74,7 +82,7 @@ const Sidemenu = () => {
 
       <style jsx>{`
         .back-layer {
-          positon: fixed;
+          position: fixed;
           width: 100%;
           top: 0;
           left: 0;
@@ -151,7 +159,7 @@ const Sidemenu = () => {
 
         .inner-image {
           width: 100%;
-          height: 128px;
+          height: auto;
           text-align: center;
         }
 

@@ -8,27 +8,28 @@ type Props = {
   videos: CloudVideo[];
 };
 
-const ProfileVideoInnerItem = ({ videos }: Props) => (
-  <Container className="py-2">
-    {videos.length === 0 && <div>No hay videos...</div>}
-    {videos.length > 0 && (
-      <>
-        {videos.map((video, index) => (
-          <Row key={video.id} className="justify-content-around align-items-center pt-2">
-            <Col xs={3}>
-              <FaFilm />
-            </Col>
-            <Col xs={7}>
-              <small className="mb-0">Video {index + 1}</small>
-            </Col>
-            <Col xs={2}>
-              <FaPlay />
-            </Col>
-          </Row>
-        ))}
-      </>
-    )}
-  </Container>
-);
+const ProfileVideoInnerItem = ({ videos }: Props) => {
+  if (videos.length === 0) {
+    return <p className="font-italic">No hay videos disponibles...</p>;
+  }
+
+  return (
+    <Container className="py-2">
+      {videos.map((video, index) => (
+        <Row key={video.id} className="justify-content-around align-items-center pt-2">
+          <Col xs={3}>
+            <FaFilm />
+          </Col>
+          <Col xs={7}>
+            <small className="mb-0">Video {index + 1}</small>
+          </Col>
+          <Col xs={2}>
+            <FaPlay />
+          </Col>
+        </Row>
+      ))}
+    </Container>
+  );
+};
 
 export default ProfileVideoInnerItem;

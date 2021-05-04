@@ -12,7 +12,7 @@ type Props = {
   purchases: Pattern[];
 };
 
-export default function ProfileVideoItem({ purchases }: Props) {
+const ProfileVideoItem = ({ purchases }: Props) => {
   const itemEls = useRef({});
 
   const handleClick = (index: number) => {
@@ -31,56 +31,53 @@ export default function ProfileVideoItem({ purchases }: Props) {
     return <div>No hay patrones</div>;
   }
 
-  if (purchases.length > 0) {
-    return (
-      <Container>
-        <ul className="list-unstyled">
-          {purchases.map((purchase, index) => (
-            <li key={purchase.id}>
-              <Row className="py-3 justify-content-around align-items-center">
-                <Col xs={3}>
-                  <div className="image-container">
-                    <Image
-                      src={purchase.images[0].url}
-                      alt={purchase.images[0].alternativeText}
-                      layout="fill"
-                      objectFit="contain"
-                    />
-                  </div>
-                </Col>
-                <Col xs={7}>
-                  <p className="mb-0 font-weight-bold">
-                    {purchase.category} <span className="text-uppercase">{purchase.name}</span>
-                  </p>
-                </Col>
-                <Col xs={2}>
-                  <button className="arrow-btn" type="button" onClick={() => handleClick(index)}>
-                    <IoIosArrowDown style={{ fontSize: '28px' }} />
-                  </button>
-                </Col>
-              </Row>
-              <hr className="mt-2" />
-              <div
-                ref={(element) => (itemEls.current[index] = element)}
-                style={{ display: 'none' }}
-              >
-                <ProfileVideoInnerItem videos={purchase.videos} />
-              </div>
-            </li>
-          ))}
-        </ul>
+  return (
+    <Container>
+      <ul className="list-unstyled">
+        {purchases.map((purchase, index) => (
+          <li key={purchase.id}>
+            <Row className="py-3 justify-content-around align-items-center">
+              <Col xs={3}>
+                <div className="image-container">
+                  <Image
+                    src={purchase.images[0].url}
+                    alt={purchase.images[0].alternativeText}
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+              </Col>
+              <Col xs={7}>
+                <p className="mb-0 font-weight-bold">
+                  {purchase.category} <span className="text-uppercase">{purchase.name}</span>
+                </p>
+              </Col>
+              <Col xs={2}>
+                <button className="arrow-btn" type="button" onClick={() => handleClick(index)}>
+                  <IoIosArrowDown style={{ fontSize: '28px' }} />
+                </button>
+              </Col>
+            </Row>
+            <hr className="mt-2" />
+            <div ref={(element) => (itemEls.current[index] = element)} style={{ display: 'none' }}>
+              <ProfileVideoInnerItem videos={purchase.videos} />
+            </div>
+          </li>
+        ))}
+      </ul>
 
-        <style jsx>{`
-          .image-container {
-            width: 100%;
-            height: 100px;
-          }
-          .arrow-btn {
-            border: 0;
-            background: transparent;
-          }
-        `}</style>
-      </Container>
-    );
-  }
-}
+      <style jsx>{`
+        .image-container {
+          width: 100%;
+          height: 100px;
+        }
+        .arrow-btn {
+          border: 0;
+          background: transparent;
+        }
+      `}</style>
+    </Container>
+  );
+};
+
+export default ProfileVideoItem;

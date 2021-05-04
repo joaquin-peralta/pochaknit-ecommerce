@@ -9,31 +9,36 @@ const SessionNav = () => {
 
   if (error) return <div>{error.message}</div>;
 
+  if (!user) {
+    return (
+      <div style={{ color: `${colors.darkgray}` }}>
+        <a href="/api/auth/login" className="text-decoration-none text-reset">
+          Crear cuenta
+        </a>
+        {' | '}
+        <a href="/api/auth/login" className="font-weight-bold text-decoration-none text-reset">
+          Iniciar sesión
+        </a>
+      </div>
+    );
+  }
+
   return (
     <>
-      {!user && (
-        <div style={{ color: `${colors.darkgray}` }}>
-          <a href="/api/auth/login" className="text-decoration-none text-reset">
-            Crear cuenta
+      <p className="mb-1">
+        ¡Hola <span className="font-weight-bold">{user.nickname}</span>!
+      </p>
+      <>
+        <Link href="/profile">
+          <a className="font-weight-bold" style={{ color: `${colors.primaryStrong}` }}>
+            Ver perfil
           </a>
-          {' | '}
-          <a
-            href="/api/auth/login"
-            className="font-weight-bold text-decoration-none text-reset"
-          >
-            Iniciar sesión
-          </a>
-        </div>
-      )}
-      {user && (
-        <div className="mt-1 pl-4" style={{ color: `${colors.darkgray}` }}>
-          <p className="d-inline-block mb-0">¡Hola {user.nickname}</p>
-          {' | '}
-          <Link href="/profile">
-            <a className="d-inline-block">Ver perfil</a>
-          </Link>
-        </div>
-      )}
+        </Link>
+        <span className="mx-2">|</span>
+        <a href="/api/auth/logout" className="text-decoration-none text-reset">
+          Cerrar sesión
+        </a>
+      </>
     </>
   );
 };

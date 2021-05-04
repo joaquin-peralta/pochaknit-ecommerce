@@ -41,10 +41,10 @@ const TopNavbar = () => {
       <Link href="/">
         <a>
           <div className="square-brand">
-            <Image src="/square-logo.png" alt="logo" width={72} height={72} />
+            <Image src="/square-logo.png" alt="brand" width={72} height={72} />
           </div>
           <div className="brand">
-            <img src="/logo3.png" alt="brand" />
+            <Image src="/logo.png" alt="brand" width={160} height={72} />
           </div>
         </a>
       </Link>
@@ -180,17 +180,8 @@ const TopNavbar = () => {
 
           .brand {
             display: block;
-            position: relative;
-            width: 197px;
-            height: 72px;
-          }
-
-          .brand img {
-            position: absolute;
-            top: -30px;
-            left: 0;
             width: 100%;
-            height: auto;
+            height: 72px;
           }
         }
 
