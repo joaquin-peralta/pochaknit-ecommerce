@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BagContext from '@context/BagContext';
 import CartmenuContext from '@context/CartmenuContext';
@@ -13,6 +13,17 @@ import { colors } from '@utils/themes';
 const Cartmenu = () => {
   const { bag } = useContext(BagContext);
   const [cartVisibility, setCartVisibility] = useContext(CartmenuContext);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (bag !== null) {
+      let sum = 0;
+      for (const item of bag) {
+        sum += item.price;
+      }
+      setTotal(sum);
+    }
+  }, [bag]);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -65,6 +76,8 @@ const Cartmenu = () => {
                   ))}
                 </ul>
                 <hr className="mt-0 mb-4" />
+                <p className="mb-0 text-right">Total</p>
+                <p className="text-right font-weight-bold">$ {total}</p>
                 <div className="text-center">
                   <Link href="/checkout" passHref>
                     <Button variant="outlinePrimary">Checkout</Button>
@@ -138,6 +151,7 @@ const Cartmenu = () => {
           font-style: italic;
           text-align: center;
           font-weight: 700;
+          margin-top: 1rem;
         }
 
         .cart-items {

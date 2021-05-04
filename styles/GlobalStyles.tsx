@@ -18,6 +18,7 @@ const GlobalStyles = () => (
         font-family: 'Thasadith', sans-serif;
         font-size: 1.2rem;
         background-color: ${colors.background};
+        letter-spacing: 0.8px;
       }
 
       h2 {

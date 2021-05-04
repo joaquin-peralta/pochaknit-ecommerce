@@ -42,7 +42,7 @@ const Sidemenu = () => {
               <AiOutlineClose />
             </button>
             <nav>
-              <ul className="list">
+              <ul className="list font-weight-bold">
                 {SidemenuData.map((item) => (
                   <Link key={item.title} href={item.path}>
                     <a
