@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { currentPrice } from '@utils/maths';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { colors } from '@utils/themes';
@@ -16,7 +17,7 @@ type Props = {
 
 const CartmenuItem = ({ item }: Props) => {
   const { removeFromBag } = useContext(BagContext);
-  const { removeValue } = useLocalStorage(item.id, false);
+  const { removeValue } = useLocalStorage(item._id, false);
 
   const handleRemoveFromBag = () => {
     removeFromBag(item);
@@ -34,16 +35,23 @@ const CartmenuItem = ({ item }: Props) => {
       </Row>
       <Row className="py-1 justify-content-center">
         <Col xs={6}>
-          <Image src={item.images[0].url} width={900} height={1124} layout="responsive" />
+          <Image
+            src={item.images[0].url}
+            alt={item.images[0].alternativeText}
+            width={900}
+            height={1124}
+            layout="responsive"
+          />
         </Col>
       </Row>
       <Row className="py-2 justify-content-center">
         <Col xs={6}>
           <p className="mb-0" style={{ color: `${colors.darkgray}` }}>
-            {item.category} <span className="text-uppercase">{item.name}</span>
+            <span className="text-capitalize">{item.category}</span>{' '}
+            <span className="text-uppercase">{item.name}</span>
           </p>
           <small className="font-weight-bold" style={{ color: `${colors.darkgray}` }}>
-            $ {item.price}
+            $ {currentPrice(item.price, item.discount)}
           </small>
         </Col>
       </Row>

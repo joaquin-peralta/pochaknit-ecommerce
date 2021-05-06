@@ -3,11 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
-import { CloudImage } from '@types';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
-  images: CloudImage[];
+  images: any;
 };
 
 const SlideShowGallery = ({ images }: Props) => {
@@ -42,12 +41,10 @@ const SlideShowGallery = ({ images }: Props) => {
     <>
       <Container className="gallery-container">
         {images.map((image, index) => (
-          <div
-            key={image.id}
-            className={slideIndex === index ? 'show' : 'hide'}
-          >
+          <div key={image._id} className={slideIndex === index ? 'show' : 'hide'}>
             <Image
               src={image.url}
+              alt={image.alternativeText}
               width={900}
               height={1124}
               layout="responsive"
@@ -55,7 +52,7 @@ const SlideShowGallery = ({ images }: Props) => {
           </div>
         ))}
 
-        <Row className="align-items-center py-2">
+        <Row className="flex-nowrap align-items-center py-2">
           <Col className="px-0 text-center">
             <button type="button" className="prev" onClick={substract}>
               &#10094;
@@ -63,14 +60,14 @@ const SlideShowGallery = ({ images }: Props) => {
           </Col>
 
           {images.map((image, index) => (
-            <Col key={image.id} className="px-2">
-              <div>
+            <Col key={image._id} className="px-2">
+              <div className="thumbnail-image">
                 <Image
                   className={`slide-thumbnail ${slideActive(index)}`}
                   src={image.url}
-                  width={1124}
-                  height={1124}
-                  layout="responsive"
+                  alt={image.alternativeText}
+                  layout="fill"
+                  objectFit="contain"
                   onClick={() => currentSlide(index)}
                 />
               </div>
@@ -120,6 +117,11 @@ const SlideShowGallery = ({ images }: Props) => {
         .next {
           right: 0;
           border-radius: 3px 0 0 3px;
+        }
+
+        .thumbnail-image {
+          width: 48px;
+          height: 48px;
         }
       `}</style>
     </>

@@ -6,6 +6,7 @@ type GlobalBagContent = {
   addToBag: (payload: Pattern) => void;
   removeFromBag: (payload: Pattern) => void;
   cleanBag: () => void;
+  totalPrice: number;
 };
 
 const BagContext = createContext<GlobalBagContent>(null);

@@ -1,19 +1,19 @@
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'next/image';
-import { CloudImage } from '@types';
 
 type Props = {
-  images: CloudImage[];
+  images: any;
 };
 
 const MobileCarousel = ({ images }: Props) => (
   <div>
     <Carousel>
       {images.map((image) => (
-        <Carousel.Item key={image.id}>
+        <Carousel.Item key={image._id}>
           <div className="d-block w-100">
             <Image
               src={image.url}
+              alt={image.alternativeText}
               width={900}
               height={1124}
               layout="responsive"

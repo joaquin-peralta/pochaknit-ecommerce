@@ -6,7 +6,7 @@ import FeaturedPattern from '@components/FeaturedPattern';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Featured = {
-  id: string;
+  _id: string;
   pattern: Pattern;
 };
 
@@ -27,7 +27,7 @@ const Home = ({ featured }: InferGetStaticPropsType<typeof getStaticProps>) => (
       <title>Create Next App</title>
     </Head>
     {featured.map((item, index) => (
-      <Link key={item.id} href={`/patterns/${item.pattern.id}`}>
+      <Link key={item._id} href={`/patterns/${item.pattern._id}`}>
         <a className="text-decoration-none text-reset">
           <FeaturedPattern pattern={item.pattern} indexOfArray={index} />
         </a>

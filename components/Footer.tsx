@@ -13,9 +13,7 @@ const Footer = () => (
       <hr />
       <Row className="align-items-end">
         <Col xs={5} lg={2}>
-          <IconContext.Provider
-            value={{ size: '24px', color: `${colors.darkgray}` }}
-          >
+          <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
             <div className="mb-2">
               <FaInstagram />
               <Link href="/">

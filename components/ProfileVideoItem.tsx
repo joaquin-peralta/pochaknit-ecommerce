@@ -35,7 +35,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
     <Container>
       <ul className="list-unstyled">
         {purchases.map((purchase, index) => (
-          <li key={purchase.id}>
+          <li key={purchase._id}>
             <Row className="py-3 justify-content-around align-items-center">
               <Col xs={3}>
                 <div className="image-container">
@@ -60,7 +60,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
             </Row>
             <hr className="mt-2" />
             <div ref={(element) => (itemEls.current[index] = element)} style={{ display: 'none' }}>
-              <ProfileVideoInnerItem videos={purchase.videos} />
+              <ProfileVideoInnerItem videosUrls={purchase.videos.urls} />
             </div>
           </li>
         ))}

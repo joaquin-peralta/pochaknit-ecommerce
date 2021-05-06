@@ -1,30 +1,23 @@
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { FaFilm, FaPlay } from 'react-icons/fa';
-import { CloudVideo } from '@types';
+import YouTube from 'react-youtube';
 
 type Props = {
-  videos: CloudVideo[];
+  videosUrls: string[];
 };
 
-const ProfileVideoInnerItem = ({ videos }: Props) => {
-  if (videos.length === 0) {
+const ProfileVideoInnerItem = ({ videosUrls }: Props) => {
+  if (videosUrls.length === 0) {
     return <p className="font-italic">No hay videos disponibles...</p>;
   }
 
   return (
     <Container className="py-2">
-      {videos.map((video, index) => (
-        <Row key={video.id} className="justify-content-around align-items-center pt-2">
-          <Col xs={3}>
-            <FaFilm />
-          </Col>
-          <Col xs={7}>
-            <small className="mb-0">Video {index + 1}</small>
-          </Col>
-          <Col xs={2}>
-            <FaPlay />
+      {videosUrls.map((url) => (
+        <Row key={url}>
+          <Col className="text-center">
+            <YouTube videoId="9BMwcO6_hyA" />
           </Col>
         </Row>
       ))}

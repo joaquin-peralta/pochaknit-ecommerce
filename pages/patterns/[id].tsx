@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import MobileGallery from '@components/MobileCarousel';
 import TabletGallery from '@components/SlideShowGallery';
+import ProductPrice from '@components/ProductPrice';
 import Button from 'react-bootstrap/Button';
 import { MdAdd } from 'react-icons/md';
 import GlobalStyles from '@styles/GlobalStyles';
@@ -18,7 +19,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: patterns.map((pattern) => ({
-      params: { id: pattern.id },
+      params: { id: pattern._id },
     })),
     fallback: false,
   };
@@ -37,17 +38,17 @@ export const getStaticProps = async ({ params: { id } }) => {
 
 const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { bag, addToBag } = useContext(BagContext);
-  const { setLocalStorage } = useLocalStorage(pattern.id, false);
+  const { setLocalStorage } = useLocalStorage(pattern._id, false);
 
-  const handleAddToBag = () => {
-    addToBag(pattern);
-    setLocalStorage(pattern);
+  const handleAddToBag = (product: Pattern) => {
+    addToBag(product);
+    setLocalStorage(product);
   };
 
   const handleDisable = (product: Pattern) => {
     if (bag.length > 0) {
       for (const element of bag) {
-        if (element.id === product.id) {
+        if (element._id === product._id) {
           return true;
         }
       }
@@ -66,16 +67,17 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
             <TabletGallery images={pattern.images} />
           </div>
         </Col>
-        <Col xs md={{ span: 4, offset: 1 }} className="pt-5 pb-2">
+        <Col xs md={{ span: 5, offset: 1 }} className="pt-5 pb-2">
           <h2 className="mb-3">
-            {pattern.category} <span className="text-uppercase">{pattern.name}</span>
+            <span className="text-capitalize">{pattern.category}</span>{' '}
+            <span className="text-uppercase">{pattern.name}</span>
           </h2>
-          <p className="h3">$ {pattern.price}</p>
+          <ProductPrice price={pattern.price} discount={pattern.discount} />
 
           <div className="btn-container">
             <Button
               variant="primary"
-              onClick={handleAddToBag}
+              onClick={() => handleAddToBag(pattern)}
               disabled={handleDisable(pattern)}
               block
             >

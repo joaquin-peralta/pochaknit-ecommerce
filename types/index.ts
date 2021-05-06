@@ -1,28 +1,16 @@
-export interface File {
-  id: string;
-  url: string;
-}
-
-export interface CloudImage {
-  id: string;
-  alternativeText: string;
-  url: string;
-}
-
-export interface CloudVideo {
-  id: string;
-  url: string;
-}
 export interface Pattern {
-  id: string;
+  _id: string;
   category: string;
   name: string;
   description: string;
   price: number;
+  priceExt: number;
+  discount: number;
+  creationDate: string;
   primaryColor: string;
-  files: File[];
-  images: CloudImage[];
-  videos: CloudVideo[];
+  images: any;
+  files: { urls: string[] };
+  videos: { urls: string[] };
 }
 
 export interface Profile {
@@ -35,11 +23,6 @@ export interface Profile {
   mercadopago: [string];
   paypal: [string];
   tempPurchase: [string];
-}
-
-export interface Featured {
-  id: string;
-  pattern: Pattern;
 }
 export interface Purchase {
   categoryId: string;

@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import BagContext from '@context/BagContext';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
 import { Pattern } from '@types';
+import { currentPrice } from '@utils/maths';
 import { colors } from '@utils/themes';
 
 type Props = {
@@ -13,23 +14,12 @@ type Props = {
 };
 
 const SummaryBag = ({ items }: Props) => {
-  const { removeFromBag } = useContext(BagContext);
-  const [total, setTotal] = useState(0);
+  const { removeFromBag, totalPrice } = useContext(BagContext);
 
   const handleRemoveFromBag = (product: Pattern) => {
     removeFromBag(product);
-    window.localStorage.removeItem(String(product.id));
+    window.localStorage.removeItem(String(product._id));
   };
-
-  useEffect(() => {
-    if (items !== null) {
-      let sum = 0;
-      for (const item of items) {
-        sum += item.price;
-      }
-      setTotal(sum);
-    }
-  }, [items]);
 
   return (
     <Container fluid>
@@ -44,7 +34,7 @@ const SummaryBag = ({ items }: Props) => {
       <hr className="mt-0" />
       <ul className="list-unstyled pl-0 py-1 mb-0">
         {items.map((item) => (
-          <li key={item.id} className="py-1">
+          <li key={item._id} className="py-1">
             <Row className="align-items-center">
               <Col xs={3}>
                 <Image
@@ -56,9 +46,10 @@ const SummaryBag = ({ items }: Props) => {
                 />
               </Col>
               <Col xs={4}>
-                {item.category} {item.name}
+                <span className="text-capitalize">{item.category}</span>{' '}
+                <span className="text-uppercase">{item.name}</span>
               </Col>
-              <Col xs={3}>$ {item.price}</Col>
+              <Col xs={3}>$ {currentPrice(item.price, item.discount)}</Col>
               <Col xs={2}>
                 <button
                   type="button"
@@ -78,7 +69,7 @@ const SummaryBag = ({ items }: Props) => {
           <p className="h4 mb-0">Total</p>
         </Col>
         <Col className="text-right">
-          <p className="h4 font-weight-bold mb-0">$ {total}</p>
+          <p className="h4 font-weight-bold mb-0">$ {totalPrice}</p>
         </Col>
       </Row>
 

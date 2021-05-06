@@ -42,7 +42,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
       if (profile.purchases.length > 0) {
         const purch = [];
         for (const pattern of patterns) {
-          if (profile.purchases.includes(pattern.id)) {
+          if (profile.purchases.includes(pattern._id)) {
             purch.push(pattern);
           }
         }

@@ -1,36 +1,20 @@
 import Image from 'next/image';
-import { CloudImage } from '@types';
 
 type Props = {
-  images: CloudImage[];
+  images: any;
 };
 
 const QuiltedImages = ({ images }: Props) => (
   <>
     <div className="wrapper">
       <div className="one">
-        <Image
-          src={images[0].url}
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[0].url} width={900} height={1124} layout="responsive" />
       </div>
       <div className="two">
-        <Image
-          src={images[1].url}
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[1].url} width={900} height={1124} layout="responsive" />
       </div>
       <div className="three">
-        <Image
-          src={images[2].url}
-          width={900}
-          height={1124}
-          layout="responsive"
-        />
+        <Image src={images[2].url} width={900} height={1124} layout="responsive" />
       </div>
     </div>
 

@@ -24,7 +24,7 @@ export default function ProfilePatternItem({ purchases }: Props) {
       <Container>
         <ul className="list-unstyled">
           {purchases.map((purchase) => (
-            <li key={purchase.id}>
+            <li key={purchase._id}>
               <Row className="py-3 justify-content-around align-items-center ">
                 <Col xs={3}>
                   <div className="image-container">
@@ -42,11 +42,7 @@ export default function ProfilePatternItem({ purchases }: Props) {
                   </p>
                 </Col>
                 <Col xs={2}>
-                  <a
-                    href="https://drive.google.com/file/d/1-cOd1As5RsVTekzvu8Py8-S8M1k1eKLD/view?usp=sharing"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={purchase.files.urls[0]} target="_blank" rel="noreferrer">
                     <IoMdDownload style={{ fontSize: '28px', color: `${colors.darkgray}` }} />
                   </a>
                 </Col>

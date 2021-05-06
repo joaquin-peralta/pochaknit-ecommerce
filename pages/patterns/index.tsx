@@ -22,8 +22,8 @@ const PatternsPage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProp
   <Container>
     <Row xs={1} md={2}>
       {patterns.map((pattern) => (
-        <Col key={pattern.id}>
-          <Link href={`/patterns/${pattern.id}`}>
+        <Col key={pattern._id}>
+          <Link href={`/patterns/${pattern._id}`}>
             <a className="text-decoration-none text-reset">
               <DetailedPattern pattern={pattern} />
             </a>

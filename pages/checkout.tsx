@@ -3,6 +3,7 @@ import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import { postData, putData } from '@utils/fetcher';
 import useSWR from 'swr';
+import Link from 'next/link';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,6 +12,7 @@ import Alert from 'react-bootstrap/Alert';
 import BagContext from '@context/BagContext';
 import SummaryBag from '@components/SummaryBag';
 import { FiAlertTriangle } from 'react-icons/fi';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export default withPageAuthRequired(function CheckoutPage() {
@@ -20,9 +22,10 @@ export default withPageAuthRequired(function CheckoutPage() {
   const [userID, setUserID] = useState('');
   const [paymentStatus, setPaymentStatus] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
   const { data: savedPurchase, error: savedPurchaseError } = useSWR(
     paymentStatus ? `/api/user/${userID}` : null,
-    () => putData(`/api/user/${userID}`, { tempPurchase: bag.map((item) => item.id) }),
+    () => putData(`/api/user/${userID}`, { tempPurchase: bag.map((item) => item._id) }),
     { revalidateOnFocus: false, revalidateOnReconnect: false },
   );
   const {
@@ -43,7 +46,6 @@ export default withPageAuthRequired(function CheckoutPage() {
   useEffect(() => {
     if (user) {
       setUserID(user.sub.slice(6, user.sub.length));
-      console.log(user.email_verified);
     }
 
     return () => {
@@ -54,7 +56,7 @@ export default withPageAuthRequired(function CheckoutPage() {
   useEffect(() => {
     if (preference) {
       if (preference.success) {
-        router.push(preference.data.sandbox_init_point);
+        router.push(preference.data.init_point);
       }
     }
   }, [preference]);
@@ -62,7 +64,15 @@ export default withPageAuthRequired(function CheckoutPage() {
   if (user) {
     return (
       <div className="page">
-        {bag.length === 0 && <div>Bolsa de compra vacía...</div>}
+        {bag.length === 0 && (
+          <Alert variant="info">
+            <AiOutlineInfoCircle style={{ fontSize: '24px' }} />{' '}
+            <span>Bolsa de compra vacía. Ver más</span>{' '}
+            <Link href="/patterns">
+              <a className="font-weight-bold">patrones.</a>
+            </Link>
+          </Alert>
+        )}
         {bag.length > 0 && (
           <Container fluid>
             <Row xs={1} lg={2} className="align-items-center">
@@ -95,9 +105,22 @@ export default withPageAuthRequired(function CheckoutPage() {
                         variant="secondary"
                         block
                         disabled={paymentStatus && !user.email_verified}
+                        onClick={() => setShowNotification(true)}
                       >
                         Comprar desde el Exterior
                       </Button>
+                      {showNotification && (
+                        <div className="mt-2">
+                          <Alert variant="info">
+                            <AiOutlineInfoCircle />{' '}
+                            <small>
+                              Muy pronto estará habilitado el pago a través de PayPal. Si querés
+                              realizar el pago en este momento mandanos un mail a{' '}
+                              <span className="font-weight-bold">pochaknit@gmail.com</span>
+                            </small>
+                          </Alert>
+                        </div>
+                      )}
                     </Col>
                   </Row>
                   {!user.email_verified && (
