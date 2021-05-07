@@ -61,7 +61,7 @@ const ProfileVideoItem = ({ purchases }: Props) => {
             </Row>
             <hr className="mt-2" />
             <div ref={(element) => (itemEls.current[index] = element)} style={{ display: 'none' }}>
-              <ProfileVideoInnerItem videosUrls={purchase.videos.urls} />
+              <ProfileVideoInnerItem videosIds={purchase.videos.ids} />
             </div>
           </li>
         ))}

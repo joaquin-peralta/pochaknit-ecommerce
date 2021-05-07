@@ -179,6 +179,23 @@ const GlobalStyles = () => (
       .btn.btn-ext:not(:disabled):not(.disabled):focus {
         box-shadow: 0 0 0 0.2rem ${colors.triadic100Transparent};
       }
+
+      .youtubeContainer {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%;
+        overflow: hidden;
+        margin-bottom: 50px;
+      }
+
+      .youtubeContainer iframe {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     `}</style>
   </>
 );

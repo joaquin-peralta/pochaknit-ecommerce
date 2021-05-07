@@ -48,7 +48,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           grid-auto-rows: auto;
-          margin-bottom: 3rem;
+          margin-bottom: 5rem;
         }
 
         .one {

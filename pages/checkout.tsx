@@ -11,6 +11,8 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import BagContext from '@context/BagContext';
 import SummaryBag from '@components/SummaryBag';
+import Loader from 'react-loader-spinner';
+import { colors } from '@utils/themes';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import GlobalStyles from '@styles/GlobalStyles';
@@ -75,6 +77,15 @@ export default withPageAuthRequired(function CheckoutPage() {
         )}
         {bag.length > 0 && (
           <Container fluid>
+            {paymentStatus && (
+              <div className="loader-container">
+                <div className="loader">
+                  <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+                  <p className="mt-4 mb-0">Redireccionando a Mercadopago.</p>
+                  <p className="mb-0">Por favor espera.</p>
+                </div>
+              </div>
+            )}
             <Row xs={1} lg={2} className="align-items-center">
               <Col>
                 <SummaryBag items={bag} />
@@ -164,6 +175,27 @@ export default withPageAuthRequired(function CheckoutPage() {
         <style jsx>{`
           .page {
             height: auto;
+          }
+          .loader-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 2999;
+            padding: 0;
+          }
+          .loader {
+            position: fixed;
+            z-index: 3000;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: ${colors.background};
+            padding: 2rem 1rem;
+            border-radius: 8px;
           }
         `}</style>
       </div>

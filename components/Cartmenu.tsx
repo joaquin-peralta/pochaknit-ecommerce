@@ -67,7 +67,13 @@ const Cartmenu = () => {
                 <hr className="mt-0 mb-4" />
                 <p className="mb-0 text-right">Total</p>
                 <p className="text-right font-weight-bold">$ {totalPrice}</p>
-                <div className="text-center">
+                <div
+                  className="text-center"
+                  onClick={hideCartMenu}
+                  onKeyPress={hideCartMenu}
+                  role="button"
+                  tabIndex={0}
+                >
                   <Link href="/checkout" passHref>
                     <Button variant="outlinePrimary">Checkout</Button>
                   </Link>

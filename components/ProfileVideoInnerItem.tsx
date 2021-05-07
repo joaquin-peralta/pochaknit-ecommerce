@@ -2,25 +2,27 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import YouTube from 'react-youtube';
+import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
-  videosUrls: string[];
+  videosIds: string[];
 };
 
-const ProfileVideoInnerItem = ({ videosUrls }: Props) => {
-  if (videosUrls.length === 0) {
-    return <p className="font-italic">No hay videos disponibles...</p>;
+const ProfileVideoInnerItem = ({ videosIds }: Props) => {
+  if (videosIds.length === 0) {
+    return <p className="font-italic">No hay videos disponibles.</p>;
   }
 
   return (
     <Container className="py-2">
-      {videosUrls.map((url) => (
-        <Row key={url}>
-          <Col className="text-center">
-            <YouTube videoId="9BMwcO6_hyA" />
+      {videosIds.map((id) => (
+        <Row key={id}>
+          <Col>
+            <YouTube videoId={id} containerClassName="youtubeContainer" />
           </Col>
         </Row>
       ))}
+      <GlobalStyles />
     </Container>
   );
 };
