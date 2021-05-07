@@ -10,6 +10,7 @@ import DesktopGallery from '@components/SlideShowGallery';
 import ProductPrice from '@components/ProductPrice';
 import Button from 'react-bootstrap/Button';
 import { MdAdd } from 'react-icons/md';
+import ReactMarkdown from 'react-markdown';
 import GlobalStyles from '@styles/GlobalStyles';
 import useLocalStorage from '@hooks/useLocalStorage';
 
@@ -87,7 +88,9 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           </div>
         </Col>
       </Row>
-      <div className="product-description">{pattern.description}</div>
+      <div className="product-description">
+        <ReactMarkdown>{pattern.description}</ReactMarkdown>
+      </div>
       <GlobalStyles />
 
       <style jsx>{`

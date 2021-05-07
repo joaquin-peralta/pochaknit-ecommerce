@@ -73,7 +73,13 @@ const Sidemenu = () => {
                 <FaPinterest />
               </a>
             </div>
-            <div className="log-in">
+            <div
+              className="log-in"
+              onClick={hideMenu}
+              onKeyPress={hideMenu}
+              role="button"
+              tabIndex={0}
+            >
               <SessionNav />
             </div>
           </div>

@@ -38,7 +38,8 @@ export default function ProfilePatternItem({ purchases }: Props) {
                 </Col>
                 <Col xs={7}>
                   <p className="mb-0 font-weight-bold">
-                    {purchase.category} <span className="text-uppercase">{purchase.name}</span>
+                    <span className="text-capitalize">{purchase.category}</span>{' '}
+                    <span className="text-uppercase">{purchase.name}</span>
                   </p>
                 </Col>
                 <Col xs={2}>

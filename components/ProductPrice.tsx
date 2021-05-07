@@ -10,7 +10,8 @@ const ProductPrice = ({ price, discount }: Props) => {
     return (
       <>
         <small style={{ textDecoration: 'line-through' }}>$ {price}</small>
-        <p className="font-weight-bold h3" style={{ color: '#b13679' }}>
+        <span className="ml-2" style={{ color: '#b13679' }}>{`${discount}% OFF`}</span>
+        <p className="h3" style={{ color: '#b13679' }}>
           $ {currentPrice(price, discount)}
         </p>
       </>
