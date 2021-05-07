@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { currentPrice } from '@utils/maths';
 import { Pattern } from '@types';
 
 const mercadopago = require('mercadopago');
@@ -11,11 +12,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const { bag } = req.body;
     const cart = bag.map((item: Pattern) => ({
-      id: item.id,
-      title: `${item.category} ${item.name}`,
-      description: 'Patrón de tejido',
+      id: item._id,
+      title: `${item.category.toUpperCase()} ${item.name.toUpperCase()}`,
+      description: `Patrón de tejido ${item.category.toUpperCase()} ${item.name.toUpperCase()}`,
       picture_url: item.images[0].url,
-      unit_price: Number(item.price),
+      unit_price: Number(currentPrice(item.price, item.discount)),
       currency_id: 'ARS',
       quantity: 1,
     }));
@@ -31,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       payment_methods: {
         excluded_payment_types: [{ id: 'atm' }, { id: 'ticket' }],
       },
-      statement_descriptor: 'POCHA-KNIT-MERCADOPAGO',
+      statement_descriptor: 'POCHAKNIT.COM',
     };
 
     await mercadopago.preferences

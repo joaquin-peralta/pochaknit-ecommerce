@@ -5,8 +5,8 @@ import { Pattern } from '@types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import MobileGallery from '@components/MobileCarousel';
-import TabletGallery from '@components/SlideShowGallery';
+import MobileAndTabletGallery from '@components/MobileCarousel';
+import DesktopGallery from '@components/SlideShowGallery';
 import ProductPrice from '@components/ProductPrice';
 import Button from 'react-bootstrap/Button';
 import { MdAdd } from 'react-icons/md';
@@ -60,11 +60,11 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
     <Container>
       <Row xs={1} md={2} className="py-4 justify-content-between">
         <Col xs md={6}>
-          <div className="mobile-breakpoint">
-            <MobileGallery images={pattern.images} />
-          </div>
           <div className="tablet-breakpoint">
-            <TabletGallery images={pattern.images} />
+            <MobileAndTabletGallery images={pattern.images} />
+          </div>
+          <div className="desktop-breakpoint">
+            <DesktopGallery images={pattern.images} />
           </div>
         </Col>
         <Col xs md={{ span: 5, offset: 1 }} className="pt-5 pb-2">
@@ -108,21 +108,21 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           padding-top: 1.5rem;
           padding-bottom: 1.5rem;
         }
-        .tablet-breakpoint {
+        .desktop-breakpoint {
           display: none;
         }
-        @media screen and (max-width: 767px) {
-          .mobile-breakpoint {
+        @media screen and (max-width: 991px) {
+          .tablet-breakpoint {
             display: block;
           }
         }
 
-        @media screen and (min-width: 768px) {
-          .mobile-breakpoint {
+        @media screen and (min-width: 992px) {
+          .tablet-breakpoint {
             display: none;
           }
 
-          .tablet-breakpoint {
+          .desktop-breakpoint {
             display: block;
           }
 

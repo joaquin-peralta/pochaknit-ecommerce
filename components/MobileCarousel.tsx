@@ -15,7 +15,7 @@ const MobileCarousel = ({ images }: Props) => (
               src={image.url}
               alt={image.alternativeText}
               width={900}
-              height={1124}
+              height={1200}
               layout="responsive"
             />
           </div>

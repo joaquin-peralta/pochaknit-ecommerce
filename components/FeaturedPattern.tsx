@@ -33,7 +33,7 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
             </h3>
           </div>
           <div className="two">
-            <Image src={pattern.images[0].url} width={900} height={1124} layout="responsive" />
+            <Image src={pattern.images[0].url} width={900} height={1200} layout="responsive" />
           </div>
           <div className="three">
             <h2 className="title">
@@ -59,6 +59,11 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
         .two {
           grid-column: 1 / 3;
           grid-row: 1;
+        }
+
+        .featured-img {
+          width: 900px;
+          height: 1124px;
         }
 
         .three {

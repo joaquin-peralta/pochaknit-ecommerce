@@ -39,7 +39,7 @@ const CartmenuItem = ({ item }: Props) => {
             src={item.images[0].url}
             alt={item.images[0].alternativeText}
             width={900}
-            height={1124}
+            height={1200}
             layout="responsive"
           />
         </Col>
