@@ -11,6 +11,7 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { FaVideo } from 'react-icons/fa';
 import ProfilePatternItem from '@components/ProfilePatternItem';
 import ProfileVideoItem from '@components/ProfileVideoItem';
+import Loader from 'react-loader-spinner';
 import { Pattern } from '@types';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
@@ -29,7 +30,7 @@ export const getStaticProps = async () => {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { user, error } = useUser();
+  const { user, isLoading, error } = useUser();
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState([]);
   const { data: profile } = useSWR(
@@ -59,7 +60,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
     setMenu(false);
   };
 
-  if (!user) {
+  if (isLoading) {
     return (
       <>
         <h2>Cargando perfil...</h2>
@@ -141,7 +142,11 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         </Col>
       </Row>
       <>
-        {!profile && <div>Cargando patrones...</div>}
+        {!profile && (
+          <div className="loader-container">
+            <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+          </div>
+        )}
         {profile && (
           <>
             {menu ? (
@@ -158,6 +163,12 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         .btn-menu {
           border: 0;
           background: transparent;
+        }
+        .loader-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 2rem;
         }
       `}</style>
     </Container>

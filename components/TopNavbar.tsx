@@ -44,7 +44,7 @@ const TopNavbar = () => {
             <Image src="/square-logo.png" alt="brand" width={72} height={72} />
           </div>
           <div className="brand">
-            <Image src="/logo.png" alt="brand" width={160} height={72} />
+            <Image src="/logo.png" alt="brand" width={179} height={72} />
           </div>
         </a>
       </Link>

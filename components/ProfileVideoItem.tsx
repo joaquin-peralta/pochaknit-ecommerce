@@ -23,12 +23,8 @@ const ProfileVideoItem = ({ purchases }: Props) => {
     }
   };
 
-  if (purchases.length === null) {
-    return <div>Cargando...</div>;
-  }
-
   if (purchases.length === 0) {
-    return <div>No hay patrones</div>;
+    return <p className="font-italic">No hay videos disponibles...</p>;
   }
 
   return (

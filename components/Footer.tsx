@@ -11,8 +11,8 @@ const Footer = () => (
   <footer className="pb-3">
     <Container>
       <hr />
-      <Row className="align-items-end">
-        <Col xs={5} lg={2}>
+      <Row className="justify-content-between">
+        <Col>
           <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
             <div className="mb-2">
               <FaInstagram />
@@ -28,41 +28,26 @@ const Footer = () => (
             </div>
           </IconContext.Provider>
         </Col>
-        <Col xs={2} lg={8} className="text-center">
-          <a className="powered-by" href="/">
-            <small>
-              By <strong>JPDevs</strong>
-            </small>
-          </a>
-        </Col>
-        <Col xs={5} lg={2}>
-          <Row>
-            <Col className="text-right">
-              <Image
-                src="/mercadopago-logo.png"
-                alt="Mercadopago"
-                layout="intrinsic"
-                width={64}
-                height={64}
-              />
-            </Col>
-            <Col className="text-right">
-              <Image
-                src="/paypal-logo.png"
-                alt="PayPal"
-                layout="intrinsic"
-                width={64}
-                height={64}
-              />
-            </Col>
-          </Row>
+        <Col className="text-right">
+          <div className="mercadopago-logo">
+            <Image
+              src="/mercadopago-logo.png"
+              alt="Mercadopago"
+              layout="responsive"
+              width={64}
+              height={64}
+            />
+          </div>
+          <div className="paypal-logo">
+            <Image src="/paypal-logo.png" alt="PayPal" layout="responsive" width={66} height={64} />
+          </div>
         </Col>
       </Row>
     </Container>
 
     <style jsx>{`
       .social-media {
-        font-size: 12px;
+        font-size: 1rem;
         margin-left: 4px;
         text-decoration: none;
         color: ${colors.darkgray};
@@ -72,20 +57,17 @@ const Footer = () => (
         color: ${colors.analogous500};
       }
 
-      .powered-by {
-        text-decoration: none;
-        color: ${colors.darkgray};
-        font-size: 12px;
+      .mercadopago-logo {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        margin-right: 1rem;
       }
 
-      @media screen and (min-width: 768px) {
-        .powered-by {
-          font-size: 14px;
-        }
-
-        .social-media {
-          font-size: 14px;
-        }
+      .paypal-logo {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
       }
     `}</style>
   </footer>
