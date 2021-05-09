@@ -10,7 +10,7 @@ export interface Pattern {
   primaryColor: string;
   images: any;
   files: { urls: string[] };
-  videos: { ids: string[] };
+  videos: any;
 }
 
 export interface Profile {

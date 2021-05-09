@@ -66,10 +66,10 @@ const Sidemenu = () => {
             </div>
             <p className="font-italic text-center h6 py-2">¡No olvides de seguirnos!</p>
             <div className="text-center">
-              <a href="#" className="mr-3">
+              <a href="https://www.instagram.com/pochaknit/" className="mr-3">
                 <FaInstagram />
               </a>
-              <a href="#">
+              <a href="https://ar.pinterest.com/pochaknit/_created/">
                 <FaPinterest />
               </a>
             </div>
@@ -155,6 +155,10 @@ const Sidemenu = () => {
           align-items: center;
           padding-left: 8px;
           padding-right: 8px;
+        }
+
+        .list-item:hover {
+          color: ${colors.analogous500};
         }
 
         .list-item__title {

@@ -38,9 +38,11 @@ export default function ProfilePatternItem({ purchases }: Props) {
                 </p>
               </Col>
               <Col xs={2}>
-                <a href={purchase.files.urls[0]} target="_blank" rel="noreferrer">
-                  <IoMdDownload style={{ fontSize: '28px', color: `${colors.darkgray}` }} />
-                </a>
+                {purchase.files.urls.map((url) => (
+                  <a key={url} href={url} target="_blank" rel="noreferrer">
+                    <IoMdDownload style={{ fontSize: '28px', color: `${colors.darkgray}` }} />
+                  </a>
+                ))}
               </Col>
             </Row>
             <hr className="mt-2" />

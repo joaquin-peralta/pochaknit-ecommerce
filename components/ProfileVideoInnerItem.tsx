@@ -5,20 +5,20 @@ import YouTube from 'react-youtube';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
-  videosIds: string[];
+  videos: any;
 };
 
-const ProfileVideoInnerItem = ({ videosIds }: Props) => {
-  if (videosIds.length === 0) {
+const ProfileVideoInnerItem = ({ videos }: Props) => {
+  if (videos.length === 0) {
     return <p className="font-italic">No hay videos disponibles.</p>;
   }
 
   return (
     <Container className="py-2">
-      {videosIds.map((id) => (
-        <Row key={id}>
+      {videos.map((video) => (
+        <Row key={video.id}>
           <Col>
-            <YouTube videoId={id} containerClassName="youtubeContainer" />
+            <YouTube videoId={video.id} containerClassName="youtubeContainer" />
           </Col>
         </Row>
       ))}

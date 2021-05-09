@@ -16,13 +16,13 @@ const Footer = () => (
           <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
             <div className="mb-2">
               <FaInstagram />
-              <Link href="/">
+              <Link href="https://www.instagram.com/pochaknit/">
                 <a className="social-media">@pochaknit</a>
               </Link>
             </div>
             <div>
               <FaPinterest />
-              <Link href="/">
+              <Link href="https://ar.pinterest.com/pochaknit/_created/">
                 <a className="social-media">@pochaknit</a>
               </Link>
             </div>

@@ -24,7 +24,7 @@ export const getStaticProps = async () => {
 const Home = ({ featured }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <>
     <Head>
-      <title>Create Next App</title>
+      <title>Pocha Knit</title>
     </Head>
     {featured.map((item, index) => (
       <Link key={item._id} href={`/patterns/${item.pattern._id}`}>

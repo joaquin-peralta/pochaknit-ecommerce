@@ -1,4 +1,5 @@
 import { InferGetStaticPropsType, GetStaticPaths } from 'next';
+import Head from 'next/head';
 import { useContext } from 'react';
 import BagContext from '@context/BagContext';
 import { Pattern } from '@types';
@@ -58,40 +59,47 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
   };
 
   return (
-    <Container>
-      <Row xs={1} md={2} className="py-4 justify-content-between">
-        <Col xs md={6}>
-          <div className="tablet-breakpoint">
-            <MobileAndTabletGallery images={pattern.images} />
-          </div>
-          <div className="desktop-breakpoint">
-            <DesktopGallery images={pattern.images} />
-          </div>
-        </Col>
-        <Col xs md={{ span: 5, offset: 1 }} className="pt-5 pb-2">
-          <h2 className="mb-3">
-            <span className="text-capitalize">{pattern.category}</span>{' '}
-            <span className="text-uppercase">{pattern.name}</span>
-          </h2>
-          <ProductPrice price={pattern.price} discount={pattern.discount} />
+    <>
+      <Head>
+        <title>
+          {pattern.category} {pattern.name} - Pocha Knit
+        </title>
+      </Head>
+      <Container>
+        <Row xs={1} md={2} className="py-4 justify-content-between">
+          <Col xs md={6}>
+            <div className="tablet-breakpoint">
+              <MobileAndTabletGallery images={pattern.images} />
+            </div>
+            <div className="desktop-breakpoint">
+              <DesktopGallery images={pattern.images} />
+            </div>
+          </Col>
+          <Col xs md={{ span: 5, offset: 1 }} className="pt-5 pb-2">
+            <h2 className="mb-3">
+              <span className="text-capitalize">{pattern.category}</span>{' '}
+              <span className="text-uppercase">{pattern.name}</span>
+            </h2>
+            <ProductPrice price={pattern.price} discount={pattern.discount} />
 
-          <div className="btn-container">
-            <Button
-              variant="primary"
-              onClick={() => handleAddToBag(pattern)}
-              disabled={handleDisable(pattern)}
-              block
-            >
-              <MdAdd style={{ fontSize: '18px' }} />
-              <span className="ml-2">Añadir a la bolsa</span>
-            </Button>
-          </div>
-        </Col>
-      </Row>
-      <div className="product-description">
-        <ReactMarkdown>{pattern.description}</ReactMarkdown>
-      </div>
-      <GlobalStyles />
+            <div className="btn-container">
+              <Button
+                variant="primary"
+                onClick={() => handleAddToBag(pattern)}
+                disabled={handleDisable(pattern)}
+                block
+              >
+                <MdAdd style={{ fontSize: '18px' }} />
+                <span className="ml-2">Añadir a la bolsa</span>
+              </Button>
+            </div>
+          </Col>
+        </Row>
+        <div className="product-description">
+          <ReactMarkdown>{pattern.description}</ReactMarkdown>
+        </div>
+        <GlobalStyles />
+      </Container>
 
       <style jsx>{`
         .social-media {
@@ -135,7 +143,7 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
           }
         }
       `}</style>
-    </Container>
+    </>
   );
 };
 

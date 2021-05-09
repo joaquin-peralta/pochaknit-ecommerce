@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import { postData, putData } from '@utils/fetcher';
+import Head from 'next/head';
 import useSWR from 'swr';
 import Link from 'next/link';
 import Container from 'react-bootstrap/Container';
@@ -65,112 +66,118 @@ export default withPageAuthRequired(function CheckoutPage() {
 
   if (user) {
     return (
-      <div className="page">
-        {bag.length === 0 && (
-          <Alert variant="info">
-            <AiOutlineInfoCircle style={{ fontSize: '24px' }} />{' '}
-            <span>Bolsa de compra vacía. Ver más</span>{' '}
-            <Link href="/patterns">
-              <a className="font-weight-bold">patrones.</a>
-            </Link>
-          </Alert>
-        )}
-        {bag.length > 0 && (
-          <Container fluid>
-            {paymentStatus && (
-              <div className="loader-container">
-                <div className="loader">
-                  <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
-                  <p className="mt-4 mb-0">Redireccionando a Mercadopago.</p>
-                  <p className="mb-0">Por favor espera.</p>
+      <>
+        <Head>
+          <title>Checkout - Pocha Knit</title>
+        </Head>
+        <div className="page">
+          {bag.length === 0 && (
+            <Alert variant="info">
+              <AiOutlineInfoCircle style={{ fontSize: '24px' }} />{' '}
+              <span>Bolsa de compra vacía. Ver más</span>{' '}
+              <Link href="/patterns">
+                <a className="font-weight-bold">patrones.</a>
+              </Link>
+            </Alert>
+          )}
+          {bag.length > 0 && (
+            <Container fluid>
+              {paymentStatus && (
+                <div className="loader-container">
+                  <div className="loader">
+                    <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+                    <p className="mt-4 mb-0">Redireccionando a Mercadopago.</p>
+                    <p className="mb-0">Por favor espera.</p>
+                  </div>
                 </div>
-              </div>
-            )}
-            <Row xs={1} lg={2} className="align-items-center">
-              <Col>
-                <SummaryBag items={bag} />
-              </Col>
-              <Col>
-                <Container className="py-4">
-                  <Row className="justify-content-center mb-4">
-                    <Col xs={9}>
-                      <Button
-                        onClick={() => setPaymentStatus(true)}
-                        variant="primary"
-                        block
-                        disabled={!user.email_verified || paymentStatus}
-                      >
-                        Comprar desde Argentina
-                      </Button>
-                      {savedPurchaseError ||
-                        (preferenceError && (
-                          <Alert variant="danger">
-                            No se ha podido procesar la solicitud. Por favor inténtelo nuevamente.
-                          </Alert>
-                        ))}
-                    </Col>
-                  </Row>
-                  <Row className="justify-content-center mb-4">
-                    <Col xs={9}>
-                      <Button
-                        variant="secondary"
-                        block
-                        disabled={paymentStatus && !user.email_verified}
-                        onClick={() => setShowNotification(true)}
-                      >
-                        Comprar desde el Exterior
-                      </Button>
-                      {showNotification && (
-                        <div className="mt-2">
-                          <Alert variant="info">
-                            <AiOutlineInfoCircle />{' '}
-                            <small>
-                              Muy pronto estará habilitado el pago a través de PayPal. Si querés
-                              realizar el pago en este momento mandanos un mail a{' '}
-                              <span className="font-weight-bold">pochaknit@gmail.com</span>
-                            </small>
-                          </Alert>
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                  {!user.email_verified && (
-                    <Row>
-                      <Col>
-                        <Alert variant="warning">
-                          <FiAlertTriangle />
-                          <small className="ml-2 font-weight-bold">
-                            Por favor verifica tu cuenta para poder realizar la compra. Si aun no
-                            has reicibido un mail de verificación, revisa tu correo spam o presiona{' '}
-                            <Button
-                              className="p-0"
-                              variant="link"
-                              onClick={() => setSendingEmail(true)}
-                            >
-                              <strong>aquí</strong>
-                            </Button>{' '}
-                            para reenviarlo.
-                          </small>
-                        </Alert>
-                        {verification && (
-                          <Alert variant="success">
-                            <small>Mail de verificación enviado.</small>
-                          </Alert>
-                        )}
-                        {verificationError && (
-                          <Alert variant="danger">
-                            <small>No se ha podido enviar el mail. Intente de nuevo.</small>
-                          </Alert>
+              )}
+              <Row xs={1} lg={2} className="align-items-center">
+                <Col>
+                  <SummaryBag items={bag} />
+                </Col>
+                <Col>
+                  <Container className="py-4">
+                    <Row className="justify-content-center mb-4">
+                      <Col xs={9}>
+                        <Button
+                          onClick={() => setPaymentStatus(true)}
+                          variant="primary"
+                          block
+                          disabled={!user.email_verified || paymentStatus}
+                        >
+                          Comprar desde Argentina
+                        </Button>
+                        {savedPurchaseError ||
+                          (preferenceError && (
+                            <Alert variant="danger">
+                              No se ha podido procesar la solicitud. Por favor inténtelo nuevamente.
+                            </Alert>
+                          ))}
+                      </Col>
+                    </Row>
+                    <Row className="justify-content-center mb-4">
+                      <Col xs={9}>
+                        <Button
+                          variant="secondary"
+                          block
+                          disabled={paymentStatus && !user.email_verified}
+                          onClick={() => setShowNotification(true)}
+                        >
+                          Comprar desde el Exterior
+                        </Button>
+                        {showNotification && (
+                          <div className="mt-2">
+                            <Alert variant="info">
+                              <AiOutlineInfoCircle />{' '}
+                              <small>
+                                Muy pronto estará habilitado el pago a través de PayPal. Si querés
+                                realizar el pago en este momento mandanos un mail a{' '}
+                                <span className="font-weight-bold">pochaknit@gmail.com</span>
+                              </small>
+                            </Alert>
+                          </div>
                         )}
                       </Col>
                     </Row>
-                  )}
-                </Container>
-              </Col>
-            </Row>
-          </Container>
-        )}
-        <GlobalStyles />
+                    {!user.email_verified && (
+                      <Row>
+                        <Col>
+                          <Alert variant="warning">
+                            <FiAlertTriangle />
+                            <small className="ml-2 font-weight-bold">
+                              Por favor verifica tu cuenta para poder realizar la compra. Si aun no
+                              has reicibido un mail de verificación, revisa tu correo spam o
+                              presiona{' '}
+                              <Button
+                                className="p-0"
+                                variant="link"
+                                onClick={() => setSendingEmail(true)}
+                              >
+                                <strong>aquí</strong>
+                              </Button>{' '}
+                              para reenviarlo.
+                            </small>
+                          </Alert>
+                          {verification && (
+                            <Alert variant="success">
+                              <small>Mail de verificación enviado.</small>
+                            </Alert>
+                          )}
+                          {verificationError && (
+                            <Alert variant="danger">
+                              <small>No se ha podido enviar el mail. Intente de nuevo.</small>
+                            </Alert>
+                          )}
+                        </Col>
+                      </Row>
+                    )}
+                  </Container>
+                </Col>
+              </Row>
+            </Container>
+          )}
+          <GlobalStyles />
+        </div>
 
         <style jsx>{`
           .page {
@@ -198,7 +205,7 @@ export default withPageAuthRequired(function CheckoutPage() {
             border-radius: 8px;
           }
         `}</style>
-      </div>
+      </>
     );
   }
 });

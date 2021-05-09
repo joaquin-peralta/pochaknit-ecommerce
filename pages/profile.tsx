@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 import useSWR from 'swr';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -78,86 +79,91 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
   }
 
   return (
-    <Container>
-      <>
-        <Row xs={1} className="text-center py-4 mb-4">
-          <Col>
-            <Image
-              className="avatar"
-              src={user.picture}
-              alt={user.nickname}
-              width={72}
-              height={72}
-              layout="intrinsic"
+    <>
+      <Head>
+        <title>Mi Perfil - Pocha Knit</title>
+      </Head>
+      <Container>
+        <>
+          <Row xs={1} className="text-center py-4 mb-4">
+            <Col>
+              <Image
+                className="avatar"
+                src={user.picture}
+                alt={user.nickname}
+                width={72}
+                height={72}
+                layout="intrinsic"
+              />
+            </Col>
+            <Col>
+              <p className="font-weight-bold mb-0">{user.nickname}</p>
+            </Col>
+            <Col>
+              <small style={{ color: colors.analogous500 }}>{user.email}</small>
+            </Col>
+          </Row>
+        </>
+        <Row>
+          <Col className="text-center pr-0">
+            <div className="d-block">
+              <button type="button" onClick={patternButton} className="btn-menu">
+                <AiFillFilePdf
+                  style={{
+                    fontSize: '24px',
+                    color: menu ? `${colors.primaryStrong}` : `${colors.darkgray}`,
+                  }}
+                />
+              </button>
+            </div>
+            <small>Patrones</small>
+            <hr
+              style={{
+                borderTop: menu
+                  ? `2px solid ${colors.primaryStrong}`
+                  : '1px solid rgba(0, 0, 0, 0.1)',
+              }}
             />
           </Col>
-          <Col>
-            <p className="font-weight-bold mb-0">{user.nickname}</p>
-          </Col>
-          <Col>
-            <small style={{ color: colors.analogous500 }}>{user.email}</small>
+          <Col className="text-center pl-0">
+            <div className="d-block">
+              <button type="button" onClick={videoButton} className="btn-menu">
+                <FaVideo
+                  style={{
+                    fontSize: '24px',
+                    color: menu ? `${colors.darkgray}` : `${colors.primaryStrong}`,
+                  }}
+                />
+              </button>
+            </div>
+            <small>Videos</small>
+            <hr
+              style={{
+                borderTop: menu
+                  ? '1px solid rgba(0, 0, 0, 0.1)'
+                  : `2px solid ${colors.primaryStrong}`,
+              }}
+            />
           </Col>
         </Row>
-      </>
-      <Row>
-        <Col className="text-center pr-0">
-          <div className="d-block">
-            <button type="button" onClick={patternButton} className="btn-menu">
-              <AiFillFilePdf
-                style={{
-                  fontSize: '24px',
-                  color: menu ? `${colors.primaryStrong}` : `${colors.darkgray}`,
-                }}
-              />
-            </button>
-          </div>
-          <small>Patrones</small>
-          <hr
-            style={{
-              borderTop: menu
-                ? `2px solid ${colors.primaryStrong}`
-                : '1px solid rgba(0, 0, 0, 0.1)',
-            }}
-          />
-        </Col>
-        <Col className="text-center pl-0">
-          <div className="d-block">
-            <button type="button" onClick={videoButton} className="btn-menu">
-              <FaVideo
-                style={{
-                  fontSize: '24px',
-                  color: menu ? `${colors.darkgray}` : `${colors.primaryStrong}`,
-                }}
-              />
-            </button>
-          </div>
-          <small>Videos</small>
-          <hr
-            style={{
-              borderTop: menu
-                ? '1px solid rgba(0, 0, 0, 0.1)'
-                : `2px solid ${colors.primaryStrong}`,
-            }}
-          />
-        </Col>
-      </Row>
-      <>
-        {!profile && (
-          <div className="loader-container">
-            <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
-          </div>
-        )}
-        {profile && (
-          <>
-            {menu ? (
-              <ProfilePatternItem purchases={purchases} />
-            ) : (
-              <ProfileVideoItem purchases={purchases} />
-            )}
-          </>
-        )}
-      </>
-      <GlobalStyles />
+        <>
+          {!profile && (
+            <div className="loader-container">
+              <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+            </div>
+          )}
+          {profile && (
+            <>
+              {menu ? (
+                <ProfilePatternItem purchases={purchases} />
+              ) : (
+                <ProfileVideoItem purchases={purchases} />
+              )}
+            </>
+          )}
+        </>
+        <GlobalStyles />
+      </Container>
 
       <style jsx>{`
         .btn-menu {
@@ -171,7 +177,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
           padding: 2rem;
         }
       `}</style>
-    </Container>
+    </>
   );
 };
 
