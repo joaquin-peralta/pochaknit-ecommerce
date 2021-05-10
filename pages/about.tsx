@@ -1,10 +1,26 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
+import ReactMarkdown from 'react-markdown';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
-const AboutPage = () => (
+export const getStaticProps = async () => {
+  const res = await fetch(`${process.env.HOST}/about`);
+  const data = await res.json();
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+type Props = {
+  data: any;
+};
+
+const AboutPage = ({ data }: Props) => (
   <>
     <Head>
       <title>Sobre mí - Pocha Knit</title>
@@ -14,44 +30,47 @@ const AboutPage = () => (
         <div className="bg-wrap">
           <Image
             className="hero-img"
-            src="/about-img-hero.jpg"
+            src={data.hero.url}
+            alt={data.hero.alternativeText}
             layout="fill"
             objectFit="cover"
             objectPosition="center"
           />
         </div>
         <div className="bg-text">
-          <h2>¡Hola! Soy Virgi...</h2>
-          <p className="font-weight-bold">
-            ...la persona detrás de POCHA KNIT y quiero darte la bienvenida a mi mundo.
-          </p>
+          <ReactMarkdown>{data.heroText}</ReactMarkdown>
         </div>
       </div>
-      <Container fluid>
-        <p className="mt-3">
-          A los 16 años comencé a tejer a crochet y algo a dos agujas, pero desde que conocí el
-          mundo de las agujas circulares, no pude parar. Pocha knit nació como el espacio donde
-          canalizo mi creatividad y mi pasión por tejer. Me gustan las prendas tejidas con
-          prolijidad, con terminaciones impecables y que se sientan como únicas. Acá encontrarás
-          patrones de tejidos con diferentes dificultades, en el que cada uno tendrá un patrón
-          escrito en PDF más videos complementarios. Una vez realizada la compra, podrás acceder al
-          patrón y a los videos a través del perfil de tu cuenta, los cuales estarán de por vida.
-          Además, preparé una sección de VIDEOS en donde podrás ver técnicas básicas para el tejido
-          a dos agujas, a los cuales podrás recurrir siempre que lo necesites. Te invito a que me
-          sigas en Instagram <a href="https://www.instagram.com/pochaknit/">@pochaknit</a> donde me
-          encanta mostrarte inspiraciones, consejos y mi día entre lanas y agujas. ¡A disfrutar y
-          tejer!
-        </p>
+      <Container fluid className="py-3">
+        <ReactMarkdown>{data.body}</ReactMarkdown>
         <Container>
           <div className="wrapper">
             <div className="one">
-              <Image src="/about-img-1.jpg" width={1600} height={1200} layout="responsive" />
+              <Image
+                src={data.images[0].url}
+                alt={data.images[0].alternativeText}
+                width={1600}
+                height={1200}
+                layout="responsive"
+              />
             </div>
             <div className="two">
-              <Image src="/about-img-2.jpg" width={1200} height={1600} layout="responsive" />
+              <Image
+                src={data.images[1].url}
+                alt={data.images[1].alternativeText}
+                width={1200}
+                height={1600}
+                layout="responsive"
+              />
             </div>
             <div className="three">
-              <Image src="/about-img-3.jpg" width={1600} height={1200} layout="responsive" />
+              <Image
+                src={data.images[2].url}
+                alt={data.images[2].alternativeText}
+                width={1600}
+                height={1200}
+                layout="responsive"
+              />
             </div>
           </div>
         </Container>

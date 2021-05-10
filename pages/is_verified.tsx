@@ -31,11 +31,12 @@ export default function VerifiedPage() {
 
   if (!isVerified) {
     return (
-      <div className="loader-container">
-        <div className="loader">
+      <>
+        <div className="loader-container">
           <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
         </div>
-      </div>
+        <GlobalStyles />
+      </>
     );
   }
 
@@ -44,29 +45,17 @@ export default function VerifiedPage() {
       <>
         <Alert variant="success">
           <span className="font-weight-bold">
-            Tu email fue verificado. Si no eres redireccionado a Pocha Knit presiona{' '}
-            <a href="/api/auth/logout">aquí.</a>
+            Tu email fue verificado. Vuelve a iniciar sesión por favor.
           </span>
         </Alert>
         <GlobalStyles />
 
         <style jsx>{`
           .loader-container {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.2);
-            z-index: 2999;
-            padding: 0;
-          }
-          .loader {
-            position: fixed;
-            z-index: 3000;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
           }
         `}</style>
       </>

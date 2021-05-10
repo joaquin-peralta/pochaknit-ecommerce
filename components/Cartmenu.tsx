@@ -68,7 +68,7 @@ const Cartmenu = () => {
                 <p className="mb-0 text-right">Total</p>
                 <p className="text-right font-weight-bold">$ {totalPrice}</p>
                 <div
-                  className="text-center"
+                  className="text-center mb-4"
                   onClick={hideCartMenu}
                   onKeyPress={hideCartMenu}
                   role="button"
@@ -127,6 +127,12 @@ const Cartmenu = () => {
           background-color: ${colors.background};
           transition-duration: 0.5s;
           transform: translate3d(0);
+        }
+
+        @media screen and (max-height: 360px) {
+          .cartmenu-open {
+            overflow-y: scroll;
+          }
         }
 
         .close-btn {

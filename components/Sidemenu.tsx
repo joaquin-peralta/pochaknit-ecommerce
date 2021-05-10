@@ -130,6 +130,12 @@ const Sidemenu = () => {
           transform: translate3d(0);
         }
 
+        @media screen and (max-height: 360px) {
+          .sidemenu-open {
+            overflow-y: scroll;
+          }
+        }
+
         .close-btn {
           width: 72px;
           height: 72px;
@@ -174,11 +180,10 @@ const Sidemenu = () => {
         }
 
         .log-in {
-          position: fixed;
-          bottom: 0;
           width: 304px;
-          padding-top: 16px;
-          padding-bottom: 16px;
+          margin-top: 1rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
           text-align: center;
         }
       `}</style>

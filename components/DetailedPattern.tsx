@@ -22,6 +22,7 @@ const DetailedPattern = ({ pattern }: Props) => (
           <span className="text-capitalize">{pattern.category}</span>{' '}
           <span className="text-uppercase">{pattern.name}</span>
         </h2>
+        <p>Patrón de tejido</p>
         <ProductPrice price={pattern.price} discount={pattern.discount} />
       </Col>
     </Row>
