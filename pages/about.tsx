@@ -6,7 +6,7 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.HOST}/about`);
+  const res = await fetch(`${process.env.POCHAKNIT_API}/about`);
   const data = await res.json();
 
   return {

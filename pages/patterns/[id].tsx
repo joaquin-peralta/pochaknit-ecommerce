@@ -16,7 +16,7 @@ import GlobalStyles from '@styles/GlobalStyles';
 import useLocalStorage from '@hooks/useLocalStorage';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch(`${process.env.HOST}/patterns/`);
+  const response = await fetch(`${process.env.POCHAKNIT_API}/patterns/`);
   const patterns: Pattern[] = await response.json();
 
   return {
@@ -28,7 +28,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params: { id } }) => {
-  const response = await fetch(`${process.env.HOST}/patterns/?id=${id}`);
+  const response = await fetch(`${process.env.POCHAKNIT_API}/patterns/?id=${id}`);
   const found: Pattern[] = await response.json();
 
   return {

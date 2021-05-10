@@ -9,7 +9,7 @@ import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.HOST}/patterns`);
+  const res = await fetch(`${process.env.POCHAKNIT_API}/patterns`);
   const patterns: Pattern[] = await res.json();
 
   return {

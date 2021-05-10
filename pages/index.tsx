@@ -11,7 +11,7 @@ type Featured = {
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.HOST}/featured-patterns`);
+  const res = await fetch(`${process.env.POCHAKNIT_API}/featured-patterns`);
   const featured: Featured[] = await res.json();
 
   return {

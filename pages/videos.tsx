@@ -4,7 +4,7 @@ import YouTube from 'react-youtube';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.HOST}/videos`);
+  const res = await fetch(`${process.env.POCHAKNIT_API}/videos`);
   const videos = await res.json();
 
   return {
