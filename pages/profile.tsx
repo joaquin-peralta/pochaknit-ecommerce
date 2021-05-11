@@ -30,17 +30,27 @@ export const getStaticProps = async () => {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const checkPayment = (payment: string) => {
-  fetch('/api/mercadopago/payments', {
-    body: JSON.stringify(payment),
-  }).then((res) => res.json());
-};
+const fetchPreference = (url: string, preferenceId: string) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify(preferenceId),
+  }).then((res) => res.json);
+
+const checkPayment = (url: string, paymentId: string) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify({ payment_id: paymentId }),
+  }).then((res) => res.json);
 
 const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { user, isLoading, error } = useUser();
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState([]);
-  const [pendingPurchases, setPendingPurchases] = useState(null);
+  const [pendingPurchases, setPendingPurchases] = useState([]);
   const { data: profile } = useSWR<Profile>(
     user ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
     fetcher,
@@ -48,6 +58,12 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
 
   useEffect(() => {
     if (profile) {
+      if (profile.mercadopagoPending.length > 0) {
+        for (const pending of profile.mercadopagoPending) {
+          checkPayment(pending.paymentId);
+        }
+      }
+
       if (profile.purchases.length > 0) {
         const purch = [];
         for (const pattern of patterns) {

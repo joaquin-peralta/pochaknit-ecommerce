@@ -2,11 +2,14 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const response = await fetch(`https://api.mercadopago.com/v1/payments/${req.body.payment_id}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
+    const response = await fetch(
+      `https://api.mercadopago.com/checkout/preferences/${req.body.preference_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
+        },
       },
-    });
+    );
     const data = await response.json();
     res.status(res.statusCode).json(data);
   } else {

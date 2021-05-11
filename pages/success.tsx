@@ -27,7 +27,7 @@ export default function SuccessPage() {
   const { user } = useUser();
   const [userID, setUserID] = useState('');
   const [purchases, setPurchases] = useState([]);
-  const [mercadopago, setMercadopago] = useState([]);
+  const [mercadopagoPayments, setMercadopagoPayments] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
   const { data: preference } = useSWR(
@@ -40,7 +40,7 @@ export default function SuccessPage() {
     fetchWithToken,
   );
   const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
-    putData(`/api/user/${userID}`, { purchases, mercadopago }),
+    putData(`/api/user/${userID}`, { purchases, mercadopagoPayments }),
   );
 
   const { cleanBag } = useContext(BagContext);
@@ -49,7 +49,6 @@ export default function SuccessPage() {
     if (user) {
       cleanBag();
       setUserID(user.sub.slice(6, user.sub.length));
-      console.log(router.query.preference_id);
     }
   }, [user]);
 
@@ -57,16 +56,16 @@ export default function SuccessPage() {
     if (profile && preference) {
       const newPurchases = preference.items.map((item) => item._id);
       const updatedPurchases = profile.purchases.map((item) => item);
-      const updatedMercadopago = profile.mercadopago.map((item) => item);
+      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((item) => item);
 
       for (const element of newPurchases) {
         updatedPurchases.unshift(element);
       }
       // @ts-ignore
-      updatedMercadopago.unshift(router.query.payment_id);
+      updatedMercadopagoPayments.unshift(router.query.payment_id);
 
       setPurchases(updatedPurchases);
-      setMercadopago(updatedMercadopago);
+      setMercadopagoPayments(updatedMercadopagoPayments);
       setShouldUpdate(true);
     }
   }, [profile, preference]);

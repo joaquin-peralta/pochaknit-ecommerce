@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const pendingPurchaseSchema = new mongoose.Schema({ purchase: [String], payment: String });
+const PendingPurchaseSchema = new mongoose.Schema({ preference: String, payment: String });
 
 const UserSchema = new mongoose.Schema({
   userID: String,
@@ -8,10 +8,8 @@ const UserSchema = new mongoose.Schema({
   email: String,
   emailVerified: Boolean,
   purchases: [String],
-  mercadopago: [String],
-  paypal: [String],
-  tempPurchase: [String],
-  pendingPurchases: [pendingPurchaseSchema],
+  mercadopagoPayments: [String],
+  mercadopagoPending: [PendingPurchaseSchema],
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

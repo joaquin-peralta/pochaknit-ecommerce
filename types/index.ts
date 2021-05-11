@@ -20,10 +20,8 @@ export interface Profile {
   email: string;
   emailVerified: Boolean;
   purchases: [string];
-  mercadopago: [string];
-  paypal: [string];
-  tempPurchase: [string];
-  pendingPurchases: [{ purchase: string[]; payment: string }];
+  mercadopagoPayments: [string];
+  mercadopagoPending: [{ preferenceId: string; paymentId: string }];
 }
 export interface Purchase {
   categoryId: string;
