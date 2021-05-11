@@ -8,9 +8,8 @@ import { putData } from '@utils/fetcher';
 import { Profile } from '@types';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { FiCheckCircle } from 'react-icons/fi';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import Loader from 'react-loader-spinner';
-
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
@@ -22,12 +21,11 @@ const fetchWithToken = (url: string, token: string) =>
     },
   }).then((res) => res.json());
 
-export default function SuccessPage() {
+export default function PendingPage() {
   const router = useRouter();
   const { user } = useUser();
   const [userID, setUserID] = useState('');
-  const [purchases, setPurchases] = useState([]);
-  const [mercadopago, setMercadopago] = useState([]);
+  const [pendingPurchases, setPendingPurchases] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
   const { data: preference } = useSWR(
@@ -40,7 +38,7 @@ export default function SuccessPage() {
     fetchWithToken,
   );
   const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
-    putData(`/api/user/${userID}`, { purchases, mercadopago }),
+    putData(`/api/user/${userID}`, { pendingPurchases, mercadopago: router.query.payment_id }),
   );
 
   const { cleanBag } = useContext(BagContext);
@@ -49,24 +47,19 @@ export default function SuccessPage() {
     if (user) {
       cleanBag();
       setUserID(user.sub.slice(6, user.sub.length));
-      console.log(router.query.preference_id);
     }
   }, [user]);
 
   useEffect(() => {
     if (profile && preference) {
+      const updatedPendingPurchases = profile.pendingPurchases.map((item) => item);
       const newPurchases = preference.items.map((item) => item._id);
-      const updatedPurchases = profile.purchases.map((item) => item);
-      const updatedMercadopago = profile.mercadopago.map((item) => item);
+      const paymentId = router.query.payment_id;
 
-      for (const element of newPurchases) {
-        updatedPurchases.unshift(element);
-      }
       // @ts-ignore
-      updatedMercadopago.unshift(router.query.payment_id);
+      updatedPendingPurchases.unshift({ purchase: newPurchases, payment: paymentId });
 
-      setPurchases(updatedPurchases);
-      setMercadopago(updatedMercadopago);
+      setPendingPurchases(updatedPendingPurchases);
       setShouldUpdate(true);
     }
   }, [profile, preference]);
@@ -84,19 +77,18 @@ export default function SuccessPage() {
   if (dbUpdated) {
     return (
       <>
-        <Alert variant="success">
-          <FiCheckCircle />
-          <span className="ml-2 font-weight-bold">Pago aprobado.</span>
+        <Alert variant="warning">
+          <AiOutlineInfoCircle />
+          <span className="ml-2 font-weight-bold">Pago pendiente.</span>
         </Alert>
         <Container fluid>
-          <h3>¡Gracias por tu compra!</h3>
+          <h3>Ya casi...</h3>
           <p>
-            Podrás visualizar en{' '}
+            Mercadopago está procesando tu pago. ¡Cuando se apruebe se habilitará el patrón en tu{' '}
             <Link href="/profile">
               <a className="font-weight-bold">tu perfil</a>
-            </Link>{' '}
-            todos los patrones adquiridos.{' '}
-            <span className="font-weight-bold">¡Happy knitting!</span>
+            </Link>
+            !
           </p>
         </Container>
         <GlobalStyles />

@@ -23,6 +23,7 @@ export interface Profile {
   mercadopago: [string];
   paypal: [string];
   tempPurchase: [string];
+  pendingPurchases: [{ purchase: string[]; payment: string }];
 }
 export interface Purchase {
   categoryId: string;

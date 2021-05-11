@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
-import { postData, putData } from '@utils/fetcher';
+import { postData } from '@utils/fetcher';
 import Head from 'next/head';
 import useSWR from 'swr';
 import Link from 'next/link';
@@ -22,21 +22,15 @@ export default withPageAuthRequired(function CheckoutPage() {
   const router = useRouter();
   const { bag } = useContext(BagContext);
   const { user } = useUser();
-  const [userID, setUserID] = useState('');
   const [paymentStatus, setPaymentStatus] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
-  const { data: savedPurchase, error: savedPurchaseError } = useSWR(
-    paymentStatus ? `/api/user/${userID}` : null,
-    () => putData(`/api/user/${userID}`, { tempPurchase: bag.map((item) => item._id) }),
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
   const {
     data: preference,
     error: preferenceError,
     mutate: mutatePreference,
   } = useSWR(
-    savedPurchase ? '/api/mercadopago/create_preference' : null,
+    paymentStatus ? '/api/mercadopago/create_preference' : null,
     () => postData('/api/mercadopago/create_preference', { bag }),
     { revalidateOnFocus: false, revalidateOnReconnect: false },
   );
@@ -46,20 +40,17 @@ export default withPageAuthRequired(function CheckoutPage() {
     { revalidateOnFocus: false, revalidateOnReconnect: false },
   );
 
-  useEffect(() => {
-    if (user) {
-      setUserID(user.sub.slice(6, user.sub.length));
-    }
-
-    return () => {
+  useEffect(
+    () => () => {
       mutatePreference({ ...preference, preference }, false);
-    };
-  }, [user]);
+    },
+    [user],
+  );
 
   useEffect(() => {
     if (preference) {
       if (preference.success) {
-        router.push(preference.data.init_point);
+        router.push(preference.data.sandbox_init_point);
       }
     }
   }, [preference]);
@@ -107,12 +98,11 @@ export default withPageAuthRequired(function CheckoutPage() {
                         >
                           Comprar desde Argentina
                         </Button>
-                        {savedPurchaseError ||
-                          (preferenceError && (
-                            <Alert variant="danger">
-                              No se ha podido procesar la solicitud. Por favor inténtelo nuevamente.
-                            </Alert>
-                          ))}
+                        {preferenceError && (
+                          <Alert variant="danger">
+                            No se ha podido procesar la solicitud. Por favor inténtelo nuevamente.
+                          </Alert>
+                        )}
                       </Col>
                     </Row>
                     <Row className="justify-content-center mb-4">

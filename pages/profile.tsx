@@ -13,7 +13,7 @@ import { FaVideo } from 'react-icons/fa';
 import ProfilePatternItem from '@components/ProfilePatternItem';
 import ProfileVideoItem from '@components/ProfileVideoItem';
 import Loader from 'react-loader-spinner';
-import { Pattern } from '@types';
+import { Pattern, Profile } from '@types';
 import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
@@ -30,11 +30,18 @@ export const getStaticProps = async () => {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+const checkPayment = (payment: string) => {
+  fetch('/api/mercadopago/payments', {
+    body: JSON.stringify(payment),
+  }).then((res) => res.json());
+};
+
 const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { user, isLoading, error } = useUser();
   const [menu, setMenu] = useState(true);
   const [purchases, setPurchases] = useState([]);
-  const { data: profile } = useSWR(
+  const [pendingPurchases, setPendingPurchases] = useState(null);
+  const { data: profile } = useSWR<Profile>(
     user ? `/api/user/${user.sub.slice(6, user.sub.length)}` : null,
     fetcher,
   );

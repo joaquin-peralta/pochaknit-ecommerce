@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { bag } = req.body;
     const cart = bag.map((item: Pattern) => ({
       id: item._id,
-      title: `${item.category.toUpperCase()} ${item.name.toUpperCase()}`,
+      title: `Patrón ${item.category} ${item.name}`,
       description: 'Patrón de tejido',
       picture_url: item.images[0].url,
       unit_price: Number(currentPrice(item.price, item.discount)),
@@ -24,9 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const preference = {
       items: cart,
       back_urls: {
-        success: `${process.env.DOMAIN}/success`,
-        failure: `${process.env.DOMAIN}/`,
-        pending: `${process.env.DOMAIN}/`,
+        success: `${process.env.HOST}/success`,
+        failure: `${process.env.HOST}/failure`,
+        pending: `${process.env.HOST}/pending`,
       },
       auto_return: 'approved',
       payment_methods: {
