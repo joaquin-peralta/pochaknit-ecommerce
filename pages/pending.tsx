@@ -14,11 +14,9 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const fetchWithToken = (url: string, token: string) =>
+const fetchWithBody = (url: string, param) =>
   fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    body: JSON.stringify({ preference_id: param }),
   }).then((res) => res.json());
 
 export default function PendingPage() {
@@ -29,14 +27,8 @@ export default function PendingPage() {
   const [mercadopagoPayments, setMercadopagoPayments] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
-  const { data: preference } = useSWR(
-    router.query
-      ? [
-          `https://api.mercadopago.com/checkout/preferences/${router.query.preference_id}`,
-          process.env.MERCADOPAGO_ACCESS_TOKEN,
-        ]
-      : null,
-    fetchWithToken,
+  const { data: preference } = useSWR(router.query ? '/api/mercadopago/get_preference' : null, () =>
+    fetchWithBody('/api/mercadopago/get_preference', router.query.preference_id),
   );
   const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
     putData(`/api/user/${userID}`, { pendingPurchases, mercadopagoPayments }),
