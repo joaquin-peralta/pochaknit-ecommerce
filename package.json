@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "ngrok": "ngrok http 3000",
     "build": "next build",
     "start": "next start"
   },
@@ -15,7 +14,6 @@
     "mercadopago": "^1.5.7",
     "mongoose": "^5.12.3",
     "next": "10.0.9",
-    "ngrok": "^4.0.1",
     "nprogress": "^0.2.0",
     "react": "17.0.2",
     "react-bootstrap": "^1.5.2",
