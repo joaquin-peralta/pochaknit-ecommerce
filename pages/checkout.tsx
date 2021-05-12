@@ -50,7 +50,7 @@ export default withPageAuthRequired(function CheckoutPage() {
   useEffect(() => {
     if (preference) {
       if (preference.success) {
-        router.push(preference.data.sandbox_init_point);
+        router.push(preference.data.init_point);
       }
     }
   }, [preference]);

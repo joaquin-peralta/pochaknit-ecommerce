@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const useInitialState = () => {
   const [bag, setBag] = useState<Pattern[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { data: patterns } = useSWR(`${process.env.POCHAKNIT_API}`, fetcher);
+  const { data: patterns } = useSWR(`${process.env.POCHAKNIT_API}/patterns`, fetcher);
 
   const addToBag = (payload: Pattern) => {
     setBag([...bag, payload]);
