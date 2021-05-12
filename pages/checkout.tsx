@@ -73,7 +73,7 @@ export default withPageAuthRequired(function CheckoutPage() {
           )}
           {bag.length > 0 && (
             <Container fluid>
-              {paymentStatus && (
+              {paymentStatus && !preferenceError && (
                 <div className="loader-container">
                   <div className="loader">
                     <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />

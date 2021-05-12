@@ -42,8 +42,6 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
   const { bag, addToBag } = useContext(BagContext);
   const { setLocalStorage } = useLocalStorage(pattern._id, false);
 
-  console.log(pattern);
-
   const handleAddToBag = (product: Pattern) => {
     addToBag(product);
     setLocalStorage(product);
