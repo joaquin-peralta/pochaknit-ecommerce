@@ -30,10 +30,8 @@ export const getStaticProps = async () => {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const checkPaymentState = async (payment): Promise<string> => {
-  const response = await fetch('/api/mercadopago/payments', {
-    body: JSON.stringify({ payment_id: payment.payment }),
-  });
+const checkPaymentState = async (paymentId: string): Promise<string> => {
+  const response = await fetch(`/api/mercadopago/payments/?paymentId=${paymentId}`);
   const data = await response.json();
   return data.status;
 };

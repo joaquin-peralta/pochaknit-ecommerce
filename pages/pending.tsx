@@ -14,10 +14,6 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const fetchWithBody = (url: string, param) =>
-  fetch(url, {
-    body: JSON.stringify({ preference_id: param }),
-  }).then((res) => res.json());
 
 export default function PendingPage() {
   const router = useRouter();
@@ -27,8 +23,9 @@ export default function PendingPage() {
   const [mercadopagoPayments, setMercadopagoPayments] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
-  const { data: preference } = useSWR(router.query ? '/api/mercadopago/get_preference' : null, () =>
-    fetchWithBody('/api/mercadopago/get_preference', router.query.preference_id),
+  const { data: preference } = useSWR(
+    profile ? `/api/mercadopago/get_preference/?preferenceId=${router.query.preference_id}` : null,
+    fetcher,
   );
   const { data: dbUpdated } = useSWR(shouldUpdate ? 'updateUser' : null, () =>
     putData(`/api/user/${userID}`, { pendingPurchases, mercadopagoPayments }),
@@ -45,7 +42,7 @@ export default function PendingPage() {
 
   useEffect(() => {
     if (profile && preference) {
-      const newPendingPurchases = preference.items.map((item) => item._id);
+      const newPendingPurchases = preference.items.map((item) => item.id);
       const updatedPendingPurchases = profile.purchases.map((item) => item);
       const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
 
@@ -69,6 +66,7 @@ export default function PendingPage() {
       <div className="loader-container">
         <div className="loader">
           <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+          <GlobalStyles />
         </div>
       </div>
     );

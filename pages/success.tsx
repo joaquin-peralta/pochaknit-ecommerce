@@ -15,12 +15,6 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const fetchWithToken = (url: string, token: string) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => res.json());
 
 export default function SuccessPage() {
   const router = useRouter();
@@ -31,15 +25,10 @@ export default function SuccessPage() {
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
   const { data: preference } = useSWR(
-    router.query
-      ? [
-          `https://api.mercadopago.com/checkout/preferences/${router.query.preference_id}`,
-          process.env.MERCADOPAGO_ACCESS_TOKEN,
-        ]
-      : null,
-    fetchWithToken,
+    profile ? `/api/mercadopago/get_preference/?preferenceId=${router.query.preference_id}` : null,
+    fetcher,
   );
-  const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
+  const { data: dbUpdated } = useSWR(shouldUpdate ? 'updateUser' : null, () =>
     putData(`/api/user/${userID}`, { purchases, mercadopagoPayments }),
   );
 
@@ -54,7 +43,7 @@ export default function SuccessPage() {
 
   useEffect(() => {
     if (profile && preference) {
-      const newPurchases = preference.items.map((item) => item._id);
+      const newPurchases = preference.items.map((item) => item.id);
       const updatedPurchases = profile.purchases.map((item) => item);
       const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
 
@@ -75,6 +64,7 @@ export default function SuccessPage() {
       <div className="loader-container">
         <div className="loader">
           <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+          <GlobalStyles />
         </div>
       </div>
     );

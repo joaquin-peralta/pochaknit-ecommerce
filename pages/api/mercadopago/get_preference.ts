@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { preferenceId } = req.query;
+
   if (req.method === 'GET') {
     const response = await fetch(
-      `https://api.mercadopago.com/checkout/preferences/${req.body.preference_id}`,
+      `https://api.mercadopago.com/checkout/preferences/${preferenceId}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
