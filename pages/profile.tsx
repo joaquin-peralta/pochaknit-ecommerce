@@ -71,7 +71,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         setPurchases(approved);
       }
 
-      /* if (profile.pendingPurchases.length > 0) {
+      if (profile.pendingPurchases.length > 0) {
         const itemsToFilter = [];
         for (const payment of profile.mercadopagoPayments) {
           const checkData = async () => {
@@ -86,7 +86,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         }
         const filtered = pending.filter((item) => !itemsToFilter.includes(item));
         setPendingPurchases(filtered);
-      } */
+      }
     }
   }, [profile]);
 
@@ -193,6 +193,9 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
             <>
               {menu ? (
                 <>
+                  {purchases.length === 0 && pendingPurchases.length === 0 && (
+                    <p className="font-italic">No hay patrones disponibles...</p>
+                  )}
                   {purchases.length > 0 && (
                     <ProfilePatternItem purchases={purchases} pending={false} />
                   )}
@@ -205,6 +208,9 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
                 </>
               ) : (
                 <>
+                  {purchases.length === 0 && pendingPurchases.length === 0 && (
+                    <p className="font-italic">No hay videos disponibles...</p>
+                  )}
                   {purchases.length > 0 && (
                     <ProfileVideoItem purchases={purchases} pending={false} />
                   )}

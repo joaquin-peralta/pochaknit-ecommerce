@@ -78,7 +78,7 @@ export default withPageAuthRequired(function CheckoutPage() {
                   <div className="loader">
                     <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
                     <p className="mt-4 mb-0">Redireccionando a Mercadopago.</p>
-                    <p className="mb-0">Por favor espera.</p>
+                    <p className="mb-0">Por favor no cierres esta ventana.</p>
                   </div>
                 </div>
               )}
@@ -99,8 +99,15 @@ export default withPageAuthRequired(function CheckoutPage() {
                           Comprar desde Argentina
                         </Button>
                         {preferenceError && (
-                          <Alert variant="danger">
-                            No se ha podido procesar la solicitud. Por favor inténtelo nuevamente.
+                          <Alert variant="danger" className="mt-2">
+                            <small>No se ha podido procesar la solicitud.</small>{' '}
+                            <Button
+                              variant="link"
+                              className="font-weight-bold p-0"
+                              onClick={() => setPaymentStatus(false)}
+                            >
+                              Reintentar.
+                            </Button>
                           </Alert>
                         )}
                       </Col>

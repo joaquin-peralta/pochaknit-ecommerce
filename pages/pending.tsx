@@ -98,6 +98,10 @@ export default function PendingPage() {
             </Link>
             !
           </p>
+          <p>
+            Ante cualquier duda o inconveniente no dudes en enviarnos un mail a{' '}
+            <strong>pochaknit@gmail.com</strong>
+          </p>
         </Container>
         <GlobalStyles />
 
