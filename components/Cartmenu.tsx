@@ -93,7 +93,6 @@ const Cartmenu = () => {
           z-index: 1002;
           transition-duration: 0.4s;
           transform: translate3d(100%, 0, 0);
-          overflow: hidden;
         }
 
         .back-layer-show {
@@ -127,12 +126,11 @@ const Cartmenu = () => {
           background-color: ${colors.background};
           transition-duration: 0.5s;
           transform: translate3d(0);
+          overflow-y: scroll;
         }
 
-        @media screen and (max-height: 360px) {
-          .cartmenu-open {
-            overflow-y: scroll;
-          }
+        .cartmenu-open::-webkit-scrollbar {
+          display: none;
         }
 
         .close-btn {

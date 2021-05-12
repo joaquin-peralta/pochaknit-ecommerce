@@ -128,12 +128,11 @@ const Sidemenu = () => {
           background-color: ${colors.background};
           transition-duration: 0.5s;
           transform: translate3d(0);
+          overflow-y: scroll;
         }
 
-        @media screen and (max-height: 360px) {
-          .sidemenu-open {
-            overflow-y: scroll;
-          }
+        .sidemenu-open::-webkit-scrollbar {
+          display: none;
         }
 
         .close-btn {

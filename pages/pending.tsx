@@ -89,7 +89,7 @@ export default function PendingPage() {
             !
           </p>
           <p>
-            Ante cualquier duda o inconveniente no dudes en enviarnos un mail a{' '}
+            Ante cualquier inconveniente no dudes en enviarnos un mail a{' '}
             <strong>pochaknit@gmail.com</strong>
           </p>
         </Container>
@@ -112,6 +112,7 @@ export default function PendingPage() {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            text-align: center;
           }
         `}</style>
       </>
