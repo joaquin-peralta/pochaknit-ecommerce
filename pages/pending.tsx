@@ -30,7 +30,7 @@ export default function PendingPage() {
   const { data: preference } = useSWR(router.query ? '/api/mercadopago/get_preference' : null, () =>
     fetchWithBody('/api/mercadopago/get_preference', router.query.preference_id),
   );
-  const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
+  const { data: dbUpdated } = useSWR(shouldUpdate ? 'updateUser' : null, () =>
     putData(`/api/user/${userID}`, { pendingPurchases, mercadopagoPayments }),
   );
 
