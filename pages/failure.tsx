@@ -1,7 +1,6 @@
 import { useEffect, useContext } from 'react';
 import BagContext from '@context/BagContext';
 import { useUser } from '@auth0/nextjs-auth0';
-import { useRouter } from 'next/router';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FaTimesCircle } from 'react-icons/fa';
@@ -11,7 +10,6 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export default function SuccessPage() {
-  const router = useRouter();
   const { user, isLoading } = useUser();
 
   const { cleanBag } = useContext(BagContext);
@@ -19,7 +17,6 @@ export default function SuccessPage() {
   useEffect(() => {
     if (user) {
       cleanBag();
-      console.log(router.query);
     }
   }, [user]);
 

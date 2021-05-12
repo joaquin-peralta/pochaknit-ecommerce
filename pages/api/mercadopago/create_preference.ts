@@ -24,9 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const preference = {
       items: cart,
       back_urls: {
-        success: `${process.env.HOST}/success`,
-        failure: `${process.env.HOST}/failure`,
-        pending: `${process.env.HOST}/pending`,
+        success: `${process.env.DOMAIN}/success`,
+        failure: `${process.env.DOMAIN}/failure`,
+        pending: `${process.env.DOMAIN}/pending`,
       },
       auto_return: 'approved',
       payment_methods: {
