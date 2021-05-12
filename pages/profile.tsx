@@ -30,21 +30,13 @@ export const getStaticProps = async () => {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const fetchPreference = (url: string, preferenceId: string) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify(preferenceId),
-  }).then((res) => res.json);
-
-const checkPayment = (url: string, paymentId: string) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify({ payment_id: paymentId }),
-  }).then((res) => res.json);
+const checkPaymentState = async (payment): Promise<string> => {
+  const response = await fetch('/api/mercadopago/payments', {
+    body: JSON.stringify({ payment_id: payment.payment }),
+  });
+  const data = await response.json();
+  return data.status;
+};
 
 const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { user, isLoading, error } = useUser();
@@ -58,21 +50,43 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
 
   useEffect(() => {
     if (profile) {
-      if (profile.mercadopagoPending.length > 0) {
-        for (const pending of profile.mercadopagoPending) {
-          checkPayment(pending.paymentId);
+      const pending = [];
+      const approved = [];
+
+      if (profile.pendingPurchases.length > 0) {
+        for (const pattern of patterns) {
+          if (profile.pendingPurchases.includes(pattern._id)) {
+            pending.push(pattern);
+          }
         }
+        setPendingPurchases(pending);
       }
 
       if (profile.purchases.length > 0) {
-        const purch = [];
         for (const pattern of patterns) {
           if (profile.purchases.includes(pattern._id)) {
-            purch.push(pattern);
+            approved.push(pattern);
           }
         }
-        setPurchases(purch);
+        setPurchases(approved);
       }
+
+      /* if (profile.pendingPurchases.length > 0) {
+        const itemsToFilter = [];
+        for (const payment of profile.mercadopagoPayments) {
+          const checkData = async () => {
+            const status = await checkPaymentState(payment.payment);
+            if (status === 'approved') {
+              for (const item of payment.items) {
+                itemsToFilter.push(item);
+              }
+            }
+          };
+          checkData();
+        }
+        const filtered = pending.filter((item) => !itemsToFilter.includes(item));
+        setPendingPurchases(filtered);
+      } */
     }
   }, [profile]);
 
@@ -178,9 +192,29 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
           {profile && (
             <>
               {menu ? (
-                <ProfilePatternItem purchases={purchases} />
+                <>
+                  {purchases.length > 0 && (
+                    <ProfilePatternItem purchases={purchases} pending={false} />
+                  )}
+                  {pendingPurchases.length > 0 && (
+                    <ProfilePatternItem
+                      purchases={pendingPurchases}
+                      pending={pendingPurchases.length > 0}
+                    />
+                  )}
+                </>
               ) : (
-                <ProfileVideoItem purchases={purchases} />
+                <>
+                  {purchases.length > 0 && (
+                    <ProfileVideoItem purchases={purchases} pending={false} />
+                  )}
+                  {pendingPurchases.length > 0 && (
+                    <ProfileVideoItem
+                      purchases={pendingPurchases}
+                      pending={pendingPurchases.length > 0}
+                    />
+                  )}
+                </>
               )}
             </>
           )}

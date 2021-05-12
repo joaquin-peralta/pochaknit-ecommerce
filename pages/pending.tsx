@@ -14,17 +14,32 @@ import { colors } from '@utils/themes';
 import GlobalStyles from '@styles/GlobalStyles';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetchWithToken = (url: string, token: string) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => res.json());
 
 export default function PendingPage() {
   const router = useRouter();
   const { user } = useUser();
   const [userID, setUserID] = useState('');
+  const [pendingPurchases, setPendingPurchases] = useState([]);
   const [mercadopagoPayments, setMercadopagoPayments] = useState([]);
-  const [mercadopagoPending, setMercadopagoPending] = useState([]);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
+  const { data: preference } = useSWR(
+    router.query
+      ? [
+          `https://api.mercadopago.com/checkout/preferences/${router.query.preference_id}`,
+          process.env.MERCADOPAGO_ACCESS_TOKEN,
+        ]
+      : null,
+    fetchWithToken,
+  );
   const { data: dbUpdated } = useSWR(shouldUpdate ? `/api/user/${userID}` : null, () =>
-    putData(`/api/user/${userID}`, { mercadopagoPayments, mercadopagoPending }),
+    putData(`/api/user/${userID}`, { pendingPurchases, mercadopagoPayments }),
   );
 
   const { cleanBag } = useContext(BagContext);
@@ -37,22 +52,25 @@ export default function PendingPage() {
   }, [user]);
 
   useEffect(() => {
-    if (profile) {
-      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((item) => item);
-      const updatedMercadopagoPending = profile.mercadopagoPending.map((item) => item);
-      const pending = {
-        preferenceId: router.query.preference_id,
-        paymentId: router.query.payment_id,
-      };
-      // @ts-ignore
-      updatedMercadopagoPayments.unshift(router.query.payment_id);
-      // @ts-ignore
-      updatedMercadopagoPending.push(pending);
+    if (profile && preference) {
+      const newPendingPurchases = preference.items.map((item) => item._id);
+      const updatedPendingPurchases = profile.purchases.map((item) => item);
+      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
+
+      for (const id of newPendingPurchases) {
+        updatedPendingPurchases.unshift(id);
+      }
+      updatedMercadopagoPayments.unshift({
+        items: newPendingPurchases,
+        // @ts-ignore
+        payment: router.query.payment_id,
+      });
+
+      setPendingPurchases(updatedPendingPurchases);
       setMercadopagoPayments(updatedMercadopagoPayments);
-      setMercadopagoPending(updatedMercadopagoPending);
       setShouldUpdate(true);
     }
-  }, [profile]);
+  }, [profile, preference]);
 
   if (!dbUpdated) {
     return (

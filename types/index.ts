@@ -19,9 +19,9 @@ export interface Profile {
   username: string;
   email: string;
   emailVerified: Boolean;
-  purchases: [string];
-  mercadopagoPayments: [string];
-  mercadopagoPending: [{ preferenceId: string; paymentId: string }];
+  purchases: string[];
+  pendingPurchases: string[];
+  mercadopagoPayments: { items: string[]; payment: string }[];
 }
 export interface Purchase {
   categoryId: string;

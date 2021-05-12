@@ -56,13 +56,13 @@ export default function SuccessPage() {
     if (profile && preference) {
       const newPurchases = preference.items.map((item) => item._id);
       const updatedPurchases = profile.purchases.map((item) => item);
-      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((item) => item);
+      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
 
-      for (const element of newPurchases) {
-        updatedPurchases.unshift(element);
+      for (const id of newPurchases) {
+        updatedPurchases.unshift(id);
       }
       // @ts-ignore
-      updatedMercadopagoPayments.unshift(router.query.payment_id);
+      updatedMercadopagoPayments.unshift({ items: newPurchases, payment: router.query.payment_id });
 
       setPurchases(updatedPurchases);
       setMercadopagoPayments(updatedMercadopagoPayments);
