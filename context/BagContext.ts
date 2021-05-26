@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createContext } from 'react';
 import { Pattern } from '@types';
 
