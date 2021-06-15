@@ -28,17 +28,17 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
       <Container fluid>
         <div className="wrapper">
           <div className="one">
-            <h3 className="title font-italic">
+            <p className="title font-italic">
               <span>New</span> in
-            </h3>
+            </p>
           </div>
           <div className="two">
             <Image src={pattern.images[0].url} width={900} height={1200} layout="responsive" />
           </div>
           <div className="three">
-            <h2 className="title">
+            <p className="title name">
               {pattern.category} <span style={{ fontSize: '1.2em' }}>{pattern.name}</span>
-            </h2>
+            </p>
           </div>
         </div>
       </Container>
@@ -74,12 +74,19 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
         .title {
           margin-top: 1rem;
           line-height: 0.5;
+          font-size: 1.5rem;
+          font-weight: 700;
         }
         .title,
         .title span {
           color: ${pattern.primaryColor};
           text-align: center;
           text-transform: uppercase;
+        }
+
+        .name {
+          font-size: 2rem;
+          font-weight: 700;
         }
 
         @media screen and (min-width: 768px) {
@@ -107,6 +114,11 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
           .title {
             margin-top: 0;
             line-height: 1;
+            font-size: 2.6rem;
+          }
+
+          .name {
+            font-size: 3rem;
           }
         }
       `}</style>
