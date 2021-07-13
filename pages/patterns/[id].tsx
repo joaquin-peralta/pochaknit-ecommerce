@@ -12,11 +12,12 @@ import ProductPrice from '@components/ProductPrice';
 import Button from 'react-bootstrap/Button';
 import { MdAdd } from 'react-icons/md';
 import ReactMarkdown from 'react-markdown';
+import { getStrapiUrl } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 import useLocalStorage from '@hooks/useLocalStorage';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch(`${process.env.POCHAKNIT_API}/patterns/`);
+  const response = await fetch(getStrapiUrl('/patterns'));
   const patterns: Pattern[] = await response.json();
 
   return {
@@ -28,7 +29,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params: { id } }) => {
-  const response = await fetch(`${process.env.POCHAKNIT_API}/patterns/?id=${id}`);
+  const response = await fetch(getStrapiUrl(`/patterns/?id=${id}`));
   const found: Pattern[] = await response.json();
 
   return {

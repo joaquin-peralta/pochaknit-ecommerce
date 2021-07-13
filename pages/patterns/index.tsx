@@ -5,11 +5,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Link from 'next/link';
 import DetailedPattern from '@components/DetailedPattern';
+import { getStrapiUrl } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.POCHAKNIT_API}/patterns`);
+  const res = await fetch(getStrapiUrl('/patterns'));
   const patterns: Pattern[] = await res.json();
 
   return {

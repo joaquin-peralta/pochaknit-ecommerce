@@ -3,6 +3,7 @@ import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import FeaturedPattern from '@components/FeaturedPattern';
+import { getStrapiUrl } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Featured = {
@@ -11,7 +12,7 @@ type Featured = {
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.POCHAKNIT_API}/featured-patterns`);
+  const res = await fetch(getStrapiUrl('/featured-patterns'));
   const featured: Featured[] = await res.json();
 
   return {

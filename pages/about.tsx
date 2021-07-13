@@ -3,10 +3,11 @@ import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import ReactMarkdown from 'react-markdown';
 import { colors } from '@utils/themes';
+import { getStrapiUrl, getStrapiMedia } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.POCHAKNIT_API}/about`);
+  const res = await fetch(getStrapiUrl('/about'));
   const data = await res.json();
 
   return {
@@ -30,7 +31,7 @@ const AboutPage = ({ data }: Props) => (
         <div className="bg-wrap">
           <Image
             className="hero-img"
-            src={data.hero.url}
+            src={getStrapiMedia(data.hero)}
             alt={data.hero.alternativeText}
             layout="fill"
             objectFit="cover"
@@ -47,7 +48,7 @@ const AboutPage = ({ data }: Props) => (
           <div className="wrapper">
             <div className="one">
               <Image
-                src={data.images[0].url}
+                src={getStrapiMedia(data.images[0])}
                 alt={data.images[0].alternativeText}
                 width={1600}
                 height={1200}
@@ -56,7 +57,7 @@ const AboutPage = ({ data }: Props) => (
             </div>
             <div className="two">
               <Image
-                src={data.images[1].url}
+                src={getStrapiMedia(data.images[1])}
                 alt={data.images[1].alternativeText}
                 width={1200}
                 height={1600}
@@ -65,7 +66,7 @@ const AboutPage = ({ data }: Props) => (
             </div>
             <div className="three">
               <Image
-                src={data.images[2].url}
+                src={getStrapiMedia(data.images[2])}
                 alt={data.images[2].alternativeText}
                 width={1600}
                 height={1200}

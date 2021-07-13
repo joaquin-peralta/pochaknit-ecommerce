@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { useRouter } from 'next/router';
 import { postData } from '@utils/fetcher';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -19,7 +18,6 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export default withPageAuthRequired(function CheckoutPage() {
-  const router = useRouter();
   const { bag } = useContext(BagContext);
   const { user } = useUser();
   const [paymentStatus, setPaymentStatus] = useState(false);
@@ -48,9 +46,11 @@ export default withPageAuthRequired(function CheckoutPage() {
   );
 
   useEffect(() => {
-    if (preference) {
-      if (preference.success) {
-        router.push(preference.data.init_point);
+    if (preference && preference.success) {
+      if (process.env.NODE_ENV !== 'production') {
+        window.location.assign(preference.data.sandbox_init_point);
+      } else {
+        window.location.assign(preference.data.init_point);
       }
     }
   }, [preference]);

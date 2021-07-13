@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { currentPrice } from '@utils/maths';
 import { AiOutlineClose } from 'react-icons/ai';
-
 import { colors } from '@utils/themes';
+import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   item: Pattern;
@@ -36,7 +36,7 @@ const CartmenuItem = ({ item }: Props) => {
       <Row className="py-1 justify-content-center">
         <Col xs={6}>
           <Image
-            src={item.images[0].url}
+            src={getStrapiMedia(item.images[0])}
             alt={item.images[0].alternativeText}
             width={900}
             height={1200}

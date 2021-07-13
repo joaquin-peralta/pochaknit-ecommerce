@@ -43,7 +43,7 @@ export default function PendingPage() {
   useEffect(() => {
     if (profile && preference) {
       const newPendingPurchases = preference.items.map((item) => item.id);
-      const updatedPendingPurchases = profile.purchases.map((item) => item);
+      const updatedPendingPurchases = profile.pendingPurchases.map((item) => item);
       const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
 
       for (const id of newPendingPurchases) {
@@ -66,6 +66,7 @@ export default function PendingPage() {
       <div className="loader-container">
         <div className="loader">
           <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+          <p>Actualizando tu perfil. Aguarda un momento...</p>
           <GlobalStyles />
         </div>
       </div>

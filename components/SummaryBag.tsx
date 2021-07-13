@@ -8,6 +8,7 @@ import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
 import { Pattern } from '@types';
 import { currentPrice } from '@utils/maths';
 import { colors } from '@utils/themes';
+import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   items: Pattern[];
@@ -38,7 +39,7 @@ const SummaryBag = ({ items }: Props) => {
             <Row className="align-items-center">
               <Col xs={3}>
                 <Image
-                  src={item.images[0].url}
+                  src={getStrapiMedia(item.images[0])}
                   alt={item.images[0].alternativeText}
                   width={900}
                   height={1200}

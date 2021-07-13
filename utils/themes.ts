@@ -17,8 +17,8 @@ export const colors = {
   triadic100Dark: '#ab663e',
   triadic100Transparent: 'rgba(188, 112, 67, 0.5)',
 
-  darkgray: '#2A2C2E',
-  darkgrayTransparent: 'rgba(42, 44, 46, 0.5)',
+  darkgray: 'rgba(10, 10, 10)',
+  darkgrayTransparent: 'rgba(10, 10, 10, 0.5)',
 
   darkenBackground: 'rgba(0, 0, 0, 0.5)',
 };

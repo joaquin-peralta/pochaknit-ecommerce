@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   images: any;
@@ -8,13 +9,13 @@ const QuiltedImages = ({ images }: Props) => (
   <>
     <div className="wrapper">
       <div className="one">
-        <Image src={images[0].url} width={900} height={1200} layout="responsive" />
+        <Image src={getStrapiMedia(images[0])} width={900} height={1200} layout="responsive" />
       </div>
       <div className="two">
-        <Image src={images[1].url} width={900} height={1200} layout="responsive" />
+        <Image src={getStrapiMedia(images[1])} width={900} height={1200} layout="responsive" />
       </div>
       <div className="three">
-        <Image src={images[2].url} width={900} height={1200} layout="responsive" />
+        <Image src={getStrapiMedia(images[2])} width={900} height={1200} layout="responsive" />
       </div>
     </div>
 

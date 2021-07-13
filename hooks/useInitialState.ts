@@ -4,11 +4,12 @@ import useSWR from 'swr';
 import { currentPrice } from '@utils/maths';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
 
 const useInitialState = () => {
   const [bag, setBag] = useState<Pattern[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { data: patterns } = useSWR(`${process.env.POCHAKNIT_API}/patterns`, fetcher);
+  const { data: patterns } = useSWR(`${API_URL}/patterns`, fetcher);
 
   const addToBag = (payload: Pattern) => {
     setBag([...bag, payload]);

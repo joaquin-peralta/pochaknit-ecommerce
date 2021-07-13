@@ -15,10 +15,11 @@ import ProfileVideoItem from '@components/ProfileVideoItem';
 import Loader from 'react-loader-spinner';
 import { Pattern, Profile } from '@types';
 import { colors } from '@utils/themes';
+import { getStrapiUrl } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.POCHAKNIT_API}/patterns`);
+  const res = await fetch(getStrapiUrl('/patterns'));
   const patterns: Pattern[] = await res.json();
 
   return {
@@ -51,7 +52,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
       const pending = [];
       const approved = [];
 
-      if (profile.pendingPurchases.length > 0) {
+      if (profile.pendingPurchases && profile.pendingPurchases.length > 0) {
         for (const pattern of patterns) {
           if (profile.pendingPurchases.includes(pattern._id)) {
             pending.push(pattern);
@@ -60,7 +61,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         setPendingPurchases(pending);
       }
 
-      if (profile.purchases.length > 0) {
+      if (profile.purchases && profile.purchases.length > 0) {
         for (const pattern of patterns) {
           if (profile.purchases.includes(pattern._id)) {
             approved.push(pattern);
@@ -69,7 +70,7 @@ const ProfilePage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps
         setPurchases(approved);
       }
 
-      if (profile.pendingPurchases.length > 0) {
+      if (profile.pendingPurchases && profile.pendingPurchases.length > 0) {
         const itemsToFilter = [];
         for (const payment of profile.mercadopagoPayments) {
           const checkData = async () => {

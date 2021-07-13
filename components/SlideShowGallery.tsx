@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
+import { getStrapiMedia } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 
 type Props = {
@@ -43,7 +44,7 @@ const SlideShowGallery = ({ images }: Props) => {
         {images.map((image, index) => (
           <div key={image._id} className={slideIndex === index ? 'show' : 'hide'}>
             <Image
-              src={image.url}
+              src={getStrapiMedia(image)}
               alt={image.alternativeText}
               width={900}
               height={1200}
@@ -64,7 +65,7 @@ const SlideShowGallery = ({ images }: Props) => {
               <div className="thumbnail-image">
                 <Image
                   className={`slide-thumbnail ${slideActive(index)}`}
-                  src={image.url}
+                  src={getStrapiMedia(image)}
                   alt={image.alternativeText}
                   layout="fill"
                   objectFit="contain"

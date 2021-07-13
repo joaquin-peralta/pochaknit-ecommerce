@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import Container from 'react-bootstrap/Container';
 import YouTube from 'react-youtube';
+import { getStrapiUrl } from '@utils/strapi';
 import GlobalStyles from '@styles/GlobalStyles';
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.POCHAKNIT_API}/videos`);
+  const res = await fetch(getStrapiUrl('/videos'));
   const videos = await res.json();
 
   return {

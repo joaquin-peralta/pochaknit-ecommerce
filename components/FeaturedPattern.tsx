@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Image from 'next/image';
 import isOdd from 'is-odd';
 import { Pattern } from '@types';
+import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   pattern: Pattern;
@@ -33,7 +34,12 @@ const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
             </p>
           </div>
           <div className="two">
-            <Image src={pattern.images[0].url} width={900} height={1200} layout="responsive" />
+            <Image
+              src={getStrapiMedia(pattern.images[0])}
+              width={900}
+              height={1200}
+              layout="responsive"
+            />
           </div>
           <div className="three">
             <p className="title name">

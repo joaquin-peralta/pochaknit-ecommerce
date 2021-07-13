@@ -7,7 +7,7 @@ type Data = {
   data: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function userHandler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const {
     query: { id },
   } = req;
@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       try {
         const user = await User.findOne({ userID: id });
         if (!user) {
-          res.status(400).json({ success: false, data: 'User does not exist' });
+          return res.status(400).json({ success: false, data: 'User does not exist' });
         }
         res.status(200).json(user);
       } catch (error) {
@@ -31,9 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       try {
         const user = await User.findOneAndUpdate({ userID: id }, req.body, { new: true });
         if (!user) {
-          res.status(404).json({ success: false, data: 'User not found.' });
+          return res.status(404).json({ success: false, data: 'User not found.' });
         }
-        res.status(201).json({ success: true, data: user });
+        res.status(200).json({ success: true, data: user });
       } catch (error) {
         res.status(400).json({ success: false, data: error.message });
       }
@@ -43,6 +43,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       res.status(405).json({ success: false, data: 'Method not allowed.' });
       break;
   }
-  res.end();
-  return false;
+  return res.end();
 }

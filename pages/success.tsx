@@ -64,6 +64,7 @@ export default function SuccessPage() {
       <div className="loader-container">
         <div className="loader">
           <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+          <p>Actualizando tu perfil. Aguarda un momento...</p>
           <GlobalStyles />
         </div>
       </div>

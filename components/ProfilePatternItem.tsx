@@ -7,6 +7,7 @@ import { IoMdDownload } from 'react-icons/io';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { Pattern } from '@types';
 import { colors } from '@utils/themes';
+import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   purchases: Pattern[];
@@ -28,7 +29,7 @@ export default function ProfilePatternItem({ purchases, pending = false }: Props
               <Col xs={3}>
                 <div className={pending ? 'image-container-opacity' : 'image-container'}>
                   <Image
-                    src={purchase.images[0].url}
+                    src={getStrapiMedia(purchase.images[0])}
                     alt={purchase.images[0].alternativeText}
                     layout="fill"
                     objectFit="contain"
