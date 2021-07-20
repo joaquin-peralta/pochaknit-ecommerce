@@ -1,99 +1,156 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef, MouseEvent, KeyboardEvent } from 'react';
 import { useUser } from '@auth0/nextjs-auth0';
-import UserMenuContext from '@context/UsermenuContext';
-import Button from 'react-bootstrap/Button';
-import { colors } from '@utils/themes';
+import Link from 'next/link';
+import Button from '@material-ui/core/Button';
+import BootstrapButton from 'react-bootstrap/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import Badge from '@material-ui/core/Badge';
+import styles from '@styles/components/Usermenu.module.scss';
 
 const Usermenu = () => {
-  const [userMenuVisibility, setUserMenuVisibility] = useContext(UserMenuContext);
   const { user } = useUser();
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (userMenuVisibility === true && !ref.current.contains(event.target)) {
-          setUserMenuVisibility(false);
-        }
-      }
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
 
-      document.addEventListener('onclick', handleClickOutside);
-      return () => {
-        document.removeEventListener('onclick', handleClickOutside);
-      };
-    }, [userMenuVisibility]);
+  const handleClose = (event: MouseEvent<EventTarget>) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
   }
 
-  const sideUserMenuRef = useRef(null);
-  useOutsideAlerter(sideUserMenuRef);
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
+  if (user) {
+    return (
+      <>
+        <Button
+          ref={anchorRef}
+          aria-controls={open ? 'menu-list-grow' : undefined}
+          aria-haspopup="true"
+          onClick={handleToggle}
+        >
+          <Badge color="secondary" variant="dot">
+            <AccountCircleOutlinedIcon />
+          </Badge>
+        </Button>
+        <Popper
+          className={styles.menu}
+          open={open}
+          anchorEl={anchorRef.current}
+          role={undefined}
+          transition
+          disablePortal
+        >
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                    <MenuItem>¡Hola {user.nickname}!</MenuItem>
+                    <MenuItem className="justify-content-center">
+                      <Link href="/profile" passHref>
+                        <BootstrapButton variant="primary" onClick={handleClose}>
+                          Mi perfil
+                        </BootstrapButton>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem className="justify-content-center">
+                      <BootstrapButton
+                        href="/api/auth/logout"
+                        variant="outline-primary"
+                        onClick={handleClose}
+                      >
+                        Cerrar sesión
+                      </BootstrapButton>
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
+      </>
+    );
+  }
 
   return (
-    <div ref={sideUserMenuRef} className={userMenuVisibility ? 'usermenu-open' : 'usermenu'}>
-      {!user && (
-        <>
-          <p className="font-weight-bold">
-            ¡Bienvenid@ a <span style={{ color: `${colors.primaryStrong}` }}>Pocha Knit</span>!
-          </p>
-          <div className="w-75 text-center">
-            <Button href="/api/auth/login" className="mb-2" variant="primary" block>
-              <span className="log-btn">Iniciar sesión</span>
-            </Button>
-            <Button href="/api/auth/login" variant="outlinePrimary" block>
-              <span className="log-btn">Crear cuenta</span>
-            </Button>
-          </div>
-        </>
-      )}
-      {user && (
-        <>
-          <p className="font-weight-bold">
-            ¡Hola <span style={{ color: `${colors.primaryStrong}` }}>{user.nickname}</span>!
-          </p>
-          <div className="w-75 text-center">
-            <Button href="/profile" className="mb-2" variant="primary" block>
-              <span className="log-btn">Ver perfil</span>
-            </Button>
-            <Button href="/api/auth/logout" variant="outlinePrimary" block>
-              <span className="log-btn">Cerrar sesión</span>
-            </Button>
-          </div>
-        </>
-      )}
-
-      <style jsx>{`
-        .usermenu {
-          display: none;
-        }
-
-        .usermenu-open {
-          display: none;
-        }
-
-        @media screen and (min-width: 992px) {
-          .usermenu-open {
-            position: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-flow: column wrap;
-            top: 80px;
-            right: 72px;
-            width: 270px;
-            height: 170px;
-            z-index: 1001;
-            background-color: ${colors.background};
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
-          }
-
-          .log-btn {
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-          }
-        }
-      `}</style>
-    </div>
+    <>
+      <Button
+        ref={anchorRef}
+        aria-controls={open ? 'menu-list-grow' : undefined}
+        aria-haspopup="true"
+        onClick={handleToggle}
+      >
+        <AccountCircleOutlinedIcon />
+      </Button>
+      <Popper
+        className={styles.menu}
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                  <MenuItem onClick={handleClose}>¡Bienvenid@ a Pocha Knit!</MenuItem>
+                  <MenuItem className="justify-content-center">
+                    <BootstrapButton href="/api/auth/login" variant="primary" onClick={handleClose}>
+                      Iniciar sesión
+                    </BootstrapButton>
+                  </MenuItem>
+                  <MenuItem className="justify-content-center">
+                    <BootstrapButton
+                      href="/api/auth/login"
+                      variant="outline-primary"
+                      onClick={handleClose}
+                    >
+                      Crear cuenta
+                    </BootstrapButton>
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </>
   );
 };
 

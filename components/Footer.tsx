@@ -5,7 +5,7 @@ import { IconContext } from 'react-icons';
 import { FaInstagram, FaPinterest } from 'react-icons/fa';
 import Link from 'next/link';
 import Image from 'next/image';
-import { colors } from '@utils/themes';
+import styles from '@styles/components/Footer.module.scss';
 
 const Footer = () => (
   <footer className="pb-3">
@@ -13,23 +13,23 @@ const Footer = () => (
       <hr />
       <Row className="justify-content-between">
         <Col>
-          <IconContext.Provider value={{ size: '24px', color: `${colors.darkgray}` }}>
+          <IconContext.Provider value={{ size: '24px', color: `#0a0a0a` }}>
             <div className="mb-2">
               <FaInstagram />
               <Link href="https://www.instagram.com/pochaknit/">
-                <a className="social-media">@pochaknit</a>
+                <a className={styles.socialMedia}>@pochaknit</a>
               </Link>
             </div>
             <div>
               <FaPinterest />
               <Link href="https://ar.pinterest.com/pochaknit/_created/">
-                <a className="social-media">@pochaknit</a>
+                <a className={styles.socialMedia}>@pochaknit</a>
               </Link>
             </div>
           </IconContext.Provider>
         </Col>
-        <Col className="text-right">
-          <div className="mercadopago-logo">
+        <Col className="text-end">
+          <div className={styles.mercadopagoLogo}>
             <Image
               src="/mercadopago-logo.png"
               alt="Mercadopago"
@@ -38,38 +38,12 @@ const Footer = () => (
               height={64}
             />
           </div>
-          <div className="paypal-logo">
+          <div className={styles.paypalLogo}>
             <Image src="/paypal-logo.png" alt="PayPal" layout="responsive" width={66} height={64} />
           </div>
         </Col>
       </Row>
     </Container>
-
-    <style jsx>{`
-      .social-media {
-        font-size: 1rem;
-        margin-left: 4px;
-        text-decoration: none;
-        color: ${colors.darkgray};
-      }
-
-      .social-media:hover {
-        color: ${colors.analogous500};
-      }
-
-      .mercadopago-logo {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        margin-right: 1rem;
-      }
-
-      .paypal-logo {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-      }
-    `}</style>
   </footer>
 );
 

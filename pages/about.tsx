@@ -2,9 +2,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import ReactMarkdown from 'react-markdown';
-import { colors } from '@utils/themes';
 import { getStrapiUrl, getStrapiMedia } from '@utils/strapi';
-import GlobalStyles from '@styles/GlobalStyles';
+import styles from '@styles/pages/About.module.scss';
 
 export const getStaticProps = async () => {
   const res = await fetch(getStrapiUrl('/about'));
@@ -26,11 +25,11 @@ const AboutPage = ({ data }: Props) => (
     <Head>
       <title>Sobre mí - Pocha Knit</title>
     </Head>
-    <div className="page">
-      <div className="hero-container">
-        <div className="bg-wrap">
+    <div className={styles.page}>
+      <div className={styles.heroContainer}>
+        <div className={styles.bgWrap}>
           <Image
-            className="hero-img"
+            className={styles.heroImg}
             src={getStrapiMedia(data.hero)}
             alt={data.hero.alternativeText}
             layout="fill"
@@ -38,15 +37,15 @@ const AboutPage = ({ data }: Props) => (
             objectPosition="center"
           />
         </div>
-        <div className="bg-text">
+        <div className={styles.bgText}>
           <ReactMarkdown>{data.heroText}</ReactMarkdown>
         </div>
       </div>
       <Container fluid className="py-3">
         <ReactMarkdown>{data.body}</ReactMarkdown>
         <Container>
-          <div className="wrapper">
-            <div className="one">
+          <div className={styles.Wrapper}>
+            <div className={styles.one}>
               <Image
                 src={getStrapiMedia(data.images[0])}
                 alt={data.images[0].alternativeText}
@@ -55,7 +54,7 @@ const AboutPage = ({ data }: Props) => (
                 layout="responsive"
               />
             </div>
-            <div className="two">
+            <div className={styles.two}>
               <Image
                 src={getStrapiMedia(data.images[1])}
                 alt={data.images[1].alternativeText}
@@ -64,7 +63,7 @@ const AboutPage = ({ data }: Props) => (
                 layout="responsive"
               />
             </div>
-            <div className="three">
+            <div className={styles.three}>
               <Image
                 src={getStrapiMedia(data.images[2])}
                 alt={data.images[2].alternativeText}
@@ -76,63 +75,7 @@ const AboutPage = ({ data }: Props) => (
           </div>
         </Container>
       </Container>
-      <GlobalStyles />
     </div>
-
-    <style jsx>{`
-      .page {
-        width: 100%;
-        height: auto;
-      }
-
-      .hero-container {
-        position: relative;
-        width: 100%;
-        height: 50vh;
-      }
-      .bg-wrap {
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-      }
-
-      .hero-img {
-        z-index: 0;
-      }
-
-      .bg-text {
-        position: absolute;
-        width: 100%;
-        z-index: 1;
-        color: ${colors.background};
-        text-align: center;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      .wrapper {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-
-      .one {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      .two {
-        grid-column: 2;
-        grid-row: 1 / 3;
-        align-self: center;
-      }
-
-      .three {
-        grid-column: 1;
-        grid-row: 2;
-      }
-    `}</style>
   </>
 );
 

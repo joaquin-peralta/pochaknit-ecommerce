@@ -1,0 +1,54 @@
+@import '../colors';
+
+.page {
+  width: 100%;
+  height: auto;
+}
+
+.heroContainer {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+}
+.bgWrap {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.heroImg {
+  z-index: 0;
+}
+
+.bgText {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  color: $background;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.one {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.two {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.three {
+  grid-column: 1;
+  grid-row: 2;
+}

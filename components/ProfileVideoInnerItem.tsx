@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import YouTube from 'react-youtube';
-import GlobalStyles from '@styles/GlobalStyles';
+import styles from '@styles/pages/Videos.module.scss';
 
 type Props = {
   videos: any;
@@ -18,11 +18,10 @@ const ProfileVideoInnerItem = ({ videos }: Props) => {
       {videos.map((video) => (
         <Row key={video.id}>
           <Col>
-            <YouTube videoId={video.id} containerClassName="youtubeContainer" />
+            <YouTube videoId={video.id} containerClassName={styles.youtubeContainer} />
           </Col>
         </Row>
       ))}
-      <GlobalStyles />
     </Container>
   );
 };

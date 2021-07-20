@@ -17,7 +17,7 @@ export default async function userHandler(req: NextApiRequest, res: NextApiRespo
   switch (req.method) {
     case 'GET':
       try {
-        const user = await User.findOne({ userID: id });
+        const user = await User.findOne({ userId: id });
         if (!user) {
           return res.status(400).json({ success: false, data: 'User does not exist' });
         }
@@ -27,13 +27,13 @@ export default async function userHandler(req: NextApiRequest, res: NextApiRespo
       }
       break;
 
-    case 'PUT':
+    case 'PATCH':
       try {
-        const user = await User.findOneAndUpdate({ userID: id }, req.body, { new: true });
+        const user = await User.findOneAndUpdate({ userId: id }, req.body);
         if (!user) {
           return res.status(404).json({ success: false, data: 'User not found.' });
         }
-        res.status(200).json({ success: true, data: user });
+        res.status(200).json({ success: true, data: 'User updated.' });
       } catch (error) {
         res.status(400).json({ success: false, data: error.message });
       }

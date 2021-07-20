@@ -13,17 +13,22 @@ export interface Pattern {
   videos: any;
 }
 
+export interface Purchase {
+  _id: string;
+  itemsIds: string[];
+  paymentMethod: string;
+  paymentId: string;
+  status: string;
+}
 export interface Profile {
   _id: string;
-  userID: string;
+  userId: string;
   username: string;
   email: string;
   emailVerified: Boolean;
-  purchases: string[];
-  pendingPurchases: string[];
-  mercadopagoPayments: { items: string[]; payment: string }[];
+  purchases: Purchase[];
 }
-export interface Purchase {
+/* export interface Purchase {
   categoryId: string;
   currencyId: string;
   description: string;
@@ -32,4 +37,4 @@ export interface Purchase {
   quantity: number;
   title: string;
   unitPrice: number;
-}
+} */

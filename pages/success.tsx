@@ -11,9 +11,6 @@ import Alert from 'react-bootstrap/Alert';
 import { FiCheckCircle } from 'react-icons/fi';
 import Loader from 'react-loader-spinner';
 
-import { colors } from '@utils/themes';
-import GlobalStyles from '@styles/GlobalStyles';
-
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function SuccessPage() {
@@ -61,13 +58,10 @@ export default function SuccessPage() {
 
   if (!dbUpdated) {
     return (
-      <div className="loader-container">
-        <div className="loader">
-          <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
-          <p>Actualizando tu perfil. Aguarda un momento...</p>
-          <GlobalStyles />
-        </div>
-      </div>
+      <>
+        <Loader type="TailSpin" color="#5cadef" height={100} width={100} />
+        <p>Actualizando tu perfil. Aguarda un momento...</p>
+      </>
     );
   }
 
@@ -76,40 +70,18 @@ export default function SuccessPage() {
       <>
         <Alert variant="success">
           <FiCheckCircle />
-          <span className="ml-2 font-weight-bold">Pago aprobado.</span>
+          <span className="ml-2 fw-bold">Pago aprobado.</span>
         </Alert>
         <Container fluid>
           <h3>¡Gracias por tu compra!</h3>
           <p>
             Podrás visualizar en{' '}
             <Link href="/profile">
-              <a className="font-weight-bold">tu perfil</a>
+              <a className="fw-bold">tu perfil</a>
             </Link>{' '}
-            todos los patrones adquiridos.{' '}
-            <span className="font-weight-bold">¡Happy knitting!</span>
+            todos los patrones adquiridos. <span className="fw-bold">¡Happy knitting!</span>
           </p>
         </Container>
-        <GlobalStyles />
-
-        <style jsx>{`
-          .loader-container {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.2);
-            z-index: 2999;
-            padding: 0;
-          }
-          .loader {
-            position: fixed;
-            z-index: 3000;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        `}</style>
       </>
     );
   }

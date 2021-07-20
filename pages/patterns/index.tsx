@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col';
 import Link from 'next/link';
 import DetailedPattern from '@components/DetailedPattern';
 import { getStrapiUrl } from '@utils/strapi';
-import GlobalStyles from '@styles/GlobalStyles';
 import { Pattern } from '@types';
 
 export const getStaticProps = async () => {
@@ -37,7 +36,6 @@ const PatternsPage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProp
           </Col>
         ))}
       </Row>
-      <GlobalStyles />
     </Container>
   </>
 );

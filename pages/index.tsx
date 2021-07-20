@@ -1,40 +1,37 @@
-import { Pattern } from '@types';
-import { InferGetStaticPropsType } from 'next';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import FeaturedPattern from '@components/FeaturedPattern';
 import { getStrapiUrl } from '@utils/strapi';
-import GlobalStyles from '@styles/GlobalStyles';
+import { Pattern } from '@types';
 
-type Featured = {
-  _id: string;
-  pattern: Pattern;
-};
-
-export const getStaticProps = async () => {
-  const res = await fetch(getStrapiUrl('/featured-patterns'));
-  const featured: Featured[] = await res.json();
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await fetch(getStrapiUrl('/patterns?is_featured=true&_sort=published_date:DESC'));
+  const patterns = await res.json();
 
   return {
     props: {
-      featured,
+      patterns,
     },
   };
 };
 
-const Home = ({ featured }: InferGetStaticPropsType<typeof getStaticProps>) => (
+type Props = {
+  patterns: Pattern[];
+};
+
+const Home = ({ patterns }: Props) => (
   <>
     <Head>
       <title>Pocha Knit</title>
     </Head>
-    {featured.map((item, index) => (
-      <Link key={item._id} href={`/patterns/${item.pattern._id}`}>
+    {patterns.map((item, index) => (
+      <Link key={item._id} href={`/patterns/${item._id}`}>
         <a className="text-decoration-none text-reset">
-          <FeaturedPattern pattern={item.pattern} indexOfArray={index} />
+          <FeaturedPattern pattern={item} index={index} />
         </a>
       </Link>
     ))}
-    <GlobalStyles />
   </>
 );
 

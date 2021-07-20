@@ -1,0 +1,41 @@
+@import '../colors';
+
+.header {
+  width: 100%;
+  height: 82px;
+  background-color: $background;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #ddd;
+}
+
+.menuBtn {
+  flex-basis: 128px;
+}
+
+.mobileLogo {
+  flex: 1;
+  text-align: center;
+}
+
+.desktopLogo {
+  text-align: start;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.desktopNav {
+  flex: 1;
+  text-align: end;
+}
+
+.userBtn {
+  flex: 0;
+}
+
+.cartBtn {
+  flex: 0;
+}

@@ -1,12 +1,14 @@
 import { ElementType } from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0';
-import 'bootstrap/dist/css/bootstrap.css';
 import Layout from '@components/Layout';
 import BagContext from '@context/BagContext';
 import useInitialState from '@hooks/useInitialState';
 import Router from 'next/router';
+// Components
 import NProgress from 'nprogress';
+// Styles
 import 'nprogress/nprogress.css';
+import '@styles/global.scss';
 
 interface Props {
   Component: ElementType;

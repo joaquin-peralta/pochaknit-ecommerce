@@ -1,15 +1,18 @@
 import mongoose from 'mongoose';
 
-const MercadopagoSchema = new mongoose.Schema({ items: [String], payment: String });
+const PurchaseSchema = new mongoose.Schema({
+  itemsIds: [String],
+  paymentMethod: String,
+  paymentId: String,
+  status: String,
+});
 
 const UserSchema = new mongoose.Schema({
-  userID: String,
+  userId: String,
   username: String,
   email: String,
   emailVerified: Boolean,
-  purchases: [String],
-  pendingPurchases: [String],
-  mercadopagoPayments: [MercadopagoSchema],
+  purchases: [PurchaseSchema],
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

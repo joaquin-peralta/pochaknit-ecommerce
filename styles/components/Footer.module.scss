@@ -1,0 +1,25 @@
+@import '../colors';
+
+.socialMedia {
+  font-size: 1rem;
+  margin-left: 4px;
+  text-decoration: none;
+  color: $darkgray;
+}
+
+.socialMedia:hover {
+  color: $analogous-500;
+}
+
+.mercadopagoLogo {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  margin-right: 1rem;
+}
+
+.paypalLogo {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}

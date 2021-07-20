@@ -1,13 +1,15 @@
 import { useContext } from 'react';
 import BagContext from '@context/BagContext';
+import Paper from '@material-ui/core/Paper';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { AiOutlineClose, AiOutlineShopping } from 'react-icons/ai';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
 import { Pattern } from '@types';
 import { currentPrice } from '@utils/maths';
-import { colors } from '@utils/themes';
 import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
@@ -23,64 +25,40 @@ const SummaryBag = ({ items }: Props) => {
   };
 
   return (
-    <Container fluid>
-      <Row className="align-items-end py-2">
-        <Col xs="auto">
-          <AiOutlineShopping style={{ fontSize: '24px' }} />
-        </Col>
-        <Col xs="auto">
-          <p className="h5 font-weight-bold mb-0">Resumen de tu compra</p>
-        </Col>
-      </Row>
-      <hr className="mt-0" />
-      <ul className="list-unstyled pl-0 py-1 mb-0">
+    <Paper elevation={3}>
+      <ListGroup variant="flush">
         {items.map((item) => (
-          <li key={item._id} className="py-1">
-            <Row className="align-items-center">
-              <Col xs={3}>
-                <Image
-                  src={getStrapiMedia(item.images[0])}
-                  alt={item.images[0].alternativeText}
-                  width={900}
-                  height={1200}
-                  layout="responsive"
-                />
-              </Col>
-              <Col xs={4}>
-                <span className="text-capitalize">{item.category}</span>{' '}
-                <span className="text-uppercase">{item.name}</span>
-              </Col>
-              <Col xs={3}>$ {currentPrice(item.price, item.discount)}</Col>
-              <Col xs={2}>
-                <button
-                  type="button"
-                  className="btn-cancel-item"
-                  onClick={() => handleRemoveFromBag(item)}
-                >
-                  <AiOutlineClose style={{ color: `${colors.darkgray}` }} />
-                </button>
-              </Col>
-            </Row>
-          </li>
+          <ListGroup.Item key={item._id} className="mb-3">
+            <Container fluid className="px-0">
+              <Row className="align-items-center">
+                <Col xs={4}>
+                  <Image
+                    src={getStrapiMedia(item.images[0])}
+                    alt={item.images[0].alternativeText}
+                    width={128}
+                    height={176}
+                  />
+                </Col>
+                <Col xs={4}>
+                  <p className="text-capitalize mb-0">{item.category}</p>{' '}
+                  <p className="text-uppercase mb-0">{item.name}</p>
+                  <p className="mb-0">$ {currentPrice(item.price, item.discount)}</p>
+                </Col>
+                <Col xs={4} className="text-end">
+                  <Button onClick={() => handleRemoveFromBag(item)}>
+                    <CloseIcon />
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </ListGroup.Item>
         ))}
-      </ul>
-      <hr />
-      <Row className="align-items-center justify-content-between">
-        <Col>
-          <p className="h4 mb-0">Total</p>
-        </Col>
-        <Col className="text-right">
-          <p className="h4 font-weight-bold mb-0">$ {totalPrice}</p>
-        </Col>
-      </Row>
-
-      <style jsx>{`
-        .btn-cancel-item {
-          border: 0;
-          background: transparent;
-        }
-      `}</style>
-    </Container>
+        <ListGroup.Item className="text-end">
+          <span className="fs-3 fw-bold me-4">Total:</span>
+          <span className="fs-3 fw-bold text-end">$ {totalPrice}</span>
+        </ListGroup.Item>
+      </ListGroup>
+    </Paper>
   );
 };
 

@@ -1,0 +1,20 @@
+@import '../colors';
+
+.list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.item {
+  display: inline-block;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  color: $darkgray;
+
+  &:hover {
+    color: $analogous-500;
+  }
+}

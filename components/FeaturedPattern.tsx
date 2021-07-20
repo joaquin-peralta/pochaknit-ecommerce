@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Image from 'next/image';
 import isOdd from 'is-odd';
 import { Pattern } from '@types';
@@ -7,129 +8,37 @@ import { getStrapiMedia } from '@utils/strapi';
 
 type Props = {
   pattern: Pattern;
-  indexOfArray: number;
+  index: number;
 };
 
-const FeaturedPattern = ({ pattern, indexOfArray }: Props) => {
-  const [alignText, setAlignText] = useState('');
-  const [alignImg, setAlignImg] = useState('');
-
-  useEffect(() => {
-    if (isOdd(indexOfArray)) {
-      setAlignText('2');
-      setAlignImg('1');
-    } else {
-      setAlignText('1');
-      setAlignImg('2');
-    }
-  }, []);
-
-  return (
-    <>
-      <Container fluid>
-        <div className="wrapper">
-          <div className="one">
-            <p className="title font-italic">
-              <span>New</span> in
-            </p>
-          </div>
-          <div className="two">
-            <Image
-              src={getStrapiMedia(pattern.images[0])}
-              width={900}
-              height={1200}
-              layout="responsive"
-            />
-          </div>
-          <div className="three">
-            <p className="title name">
-              {pattern.category} <span style={{ fontSize: '1.2em' }}>{pattern.name}</span>
-            </p>
-          </div>
-        </div>
-      </Container>
-
-      <style jsx>{`
-        .wrapper {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-auto-rows: auto;
-          margin-bottom: 5rem;
-        }
-
-        .one {
-          grid-column: 1 / 3;
-          grid-row: 2;
-        }
-
-        .two {
-          grid-column: 1 / 3;
-          grid-row: 1;
-        }
-
-        .featured-img {
-          width: 900px;
-          height: 1124px;
-        }
-
-        .three {
-          grid-column: 1 / 3;
-          grid-row: 3;
-        }
-
-        .title {
-          margin-top: 1rem;
-          line-height: 0.5;
-          font-size: 1.5rem;
-          font-weight: 700;
-        }
-        .title,
-        .title span {
-          color: ${pattern.primaryColor};
-          text-align: center;
-          text-transform: uppercase;
-        }
-
-        .name {
-          font-size: 2rem;
-          font-weight: 700;
-        }
-
-        @media screen and (min-width: 768px) {
-          .wrapper {
-            margin-bottom: 0;
-          }
-          .one {
-            grid-column: ${alignText};
-            grid-row: 1;
-            align-self: end;
-          }
-
-          .two {
-            grid-column: ${alignImg};
-            grid-row: 1 / 3;
-          }
-
-          .three {
-            grid-column: ${alignText};
-            grid-row: 2;
-          }
-        }
-
-        @media screen and (min-width: 992px) {
-          .title {
-            margin-top: 0;
-            line-height: 1;
-            font-size: 2.6rem;
-          }
-
-          .name {
-            font-size: 3rem;
-          }
-        }
-      `}</style>
-    </>
-  );
-};
+const FeaturedPattern = ({ pattern, index }: Props) => (
+  <Container fluid>
+    <Row xs={1} md={2} className="align-items-center g-0">
+      <Col md={{ order: isOdd(index + 1) ? 12 : 1 }}>
+        <Image
+          src={getStrapiMedia(pattern.images[0])}
+          alt={pattern.images[0].alternativeText}
+          width={900}
+          height={1200}
+          layout="responsive"
+        />
+      </Col>
+      <Col className="text-center p-5" md={{ order: isOdd(index + 1) ? 1 : 12 }}>
+        <span
+          className="d-block fs-2 fw-bold text-uppercase fst-italic"
+          style={{ color: `${pattern.primaryColor}` }}
+        >
+          New in
+        </span>
+        <span className="fs-1 fw-bold text-uppercase" style={{ color: `${pattern.primaryColor}` }}>
+          {pattern.category}
+        </span>{' '}
+        <span className="fs-1 fw-bold text-uppercase" style={{ color: `${pattern.primaryColor}` }}>
+          {pattern.name}
+        </span>
+      </Col>
+    </Row>
+  </Container>
+);
 
 export default FeaturedPattern;

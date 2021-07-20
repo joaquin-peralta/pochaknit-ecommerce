@@ -6,8 +6,6 @@ import Alert from 'react-bootstrap/Alert';
 import Loader from 'react-loader-spinner';
 import { FiCheckCircle } from 'react-icons/fi';
 import Button from 'react-bootstrap/Button';
-import { colors } from '@utils/themes';
-import GlobalStyles from '@styles/GlobalStyles';
 
 const updateUser = async (userId: string) => {
   try {
@@ -22,35 +20,31 @@ const updateUser = async (userId: string) => {
     return data;
   } catch (e) {
     console.error(e);
-    return false;
+    return null;
   }
 };
 
 export default function VerifiedPage() {
+  let timer;
   const router = useRouter();
   const { user } = useUser();
   const [isVerified, setIsVerified] = useState(false);
   const [count, setCount] = useState(20);
-  let timer;
 
   useEffect(() => {
     if (user && router.query.success) {
-      updateUser(user.sub.slice(6, user.sub.length))
+      updateUser(user.sub)
         .then(() => setIsVerified(true))
         .catch((e) => console.error(e));
     }
   }, [user, router.query.success]);
-
-  const logout = () => {
-    router.push('/api/auth/logout');
-  };
 
   useEffect(() => {
     if (isVerified) {
       if (count > 0) {
         timer = setTimeout(() => setCount(count - 1), 1000);
       } else {
-        logout();
+        router.push('/api/auth/logout');
       }
     }
     return () => clearTimeout(timer);
@@ -61,10 +55,9 @@ export default function VerifiedPage() {
       <>
         <div className="loader-container">
           <div className="loader">
-            <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
+            <Loader type="TailSpin" color="#5cadef" height={100} width={100} />
           </div>
         </div>
-        <GlobalStyles />
       </>
     );
   }
@@ -74,7 +67,7 @@ export default function VerifiedPage() {
       <>
         <Alert variant="success">
           <FiCheckCircle />
-          <span className="ml-2 font-weight-bold">Tu email fue verificado.</span>
+          <span className="ml-2 fw-bold">Tu email fue verificado.</span>
         </Alert>
         <Container fluid>
           <h3>Una cosa más...</h3>
@@ -85,28 +78,16 @@ export default function VerifiedPage() {
           </p>
           <p>
             Cierra sesión haciendo click{' '}
-            <Button variant="link" className="p-0 font-weight-bold" onClick={() => logout()}>
+            <Button
+              variant="link"
+              className="p-0 fw-bold"
+              onClick={() => router.push('/api/auth/logout')}
+            >
               aquí
             </Button>{' '}
-            o espera <span className="font-weight-bold">{count}</span> segundos.
+            o espera <span className="fw-bold">{count}</span> segundos.
           </p>
         </Container>
-        <GlobalStyles />
-
-        <style jsx>{`
-          .loader-container {
-            display: relative;
-            width: 100%;
-            height: 100vh;
-          }
-
-          .loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        `}</style>
       </>
     );
   }

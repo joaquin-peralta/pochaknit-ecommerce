@@ -12,9 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const user = await User.find({});
         res.status(200).json(user);
-        if (!user) {
-          res.status(500).json({ error: 'User does not exist' });
-        }
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });

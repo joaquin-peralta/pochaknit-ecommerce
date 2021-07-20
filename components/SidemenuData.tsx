@@ -4,22 +4,22 @@ import { IoMdFilm } from 'react-icons/io';
 
 const SidemenuData = [
   {
-    title: 'Inicio',
+    text: 'Inicio',
     icon: <MdHome />,
     path: '/',
   },
   {
-    title: 'Patrones',
+    text: 'Patrones',
     icon: <GiWool />,
     path: '/patterns',
   },
   {
-    title: 'Videos',
+    text: 'Videos',
     icon: <IoMdFilm />,
     path: '/videos',
   },
   {
-    title: 'Sobre mí',
+    text: 'Sobre mí',
     icon: <GiSheep />,
     path: '/about',
   },
