@@ -6,7 +6,6 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import '@styles/global.scss';
-import MaintenanceMode from '@components/MaintenanceMode';
 
 interface Props {
   Component: ElementType;
@@ -18,10 +17,6 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: Props) {
-  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE) {
-    return <MaintenanceMode />;
-  }
-
   return (
     <UserProvider>
       <CartProvider>
