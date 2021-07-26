@@ -20,19 +20,22 @@ type Props = {
   patterns: Pattern[];
 };
 
-const Home = ({ patterns }: Props) => (
-  <>
-    <Head>
-      <title>Pocha Knit</title>
-    </Head>
-    {patterns.map((item, index) => (
-      <Link key={item._id} href={`/patterns/${item._id}`}>
-        <a className="text-decoration-none text-reset">
-          <FeaturedPattern pattern={item} index={index} />
-        </a>
-      </Link>
-    ))}
-  </>
-);
+function Home({ patterns }: Props) {
+  return (
+    <>
+      <Head>
+        <title>Pocha Knit</title>
+      </Head>
+
+      {patterns.map((item, index) => (
+        <Link key={item._id} href={`/patterns/${item._id}`}>
+          <a className="text-decoration-none text-reset">
+            <FeaturedPattern pattern={item} index={index} />
+          </a>
+        </Link>
+      ))}
+    </>
+  );
+}
 
 export default Home;

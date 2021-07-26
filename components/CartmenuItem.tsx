@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-import BagContext from '@context/BagContext';
-import useLocalStorage from '@hooks/useLocalStorage';
+import { CartContext } from '@context/CartContext';
 import { Pattern } from '@types';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
@@ -16,19 +15,13 @@ type Props = {
 };
 
 const CartmenuItem = ({ item }: Props) => {
-  const { removeFromBag } = useContext(BagContext);
-  const { removeValue } = useLocalStorage(item._id, false);
-
-  const handleRemoveFromBag = () => {
-    removeFromBag(item);
-    removeValue();
-  };
+  const { removeFromCart } = useContext(CartContext);
 
   return (
     <Container>
       <Row className="justify-content-end">
         <Col xs={4}>
-          <Button className="btn-cancel-item" onClick={handleRemoveFromBag}>
+          <Button className="btn-cancel-item" onClick={() => removeFromCart(item)}>
             <CloseIcon fontSize="small" />
           </Button>
         </Col>
@@ -50,7 +43,7 @@ const CartmenuItem = ({ item }: Props) => {
             <span className="text-capitalize">{item.category}</span>{' '}
             <span className="text-uppercase">{item.name}</span>
           </p>
-          <small className="font-weight-bold">$ {currentPrice(item.price, item.discount)}</small>
+          <small className="fw-bold">$ {currentPrice(item.price, item.discount)}</small>
         </Col>
       </Row>
     </Container>

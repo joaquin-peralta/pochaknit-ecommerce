@@ -9,9 +9,7 @@ const PurchaseSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
   userId: String,
-  username: String,
   email: String,
-  emailVerified: Boolean,
   purchases: [PurchaseSchema],
 });
 

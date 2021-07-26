@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import BagContext from '@context/BagContext';
+import { CartContext } from '@context/CartContext';
 import Paper from '@material-ui/core/Paper';
 import Image from 'next/image';
 import Container from 'react-bootstrap/Container';
@@ -16,13 +16,8 @@ type Props = {
   items: Pattern[];
 };
 
-const SummaryBag = ({ items }: Props) => {
-  const { removeFromBag, totalPrice } = useContext(BagContext);
-
-  const handleRemoveFromBag = (product: Pattern) => {
-    removeFromBag(product);
-    window.localStorage.removeItem(String(product._id));
-  };
+const SummaryCart = ({ items }: Props) => {
+  const { removeFromCart, totalPrice } = useContext(CartContext);
 
   return (
     <Paper elevation={3}>
@@ -45,7 +40,7 @@ const SummaryBag = ({ items }: Props) => {
                   <p className="mb-0">$ {currentPrice(item.price, item.discount)}</p>
                 </Col>
                 <Col xs={4} className="text-end">
-                  <Button onClick={() => handleRemoveFromBag(item)}>
+                  <Button onClick={() => removeFromCart(item)}>
                     <CloseIcon />
                   </Button>
                 </Col>
@@ -62,4 +57,4 @@ const SummaryBag = ({ items }: Props) => {
   );
 };
 
-export default SummaryBag;
+export default SummaryCart;

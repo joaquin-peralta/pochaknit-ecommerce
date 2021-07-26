@@ -1,60 +1,45 @@
 import { useState, useEffect } from 'react';
+import { useLocalStorage } from 'react-use';
 import { Pattern } from '@types';
-import useSWR from 'swr';
 import { currentPrice } from '@utils/maths';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 const useInitialState = () => {
-  const [bag, setBag] = useState<Pattern[]>([]);
+  const [storage, setStorage, cleanStorage] = useLocalStorage<Pattern[]>('cart');
+  const [cart, setCart] = useState<Pattern[]>(storage || []);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { data: patterns } = useSWR(`${API_URL}/patterns`, fetcher);
 
-  const addToBag = (payload: Pattern) => {
-    setBag([...bag, payload]);
-  };
-
-  const removeFromBag = (payload: Pattern) => {
-    setBag([...bag.filter((item) => item._id !== payload._id)]);
-  };
-
-  const cleanBag = () => {
-    window.localStorage.clear();
-    setBag([]);
-  };
-
-  const totalCount = (products: Pattern[]) => {
-    let sum = 0;
-    for (const item of products) {
-      sum += currentPrice(item.price, item.discount);
+  const addToCart = (payload: Pattern) => {
+    if (!cart.includes(payload)) {
+      setCart([...cart, payload]);
+      setStorage([...cart, payload]);
     }
-    setTotalPrice(sum);
+  };
+
+  const removeFromCart = (payload: Pattern) => {
+    setCart([...cart.filter((item) => item._id !== payload._id)]);
+    setStorage([...cart.filter((item) => item._id !== payload._id)]);
+  };
+
+  const cleanCart = () => {
+    setCart([]);
+    cleanStorage();
   };
 
   useEffect(() => {
-    if (bag.length > 0) {
-      totalCount(bag);
+    if (cart.length === 0) {
+      setTotalPrice(0);
+    } else {
+      setTotalPrice(cart.map((item) => currentPrice(item.price, item.discount)).reduce(reducer));
     }
-  }, [bag]);
-
-  useEffect(() => {
-    if (patterns) {
-      const updatedBag = [];
-      for (const pattern of patterns) {
-        if (window.localStorage.getItem(pattern._id) !== null) {
-          updatedBag.push(pattern);
-        }
-      }
-      setBag(updatedBag);
-    }
-  }, [patterns]);
+  }, [cart]);
 
   return {
-    bag,
-    addToBag,
-    removeFromBag,
-    cleanBag,
+    cart,
+    addToCart,
+    removeFromCart,
+    cleanCart,
     totalPrice,
   };
 };

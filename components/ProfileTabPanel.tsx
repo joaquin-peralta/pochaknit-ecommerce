@@ -38,8 +38,7 @@ const ProfileTabPanel = ({ profile }: Props) => {
           profile.purchases.map((purchase) =>
             purchase.itemsIds.map((itemId) => (
               <ProfilePatternItem
-                key={purchase._id}
-                purchaseId={purchase._id}
+                key={itemId}
                 itemId={itemId}
                 pending={purchase.status !== 'approved'}
                 paymentId={purchase.paymentId}
@@ -54,8 +53,7 @@ const ProfileTabPanel = ({ profile }: Props) => {
           profile.purchases.map((purchase) =>
             purchase.itemsIds.map((itemId) => (
               <ProfileVideoItem
-                key={purchase._id}
-                purchaseId={purchase._id}
+                key={itemId}
                 itemId={itemId}
                 pending={purchase.status !== 'approved'}
                 paymentId={purchase.paymentId}

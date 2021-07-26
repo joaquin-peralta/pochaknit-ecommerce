@@ -1,14 +1,12 @@
 import { ElementType } from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0';
+import CartProvider from '@context/CartContext';
 import Layout from '@components/Layout';
-import BagContext from '@context/BagContext';
-import useInitialState from '@hooks/useInitialState';
 import Router from 'next/router';
-// Components
 import NProgress from 'nprogress';
-// Styles
 import 'nprogress/nprogress.css';
 import '@styles/global.scss';
+import MaintenanceMode from '@components/MaintenanceMode';
 
 interface Props {
   Component: ElementType;
@@ -20,14 +18,17 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: Props) {
-  const initialState = useInitialState();
+  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE) {
+    return <MaintenanceMode />;
+  }
+
   return (
     <UserProvider>
-      <BagContext.Provider value={initialState}>
+      <CartProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </BagContext.Provider>
+      </CartProvider>
     </UserProvider>
   );
 }

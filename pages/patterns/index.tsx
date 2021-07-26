@@ -1,4 +1,3 @@
-import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -19,25 +18,31 @@ export const getStaticProps = async () => {
   };
 };
 
-const PatternsPage = ({ patterns }: InferGetStaticPropsType<typeof getStaticProps>) => (
-  <>
-    <Head>
-      <title>Patrones - Pocha Knit</title>
-    </Head>
-    <Container>
-      <Row xs={1} md={2}>
-        {patterns.map((pattern) => (
-          <Col key={pattern._id}>
-            <Link href={`/patterns/${pattern._id}`}>
-              <a className="text-decoration-none text-reset">
-                <DetailedPattern pattern={pattern} />
-              </a>
-            </Link>
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  </>
-);
+type Props = {
+  patterns: Pattern[];
+};
+
+function PatternsPage({ patterns }: Props) {
+  return (
+    <>
+      <Head>
+        <title>Patrones - Pocha Knit</title>
+      </Head>
+      <Container>
+        <Row xs={1} md={2}>
+          {patterns.map((pattern) => (
+            <Col key={pattern._id}>
+              <Link href={`/patterns/${pattern._id}`}>
+                <a className="text-decoration-none text-reset">
+                  <DetailedPattern pattern={pattern} />
+                </a>
+              </Link>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </>
+  );
+}
 
 export default PatternsPage;

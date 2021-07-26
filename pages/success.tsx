@@ -1,88 +1,120 @@
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
-import BagContext from '@context/BagContext';
+import useSWR from 'swr';
+import { CartContext } from '@context/CartContext';
 import { useUser } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import { putData } from '@utils/fetcher';
-import { Profile } from '@types';
 import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { FiCheckCircle } from 'react-icons/fi';
-import Loader from 'react-loader-spinner';
+import { Profile, Purchase } from '@types';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const putData = (url: string, data: any) =>
+  fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+const revalidationOptions = {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+};
 
 export default function SuccessPage() {
   const router = useRouter();
   const { user } = useUser();
-  const [userID, setUserID] = useState('');
-  const [purchases, setPurchases] = useState([]);
-  const [mercadopagoPayments, setMercadopagoPayments] = useState([]);
-  const [shouldUpdate, setShouldUpdate] = useState(false);
-  const { data: profile } = useSWR<Profile>(userID ? `/api/user/${userID}` : null, fetcher);
-  const { data: preference } = useSWR(
-    profile ? `/api/mercadopago/get_preference/?preferenceId=${router.query.preference_id}` : null,
+  const { cleanCart } = useContext(CartContext);
+  const { data: profile, error: profileError } = useSWR<Profile>(
+    user ? `/api/user/${user.sub}` : null,
     fetcher,
+    revalidationOptions,
   );
-  const { data: dbUpdated } = useSWR(shouldUpdate ? 'updateUser' : null, () =>
-    putData(`/api/user/${userID}`, { purchases, mercadopagoPayments }),
+  const { data: payment, error: paymentError } = useSWR(
+    user ? `/api/mercadopago/payments/${router.query.payment_id}` : null,
+    fetcher,
+    revalidationOptions,
   );
-
-  const { cleanBag } = useContext(BagContext);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      cleanBag();
-      setUserID(user.sub.slice(6, user.sub.length));
+    if (user && router.query) {
+      cleanCart();
     }
-  }, [user]);
+  }, [user && router.query]);
 
   useEffect(() => {
-    if (profile && preference) {
-      const newPurchases = preference.items.map((item) => item.id);
-      const updatedPurchases = profile.purchases.map((item) => item);
-      const updatedMercadopagoPayments = profile.mercadopagoPayments.map((obj) => obj);
+    if (profile && payment) {
+      // prevents adding payment again by reloading page
+      if (
+        !profile.purchases.map((purchase) => purchase.paymentId).includes(payment.id.toString())
+      ) {
+        const newPurchase: Purchase = {
+          itemsIds: payment.additional_info.items.map((item) => item.id),
+          paymentMethod: 'mercadopago',
+          paymentId: payment.id,
+          status: payment.status,
+        };
 
-      for (const id of newPurchases) {
-        updatedPurchases.unshift(id);
+        const updatedPurchases = profile.purchases.map((item) => item).concat(newPurchase);
+        putData(`/api/user/${user.sub}`, { purchases: updatedPurchases })
+          .then((res) => res.json())
+          .then(() => setIsUpdated(true))
+          .catch((err) => console.error(err));
+      } else {
+        setIsUpdated(true);
       }
-      // @ts-ignore
-      updatedMercadopagoPayments.unshift({ items: newPurchases, payment: router.query.payment_id });
-
-      setPurchases(updatedPurchases);
-      setMercadopagoPayments(updatedMercadopagoPayments);
-      setShouldUpdate(true);
     }
-  }, [profile, preference]);
+  }, [profile, payment]);
 
-  if (!dbUpdated) {
+  if (profileError || paymentError) {
     return (
       <>
-        <Loader type="TailSpin" color="#5cadef" height={100} width={100} />
-        <p>Actualizando tu perfil. Aguarda un momento...</p>
+        <span className="fs-3 fw-bold">Ha ocurrido un error insesperado...</span>
+        <span>
+          Por favor verifica que tengas conexión a internet. De ser así haz click{' '}
+          <Button variant="link" className="fw-bold" onClick={() => router.reload()}>
+            aquí
+          </Button>{' '}
+          para actualizar tus datos nuevamente.{' '}
+        </span>
       </>
     );
   }
 
-  if (dbUpdated) {
+  if (!isUpdated) {
     return (
-      <>
-        <Alert variant="success">
-          <FiCheckCircle />
-          <span className="ml-2 fw-bold">Pago aprobado.</span>
-        </Alert>
-        <Container fluid>
-          <h3>¡Gracias por tu compra!</h3>
-          <p>
-            Podrás visualizar en{' '}
-            <Link href="/profile">
-              <a className="fw-bold">tu perfil</a>
-            </Link>{' '}
-            todos los patrones adquiridos. <span className="fw-bold">¡Happy knitting!</span>
-          </p>
-        </Container>
-      </>
+      <div className="text-center p-5" style={{ color: '#5cadef' }}>
+        <CircularProgress color="inherit" size={75} />
+        <span className="d-block mt-2 fw-bold" style={{ color: '#0a0a0a' }}>
+          Actualizando tu perfil...
+        </span>
+      </div>
     );
   }
+
+  return (
+    <>
+      <Alert variant="success">
+        <FiCheckCircle />
+        <span className="ms-2 fw-bold">Pago aprobado.</span>
+      </Alert>
+      <Container fluid>
+        <h3>¡Gracias por tu compra!</h3>
+        <p>
+          Podrás visualizar en{' '}
+          <Link href="/profile">
+            <a className="fw-bold">tu perfil</a>
+          </Link>{' '}
+          todos los patrones adquiridos. <span className="fw-bold">¡Happy knitting!</span>
+        </p>
+      </Container>
+    </>
+  );
 }

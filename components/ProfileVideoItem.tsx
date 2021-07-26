@@ -18,18 +18,17 @@ type Props = {
   itemId: string;
   pending?: boolean;
   paymentId: string;
-  purchaseId: string;
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const ProfileVideoItem = ({ itemId, pending = false, paymentId, purchaseId }: Props) => {
+const ProfileVideoItem = ({ itemId, pending = false, paymentId }: Props) => {
   const { data, error } = useSWR<Pattern>(getStrapiUrl(`/patterns/${itemId}`), fetcher);
   const { data: payment } = useSWR(pending ? `/api/mercadopago/${paymentId}` : null, fetcher);
 
   useEffect(() => {
     if (payment && payment.status === 'approved') {
-      fetch(`/api/purchase/${purchaseId}?status=approved`, { method: 'PATCH' }).then((res) =>
+      fetch(`/api/purchase/${paymentId}?status=approved`, { method: 'PATCH' }).then((res) =>
         console.log(res.json()),
       );
     }

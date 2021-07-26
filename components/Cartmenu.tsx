@@ -1,8 +1,8 @@
-import { useContext, useState, KeyboardEvent, MouseEvent, SyntheticEvent } from 'react';
+import { useContext, useState, useEffect, KeyboardEvent, MouseEvent, SyntheticEvent } from 'react';
 import { useUser } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import BagContext from '@context/BagContext';
+import { CartContext } from '@context/CartContext';
 import Container from 'react-bootstrap/Container';
 import CartmenuItem from '@components/CartmenuItem';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,9 +21,18 @@ import styles from '@styles/components/Cartmenu.module.scss';
 const Cartmenu = () => {
   const { user } = useUser();
   const router = useRouter();
-  const { bag, totalPrice } = useContext(BagContext);
+  const { cart, totalPrice } = useContext(CartContext);
   const [state, setState] = useState(false);
   const [alertState, setAlertState] = useState(false);
+  const [badgeState, setBadgeState] = useState(true);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      setBadgeState(false);
+    } else {
+      setBadgeState(true);
+    }
+  }, [cart]);
 
   const toggleDrawer = (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
     if (
@@ -57,12 +66,9 @@ const Cartmenu = () => {
   return (
     <>
       <Button onClick={toggleDrawer(true)}>
-        {bag.length === 0 && <LocalMallOutlinedIcon />}
-        {bag.length > 0 && (
-          <Badge color="secondary" variant="dot">
-            <LocalMallOutlinedIcon />
-          </Badge>
-        )}
+        <Badge color="secondary" variant="dot" invisible={badgeState}>
+          <LocalMallOutlinedIcon />
+        </Badge>
       </Button>
       <Drawer anchor="right" open={state} onClose={toggleDrawer(false)}>
         <div className={styles.closeBtn}>
@@ -71,7 +77,7 @@ const Cartmenu = () => {
           </Button>
         </div>
         <Divider />
-        {bag.length === 0 && (
+        {cart.length === 0 && (
           <div className={styles.emptyList}>
             <p className="mb-0">La bolsa está vacía</p>
             <Link href="/patterns" passHref>
@@ -81,10 +87,10 @@ const Cartmenu = () => {
             </Link>
           </div>
         )}
-        {bag.length > 0 && (
+        {cart.length > 0 && (
           <>
             <List className={styles.list}>
-              {bag.map((item) => (
+              {cart.map((item) => (
                 <ListItem key={item._id}>
                   <CartmenuItem item={item} />
                 </ListItem>
@@ -95,7 +101,7 @@ const Cartmenu = () => {
               <p className="mb-0">Total</p>
               <p className="fw-bold">$ {totalPrice}</p>
               <BootstrapButton variant="outline-primary" onClick={() => handleCheckout(false)}>
-                Checkout
+                <span className="fw-bold">Checkout</span>
               </BootstrapButton>
             </Container>
           </>

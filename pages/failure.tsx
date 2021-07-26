@@ -1,33 +1,26 @@
 import { useEffect, useContext } from 'react';
-import BagContext from '@context/BagContext';
+import { CartContext } from '@context/CartContext';
 import { useUser } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FaTimesCircle } from 'react-icons/fa';
-import Loader from 'react-loader-spinner';
-
-import { colors } from '@utils/themes';
-import GlobalStyles from '@styles/GlobalStyles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function SuccessPage() {
   const { user, isLoading } = useUser();
 
-  const { cleanBag } = useContext(BagContext);
+  const { cleanCart } = useContext(CartContext);
 
   useEffect(() => {
     if (user) {
-      cleanBag();
+      cleanCart();
     }
   }, [user]);
 
   if (isLoading) {
     return (
-      <div className="loader-container">
-        <div className="loader">
-          <Loader type="TailSpin" color={colors.primaryStrong} height={100} width={100} />
-          <p>Actualizando tu perfil. Aguarda un momento...</p>
-          <GlobalStyles />
-        </div>
+      <div className="text-center p-5" style={{ color: '#5cadef' }}>
+        <CircularProgress color="inherit" size={75} />
       </div>
     );
   }
@@ -37,34 +30,12 @@ export default function SuccessPage() {
       <>
         <Alert variant="danger">
           <FaTimesCircle />
-          <span className="ml-2 font-weight-bold">Pago cancelado.</span>
+          <span className="ms-2 fw-bold">Pago cancelado.</span>
         </Alert>
         <Container fluid>
-          <h3>Lo sentimos...</h3>
-          <span className="mr-2">No se ha podido efectuar tu compra.</span>
+          <span className="d-block fs-2 fw-bold">Lo sentimos...</span>
+          <span>No se ha podido efectuar tu compra.</span>
         </Container>
-        <GlobalStyles />
-
-        <style jsx>{`
-          .loader-container {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.2);
-            z-index: 2999;
-            padding: 0;
-          }
-          .loader {
-            position: fixed;
-            z-index: 3000;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-          }
-        `}</style>
       </>
     );
   }

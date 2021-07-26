@@ -1,8 +1,8 @@
-import { InferGetStaticPropsType, GetStaticPaths } from 'next';
+import { GetStaticPaths } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useContext } from 'react';
-import BagContext from '@context/BagContext';
+import { CartContext } from '@context/CartContext';
 import { Pattern } from '@types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,10 +10,9 @@ import Col from 'react-bootstrap/Col';
 import Carousel from 'react-bootstrap/Carousel';
 import ProductPrice from '@components/ProductPrice';
 import Button from 'react-bootstrap/Button';
-import { MdAdd } from 'react-icons/md';
+import AddIcon from '@material-ui/icons/Add';
 import ReactMarkdown from 'react-markdown';
 import { getStrapiUrl, getStrapiMedia } from '@utils/strapi';
-import useLocalStorage from '@hooks/useLocalStorage';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -39,26 +38,13 @@ export const getStaticProps = async ({ params: { id } }) => {
   };
 };
 
-const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { bag, addToBag } = useContext(BagContext);
-  const { setLocalStorage } = useLocalStorage(pattern._id, false);
+type Props = {
+  pattern: Pattern;
+};
+
+function SinglePatternPage({ pattern }: Props) {
+  const { addToCart } = useContext(CartContext);
   const matches = useMediaQuery('(min-width:768px)');
-
-  const handleAddToBag = (product: Pattern) => {
-    addToBag(product);
-    setLocalStorage(product);
-  };
-
-  const handleDisable = (product: Pattern) => {
-    if (bag.length > 0) {
-      for (const element of bag) {
-        if (element._id === product._id) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   return (
     <>
@@ -69,7 +55,7 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
       </Head>
       <Container>
         <Row xs={1} md={2} className="justify-content-between">
-          <Col xs md={6}>
+          <Col md={6}>
             <Carousel nextLabel="" prevLabel="">
               {pattern.images.map((image) => (
                 <Carousel.Item key={image._id}>
@@ -86,24 +72,15 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
               ))}
             </Carousel>
           </Col>
-          <Col xs md={{ span: 5, offset: 1 }} className="py-5">
-            <h2 className="mb-3">
-              <span className="text-capitalize">{pattern.category}</span>{' '}
-              <span className="text-uppercase">{pattern.name}</span>
-            </h2>
-            <p>Patrón de tejido</p>
+          <Col className={matches ? 'p-5' : 'py-3'}>
+            <span className="fs-1 fw-bold text-capitalize">{pattern.category}</span>{' '}
+            <span className="fs-1 fw-bold text-uppercase">{pattern.name}</span>
+            <span className="d-block mb-3">Patrón de tejido</span>
             <ProductPrice price={pattern.price} discount={pattern.discount} />
-            <div className="mt-3">
-              <Button
-                variant="primary"
-                onClick={() => handleAddToBag(pattern)}
-                disabled={handleDisable(pattern)}
-                block
-              >
-                <MdAdd style={{ fontSize: '18px' }} />
-                Añadir a la bolsa
-              </Button>
-            </div>
+            <Button variant="primary" onClick={() => addToCart(pattern)} className="my-3" block>
+              <AddIcon fontSize="small" />
+              <span className="fw-bold">Añadir a la bolsa</span>
+            </Button>
           </Col>
         </Row>
         <div className={matches ? 'py-5' : ''}>
@@ -112,6 +89,6 @@ const SinglePatternPage = ({ pattern }: InferGetStaticPropsType<typeof getStatic
       </Container>
     </>
   );
-};
+}
 
 export default SinglePatternPage;

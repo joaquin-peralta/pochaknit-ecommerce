@@ -24,7 +24,7 @@ const Avatar = ({ picture, nickname, email }: AvatarProps) => (
         />
       </Col>
       <Col>
-        <p className="font-weight-bold mb-0">{nickname}</p>
+        <p className="fw-bold mb-0">{nickname}</p>
       </Col>
       <Col>
         <small style={{ color: '#9CA1A5' }}>{email}</small>

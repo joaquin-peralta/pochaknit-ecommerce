@@ -12,7 +12,7 @@ export default async function purchaseHandler(req: NextApiRequest, res: NextApiR
   if (req.method === 'PATCH') {
     try {
       const user = await User.findOneAndUpdate(
-        { 'purchases._id': pid },
+        { 'purchases.paymentId': pid },
         { $set: { 'purchases.$.status': status } },
       );
       if (!user) {

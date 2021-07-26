@@ -27,7 +27,7 @@ export default async function userHandler(req: NextApiRequest, res: NextApiRespo
       }
       break;
 
-    case 'PATCH':
+    case 'PUT':
       try {
         const user = await User.findOneAndUpdate({ userId: id }, req.body);
         if (!user) {

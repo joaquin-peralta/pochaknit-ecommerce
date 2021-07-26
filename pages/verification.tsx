@@ -1,46 +1,21 @@
+import DefaultErrorPage from 'next/error';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@auth0/nextjs-auth0';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import Loader from 'react-loader-spinner';
 import { FiCheckCircle } from 'react-icons/fi';
 import Button from 'react-bootstrap/Button';
-
-const updateUser = async (userId: string) => {
-  try {
-    const res = await fetch(`/api/user/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ emailVerified: true }),
-    });
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
-};
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function VerifiedPage() {
   let timer;
   const router = useRouter();
-  const { user } = useUser();
-  const [isVerified, setIsVerified] = useState(false);
+  const { user, isLoading, error } = useUser();
   const [count, setCount] = useState(20);
 
   useEffect(() => {
-    if (user && router.query.success) {
-      updateUser(user.sub)
-        .then(() => setIsVerified(true))
-        .catch((e) => console.error(e));
-    }
-  }, [user, router.query.success]);
-
-  useEffect(() => {
-    if (isVerified) {
+    if (user && router.query.success === 'true') {
       if (count > 0) {
         timer = setTimeout(() => setCount(count - 1), 1000);
       } else {
@@ -48,35 +23,53 @@ export default function VerifiedPage() {
       }
     }
     return () => clearTimeout(timer);
-  }, [isVerified, count]);
+  }, [user, router.query.success, count]);
 
-  if (!isVerified) {
+  if (isLoading) {
     return (
-      <>
-        <div className="loader-container">
-          <div className="loader">
-            <Loader type="TailSpin" color="#5cadef" height={100} width={100} />
-          </div>
-        </div>
-      </>
+      <div className="text-center p-5" style={{ color: '#5cadef' }}>
+        <CircularProgress color="inherit" size={75} />
+      </div>
     );
   }
 
-  if (isVerified) {
+  if (!user) {
+    return <DefaultErrorPage statusCode={404} />;
+  }
+
+  if (error) {
+    return (
+      <Alert variant="danger">
+        <span className="fw-bold">Se produjo un error al cargar tu perfil.</span>
+      </Alert>
+    );
+  }
+
+  if (user && router.query.success !== 'true') {
+    return (
+      <Alert variant="danger">
+        <span className="fw-bold">
+          Error inesperado. Lo sentimos no pudimos verificar tu email.
+        </span>
+      </Alert>
+    );
+  }
+
+  if (user && router.query.success === 'true') {
     return (
       <>
         <Alert variant="success">
           <FiCheckCircle />
-          <span className="ml-2 fw-bold">Tu email fue verificado.</span>
+          <span className="ms-2 fw-bold">Tu email fue verificado.</span>
         </Alert>
         <Container fluid>
-          <h3>Una cosa más...</h3>
-          <p>
+          <span className="d-block fs-2 fw-bold">Una cosa más...</span>
+          <span className="d-block">
             Necesitamos que vuelvas a iniciar tu sesión para actualizarla. Asegurate de cerrar
             además todas las pestañas o ventanas de tu navegador en donde hayas abierto nuestro
-            sitio web de pochaknit.com!
-          </p>
-          <p>
+            sitio web de pochaknit.com
+          </span>
+          <span className="d-block">
             Cierra sesión haciendo click{' '}
             <Button
               variant="link"
@@ -86,7 +79,7 @@ export default function VerifiedPage() {
               aquí
             </Button>{' '}
             o espera <span className="fw-bold">{count}</span> segundos.
-          </p>
+          </span>
         </Container>
       </>
     );

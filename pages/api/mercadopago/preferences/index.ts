@@ -8,45 +8,37 @@ mercadopago.configure({
   access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function preferenceHandler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { bag } = req.body;
-    const cart = bag.map((item: Pattern) => ({
+    const checkoutCart = req.body.cart.map((item: Pattern) => ({
       id: item._id,
       title: `Patrón ${item.category} ${item.name}`,
       description: 'Patrón de tejido',
       picture_url: item.images[0].url,
-      unit_price: Number(currentPrice(item.price, item.discount)),
+      unit_price: currentPrice(item.price, item.discount),
       currency_id: 'ARS',
       quantity: 1,
     }));
 
     const preference = {
-      items: cart,
+      items: checkoutCart,
       back_urls: {
-        success: `${process.env.DOMAIN}/success`,
-        failure: `${process.env.DOMAIN}/failure`,
-        pending: `${process.env.DOMAIN}/pending`,
+        success: `${process.env.MY_DOMAIN}/success`,
+        failure: `${process.env.MY_DOMAIN}/failure`,
+        pending: `${process.env.MY_DOMAIN}/pending`,
       },
       auto_return: 'approved',
       payment_methods: {
-        excluded_payment_types: [{ id: 'atm' }, { id: 'ticket' }],
+        excluded_payment_types: [{ id: 'ticket' }],
       },
       statement_descriptor: 'POCHAKNIT',
     };
 
     await mercadopago.preferences
       .create(preference)
-      .then((response) => {
-        res.status(201).json({ success: true, data: response.body });
-        res.end();
-      })
-      .catch((error) => {
-        res.status(500).json({ success: false, data: error });
-        res.end();
-      });
+      .then((response) => res.status(201).json({ success: true, data: response.body }))
+      .catch((error) => res.status(500).json({ success: false, data: error }));
   } else {
-    res.status(405);
-    res.end();
+    res.status(405).json({ success: false, data: 'Bad request.' });
   }
 }

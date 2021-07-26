@@ -14,7 +14,6 @@ export interface Pattern {
 }
 
 export interface Purchase {
-  _id: string;
   itemsIds: string[];
   paymentMethod: string;
   paymentId: string;

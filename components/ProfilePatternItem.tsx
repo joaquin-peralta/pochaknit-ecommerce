@@ -17,19 +17,18 @@ type Props = {
   itemId: string;
   pending?: boolean;
   paymentId: string;
-  purchaseId: string;
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const ProfilePatternItem = ({ itemId, pending = false, paymentId, purchaseId }: Props) => {
+const ProfilePatternItem = ({ itemId, pending = false, paymentId }: Props) => {
   const matches = useMediaQuery('(min-width:768px)');
   const { data, error } = useSWR<Pattern>(getStrapiUrl(`/patterns/${itemId}`), fetcher);
   const { data: payment } = useSWR(pending ? `/api/mercadopago/${paymentId}` : null, fetcher);
 
   useEffect(() => {
     if (payment && payment.status === 'approved') {
-      fetch(`/api/purchase/${purchaseId}?status=approved`, { method: 'PATCH' }).then((res) =>
+      fetch(`/api/purchase/${paymentId}?status=approved`, { method: 'PATCH' }).then((res) =>
         console.log(res.json()),
       );
     }
@@ -85,78 +84,3 @@ ProfilePatternItem.defaultProps = {
 };
 
 export default ProfilePatternItem;
-
-/* export default function ProfilePatternItem({ purchases, pending = false }: Props) {
-  if (purchases.length === 0) {
-    return <p className="font-italic">Aun no has adquirido ningún patrón...</p>;
-  }
-
-  return (
-    <Container>
-      <ul className="list-unstyled">
-        {purchases.map((purchase) => (
-          <li key={purchase._id}>
-            <Row className="py-3 justify-content-around align-items-center ">
-              <Col xs={3}>
-                <div className={pending ? styles.imageContainerOpacity : styles.imageContainer}>
-                  <Image
-                    src={getStrapiMedia(purchase.images[0])}
-                    alt={purchase.images[0].alternativeText}
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </div>
-              </Col>
-              <Col xs={7}>
-                <p className={pending ? styles.itemLabelOpacity : styles.itemLabel}>
-                  <span className="text-capitalize">{purchase.category}</span>{' '}
-                  <span className="text-uppercase">{purchase.name}</span>
-                  {pending && <span className="font-italic ml-2">(Pendiente)</span>}
-                </p>
-              </Col>
-              <Col xs={2}>
-                {!pending && (
-                  <>
-                    {purchase.files.urls.map((url) => (
-                      <a key={url} href={url} target="_blank" rel="noreferrer">
-                        <IoMdDownload style={{ fontSize: '28px', color: '#0a0a0a' }} />
-                      </a>
-                    ))}
-                  </>
-                )}
-                {pending && (
-                  <>
-                    {purchase.files.urls.map((url) => (
-                      <IoMdDownload
-                        key={url}
-                        style={{
-                          fontSize: '28px',
-                          color: '#9CA1A5',
-                          cursor: 'not-allowed',
-                        }}
-                      />
-                    ))}
-                  </>
-                )}
-              </Col>
-            </Row>
-            {pending && (
-              <Row>
-                <Col>
-                  <Alert variant="info">
-                    <AiOutlineInfoCircle />
-                    <small className="ml-2">
-                      Mercadopago está procesando tu pago. ¡No te preocupes! Una vez aprobado se
-                      habilitará el patrón.
-                    </small>
-                  </Alert>
-                </Col>
-              </Row>
-            )}
-            <hr className="mt-2" />
-          </li>
-        ))}
-      </ul>
-    </Container>
-  );
-} */
