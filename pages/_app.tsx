@@ -1,5 +1,6 @@
 import { ElementType } from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0';
+import FacebookPixel from '@components/FacebookPixel';
 import CartProvider from '@context/CartContext';
 import Layout from '@components/Layout';
 import Router from 'next/router';
@@ -17,13 +18,27 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: Props) {
+  if (process.env.NODE_ENV !== 'production') {
+    return (
+      <UserProvider>
+        <CartProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartProvider>
+      </UserProvider>
+    );
+  }
+
   return (
     <UserProvider>
-      <CartProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </CartProvider>
+      <FacebookPixel>
+        <CartProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartProvider>
+      </FacebookPixel>
     </UserProvider>
   );
 }
