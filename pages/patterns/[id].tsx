@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ReactMarkdown from 'react-markdown';
 import { getStrapiUrl, getStrapiMedia } from '@utils/strapi';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import * as fbq from '@utils/fpixel';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await fetch(getStrapiUrl('/patterns'));
@@ -46,6 +47,13 @@ function SinglePatternPage({ pattern }: Props) {
   const { addToCart } = useContext(CartContext);
   const matches = useMediaQuery('(min-width:768px)');
 
+  const handleAddToCart = () => {
+    addToCart(pattern);
+    if (process.env.NODE_ENV === 'production') {
+      fbq.event('AddToCart', { content_name: `${pattern.category} ${pattern.name}` });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -77,7 +85,7 @@ function SinglePatternPage({ pattern }: Props) {
             <span className="fs-1 fw-bold text-uppercase">{pattern.name}</span>
             <span className="d-block mb-3">Patrón de tejido</span>
             <ProductPrice price={pattern.price} discount={pattern.discount} />
-            <Button variant="primary" onClick={() => addToCart(pattern)} className="my-3" block>
+            <Button variant="primary" onClick={handleAddToCart} className="my-3" block>
               <AddIcon fontSize="small" />
               <span className="fw-bold">Añadir a la bolsa</span>
             </Button>

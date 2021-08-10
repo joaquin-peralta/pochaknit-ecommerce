@@ -10,6 +10,7 @@ import Alert from 'react-bootstrap/Alert';
 import { FiCheckCircle } from 'react-icons/fi';
 import { Profile, Purchase } from '@types';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import * as fbq from '@utils/fpixel';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -72,6 +73,12 @@ export default function SuccessPage() {
       }
     }
   }, [profile, payment]);
+
+  useEffect(() => {
+    if (isUpdated && payment && process.env.NODE_ENV === 'production') {
+      fbq.event('Purchase', { currency: payment.currency_id, value: payment.transaction_amount });
+    }
+  }, [isUpdated, payment]);
 
   if (profileError || paymentError) {
     return (

@@ -16,6 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Badge from '@material-ui/core/Badge';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import * as fbq from '@utils/fpixel';
 import styles from '@styles/components/Cartmenu.module.scss';
 
 const Cartmenu = () => {
@@ -55,6 +56,13 @@ const Cartmenu = () => {
 
   const handleCheckout = (open: boolean) => {
     if (user) {
+      if (process.env.NODE_ENV === 'production') {
+        fbq.event('InitiateCheckout', {
+          content_category: `${cart.map((item) => item.category)}`,
+          currency: 'ARS',
+          value: totalPrice,
+        });
+      }
       setState(open);
       router.push('/checkout');
     } else {
