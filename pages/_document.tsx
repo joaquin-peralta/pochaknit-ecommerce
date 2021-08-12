@@ -41,6 +41,7 @@ class MyDocument extends Document {
           <meta property="og:image:height" content="800" />
           <meta property="og:url" content="https://pochaknit.com" />
           <meta property="og:site_name" content="Pocha Knit" />
+          <meta name="facebook-domain-verification" content="zanvl141j8vp2wteb5ht3yeeyiq4wr" />
           <script
             dangerouslySetInnerHTML={{
               __html: `
